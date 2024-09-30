@@ -1,0 +1,27 @@
+name: alsf_r_analysis
+channels:
+  - conda-forge
+dependencies:
+  - conda-forge::jupyter
+  - conda-forge::jupyterlab
+  - conda-forge::ipykernel
+  - conda-forge::python
+  - conda-forge::r-irkernel
+  - conda-forge::nb_conda_kernels
+  - conda-forge::widgetsnbextension
+  - conda-forge::r-base=4.2.2
+  - conda-forge::r-dplyr=1.0.10
+  - conda-forge::r-tidyr
+  - conda-forge::r-readr
+  - conda-forge::r-stringr
+  - conda-forge::r-ggplot2
+  - conda-forge::r-ggrepel
+  - conda-forge::r-gridextra
+  - conda-forge::r-devtools
+  - conda-forge::r-reshape2
+  - conda-forge::r-cowplot
+  - conda-forge::r-patchwork
+  - conda-forge::r-pwr
+  - conda-forge::r-platetools
+  - conda-forge::r-arrow
+  - conda-forge::r-ggridges
