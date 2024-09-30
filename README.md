@@ -23,7 +23,7 @@ These channels are listed in the number order that you can find for the TIFF ima
 
 ### Pilot dataset
 
-To assess the optimal seeding density and time point across all cell lines, we acquired six plates of preliminary data.
+To assess the optimal seeding density and time point across all cell lines, we acquired six plates of preliminary data with 19 unique cell lines.
 There are two platemap layouts, with each layout having three time points (24, 48, and 72 hours) per plate (e.g., 2 layouts * 3 time points = 6 plates).
 Per plate, there are five different seeding densities (1000, 2000, 4000, 8000, 12000).
 **We will use various methods to determine what are the best conditions per cell line.**
