@@ -59,9 +59,9 @@ for (plate in names(platemap_dfs)) {
     # Get the updated plate name
     updated_plate <- gsub("_Plate", " Plate ", plate)
 
-    # output for each plate
-    output_file <- output_platemap_files[[plate]]
-    output_file <- paste0(output_file)
+    # Remove .png extension and add new suffixes
+    filename_without_ext <- tools::file_path_sans_ext(output_platemap_files[[plate]])
+    output_file_density <- paste0(filename_without_ext, "_seeding_density.png")
     
     platemap <- platetools::raw_map(
         data = as.numeric(platemap_dfs[[plate]]$seeding_density),
@@ -78,10 +78,53 @@ for (plate in names(platemap_dfs)) {
         )  
 
     ggsave(
-        output_file,
+        output_file_density,
         platemap,
         dpi = 500,
         height = 3.5,
         width = 6
     )
 }
+
+for (plate in names(platemap_dfs)) {
+    # Get the updated plate name
+    updated_plate <- gsub("_Plate", " Plate ", plate)
+
+    # Remove .png extension and add new suffixes
+    filename_without_ext <- tools::file_path_sans_ext(output_platemap_files[[plate]])
+    output_file_cell_line <- paste0(filename_without_ext, "_cell_line.png")
+    
+    # Update the plot to map by cell_line
+    platemap <- platetools::raw_map(
+        data = platemap_dfs[[plate]]$cell_line,  # Use cell line data directly
+        well = platemap_dfs[[plate]]$well,
+        plate = 384,
+        size = 6
+        ) +
+        ggtitle(paste(updated_plate, "layout based on cell line")) +
+        theme(plot.title = element_text(size = 10, face = "bold")) +
+        ggplot2::geom_point(aes(fill = factor(platemap_dfs[[plate]]$cell_line)), shape = 21, size = 3) +  # Fill by cell line
+        ggplot2::scale_fill_manual(values = colorRampPalette(RColorBrewer::brewer.pal(8, "Set1"))(length(unique(platemap_dfs[[plate]]$cell_line))),
+                                   name = "Cell Line") +
+        theme(
+            legend.position = "right",             # Keep legend on the right side
+            legend.justification = "center",       # Keep the legend centered
+            legend.spacing.y = unit(0.4, "cm"),    # Adjust space between legend items
+            legend.key.size = unit(0.6, "cm"),     # Adjust size of legend keys
+            legend.box = "vertical",               # Vertical layout for the legend items
+            legend.direction = "vertical"          # Ensures vertical flow
+        ) +
+        guides(fill = guide_legend(ncol = 2))      # Set legend to 2 columns
+
+    # Save the updated plot with cell line coloring
+    ggsave(
+        output_file_cell_line,
+        platemap,
+        dpi = 500,
+        height = 3.5,
+        width = 6.5
+    )
+}
+
+
+

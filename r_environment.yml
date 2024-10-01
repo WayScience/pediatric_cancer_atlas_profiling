@@ -4,8 +4,6 @@ channels:
 dependencies:
   - conda-forge::jupyter
   - conda-forge::jupyterlab
-  - conda-forge::ipykernel
-  - conda-forge::python
   - conda-forge::r-irkernel
   - conda-forge::nb_conda_kernels
   - conda-forge::widgetsnbextension
