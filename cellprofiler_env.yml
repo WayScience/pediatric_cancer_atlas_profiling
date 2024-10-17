@@ -1,0 +1,29 @@
+name: alsf_cp_env
+
+channels:
+- conda-forge
+
+dependencies:
+# this is restricted to Python 3.9 at this time due to other conflicts
+- conda-forge::python=3.9
+- conda-forge::ipykernel
+- conda-forge::jupyterlab
+- conda-forge::nbconvert=6.4.4
+- conda-forge::pip
+- conda-forge::pyyaml
+- conda-forge::pandas
+- conda-forge::mysqlclient
+- conda-forge::openjdk
+- conda-forge::scikit-image
+- conda-forge::scikit-learn
+- conda-forge::mahotas
+- conda-forge::gtk2
+- conda-forge::typing-extensions
+# these are strict because that is how it is on the CellProfiler wiki (Jinja updated for nbconvert)
+- conda-forge::Jinja2=3.0.3
+- conda-forge::inflect=5.3.0
+- conda-forge::wxpython=4.2.0
+- conda-forge::sentry-sdk=0.18.0
+- pip:
+    - cellprofiler==4.2.8
+    - git+https://github.com/broadinstitute/pe2loaddata.git@4c9aee0b9fbe74bb7308b1114dabf2895113552d

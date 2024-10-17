@@ -1,0 +1,4 @@
+# Ignore python related folders/files
+*__pycache__
+
+*data/

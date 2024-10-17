@@ -15,7 +15,7 @@ These channels are listed in the number order that you can find for the TIFF ima
 3. Phalloidin and WGA **Alexa 568** - Actin, Golgi, and plasma membrane (AGP)
 4. MitoTracker **Alexa 647** - Mitochondria
 5. **Hoechst 33342** - DNA/nucleus
-6. SYTO14 **Alexa 488 long** - Cytoplasmic RNA and nucleoli 
+6. SYTO14 **Alexa 488 long (CP)** - Cytoplasmic RNA and nucleoli 
 
 ![Example Cell Painting](./examples/cell_painting_alsf.png)
 
@@ -52,9 +52,9 @@ Below are the examples of the plate map layouts based on seeding density:
 
 In this module, we include three different environments:
 
+- **[CellProfiler environment](./cellprofiler_env.yml):** This environment is used for the illumination correction and feature extraction modules as we will be using CellProfiler v4.2.8 to perform these tasks. 
 - **[R environment](./r_environment.yml):** This environment is used for any notebook that requires visualization of results and figure generation in R language.
 - **Image profiling environment**: This environment is used during the preprocessing module after we extract morphology features using CellProfiler, which includes installing relevant formatting software such as pycytominer, CytoTable, and coSMicQC.
-- **CellProfiler environment:** This environment is used for the illumination correction and feature extraction modules as we will be using CellProfiler v4.2.8 to perform these tasks. 
 
 These environments can be installed either via conda or mamba.
 Below is an example of how to install via the terminal.
