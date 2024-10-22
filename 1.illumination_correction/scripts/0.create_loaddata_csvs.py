@@ -147,9 +147,14 @@ for br_id, dfs in br00_dataframes.items():
             'Metadata_Reimaged', ascending=False
         ).drop_duplicates(subset=['Metadata_Well', 'Metadata_Site'], keep='first')
 
-        # Save the cleaned and concatenated DataFrame to a new CSV file
+        # Sort by 'Metadata_Col' and 'Metadata_Row'
+        sorted_df = deduplicated_df.sort_values(
+            ['Metadata_Col', 'Metadata_Row'], ascending=True
+        )
+
+        # Save the cleaned, concatenated, and sorted DataFrame to a new CSV file
         output_path = output_csv_dir / f"{br_id}_concatenated.csv"
-        deduplicated_df.to_csv(output_path, index=False)
+        sorted_df.to_csv(output_path, index=False)
 
         print(f"Saved: {output_path}")
         concat_files.append(output_path)  # Track new concatenated files

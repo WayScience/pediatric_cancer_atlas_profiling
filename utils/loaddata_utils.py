@@ -29,7 +29,7 @@ def create_loaddata_csv(
     command = [
         "pe2loaddata",
         "--index-directory",
-        str(index_directory),
+        f'{index_directory}',
         str(config_path),
         str(path_to_output),
     ]
