@@ -2,3 +2,9 @@
 *__pycache__
 
 *data/
+
+# Ignore any log files
+*logs/
+
+# Ignore the Experiment.csv files since they are repeating the pipeline file (not used)
+*Experiment.csv
