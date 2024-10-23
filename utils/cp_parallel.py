@@ -5,7 +5,6 @@ for each process.
 
 import logging
 import multiprocessing
-import os
 import pathlib
 import subprocess
 from concurrent.futures import ProcessPoolExecutor, Future
@@ -76,7 +75,7 @@ def run_cellprofiler_parallel(
 
     # make logs directory
     log_dir = pathlib.Path("./logs")
-    os.makedirs(log_dir, exist_ok=True)
+    log_dir.mkdir(parents=True, exist_ok=True)
 
     # iterate through each plate in the dictionary
     for _, info in plate_info_dictionary.items():
