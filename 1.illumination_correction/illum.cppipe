@@ -6,7 +6,7 @@ ModuleCount:15
 HasImagePlaneDetails:False
 
 LoadData:[module_num:1|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Input data file location:Default Input Folder sub-folder|pediatric_cancer_atlas_profiling/1.illumination_correction/loaddata_csvs
+    Input data file location:Default Input Folder|pediatric_cancer_atlas_profiling/1.illumination_correction/loaddata_csvs
     Name of the file:BR00143976_concatenated.csv
     Load images based on this data?:Yes
     Base image location:None|

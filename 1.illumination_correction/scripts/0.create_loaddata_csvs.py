@@ -203,9 +203,9 @@ for br_id, dfs in br00_dataframes.items():
             'Metadata_Reimaged', ascending=False
         ).drop_duplicates(subset=['Metadata_Well', 'Metadata_Site'], keep='first')
 
-        # Sort by 'Metadata_Col' and 'Metadata_Row'
+        # Sort by 'Metadata_Col', 'Metadata_Row', and 'Metadata_Site
         sorted_df = deduplicated_df.sort_values(
-            ['Metadata_Col', 'Metadata_Row'], ascending=True
+            ['Metadata_Col', 'Metadata_Row', "Metadata_Site"], ascending=True
         )
 
         # Save the cleaned, concatenated, and sorted DataFrame to a new CSV file
