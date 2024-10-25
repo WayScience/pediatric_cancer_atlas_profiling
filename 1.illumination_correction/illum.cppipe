@@ -6,8 +6,8 @@ ModuleCount:15
 HasImagePlaneDetails:False
 
 LoadData:[module_num:1|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
-    Input data file location:Default Input Folder|pediatric_cancer_atlas_profiling/1.illumination_correction/loaddata_csvs
-    Name of the file:
+    Input data file location:Default Input Folder sub-folder|pediatric_cancer_atlas_profiling/1.illumination_correction/loaddata_csvs
+    Name of the file:BR00143976_concatenated.csv
     Load images based on this data?:Yes
     Base image location:None|
     Process just a range of rows?:No
@@ -141,10 +141,10 @@ CorrectIlluminationCalculate:[module_num:7|svn_version:'Unknown'|variable_revisi
     Select how the illumination function is calculated:Background
     Dilate objects in the final averaged image?:No
     Dilation radius:1
-    Block size:50
+    Block size:80
     Rescale the illumination function?:No
     Calculate function for each image individually, or based on all images?:All: Across cycles
-    Smoothing method:Fit Polynomial
+    Smoothing method:Gaussian Filter
     Method to calculate smoothing filter size:Automatic
     Approximate object diameter:10
     Smoothing filter size:10

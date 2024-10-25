@@ -8,3 +8,6 @@
 
 # Ignore the Experiment.csv files since they are repeating the pipeline file (not used)
 *Experiment.csv
+
+# Ignore "in-progress" work (removed later)
+*in_progress

@@ -1,0 +1,18 @@
+channels: # Keep empty since we are using a Harmony v7 output
+channelid:
+    1: OrigBrightfield
+    2: OrigER
+    3: OrigDNA
+    4: OrigAGP
+    5: OrigRNA
+    6: OrigMito
+metadata:
+    Row: Row
+    Col: Col
+    FieldID: FieldID
+    PlaneID: PlaneID
+    ChannelID: ChannelID
+    PositionX: PositionX
+    PositionY: PositionY
+    PositionZ: PositionZ
+    AbsPositionZ: AbsPositionZ

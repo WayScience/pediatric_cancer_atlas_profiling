@@ -54,7 +54,7 @@ In this module, we include three different environments:
 
 - **[CellProfiler environment](./cellprofiler_env.yml):** This environment is used for the illumination correction and feature extraction modules as we will be using CellProfiler v4.2.8 to perform these tasks. 
 - **[R environment](./r_environment.yml):** This environment is used for any notebook that requires visualization of results and figure generation in R language.
-- **Image profiling environment**: This environment is used during the preprocessing module after we extract morphology features using CellProfiler, which includes installing relevant formatting software such as pycytominer, CytoTable, and coSMicQC.
+- **[Image profiling environment](./preprocessing_env.yml)**: This environment is used during the preprocessing module after we extract morphology features using CellProfiler, which includes installing relevant formatting software such as pycytominer, CytoTable, and coSMicQC.
 
 These environments can be installed either via conda or mamba.
 Below is an example of how to install via the terminal.
