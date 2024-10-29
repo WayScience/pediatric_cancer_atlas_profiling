@@ -130,16 +130,16 @@ for csv_file in csv_files:
         br_id = match.group(1)
 
         # Read the CSV file into a DataFrame
-        df = pd.read_csv(csv_file)
+        loaddata_df = pd.read_csv(csv_file)
 
         # Reorder DataFrame columns to match the correct column order
-        df = df[column_order]  # Ensure the columns are in the correct order
+        loaddata_df = loaddata_df[column_order]  # Ensure the columns are in the correct order
 
         # Add 'Metadata_Reimaged' column based on filename
-        df['Metadata_Reimaged'] = 'Re-imaged' in filename
+        loaddata_df['Metadata_Reimaged'] = 'Re-imaged' in filename
 
         # Append the DataFrame to the corresponding BR00 group
-        br00_dataframes[br_id].append(df)
+        br00_dataframes[br_id].append(loaddata_df)
 
         # Track this file as used
         used_files.add(csv_file.name)
@@ -151,46 +151,11 @@ print(f"\nExample DataFrame for BR00 ID: {example_id}")
 example_df.iloc[:, [0, 1, -1]] # Display only the first two and last column
 
 
-# In[6]:
-
-
-# Step 3: Initialize storage to track used files
-br00_dataframes = {br_id: [] for br_id in br00_ids}
-used_files = set()  # Store filenames used in the process
-concat_files = []  # Track new concatenated CSV files
-
-# Step 4: Add 'Metadata_Reimaged' column and group by BR00 ID
-for csv_file in csv_files:
-    filename = csv_file.stem
-    match = br00_pattern.search(filename)
-
-    if match:
-        br_id = match.group(1)
-
-        # Read the CSV file into a DataFrame
-        df = pd.read_csv(csv_file)
-
-        # Add 'Metadata_Reimaged' column based on filename
-        df['Metadata_Reimaged'] = 'Re-imaged' in filename
-
-        # Append the DataFrame to the corresponding BR00 group
-        br00_dataframes[br_id].append(df)
-
-        # Track this file as used
-        used_files.add(csv_file.name)
-
-# Print an example DataFrame (first BR00 group)
-example_id = next(iter(br00_dataframes))  # Get the first BR00 ID
-example_df = pd.concat(br00_dataframes[example_id], ignore_index=True)
-print(f"\nExample DataFrame for BR00 ID: {example_id}")
-example_df.iloc[:, [0, 1, -1]]  # Display only the first two and last column
-
-
 # ### Concat the re-imaged and original data for the same plate and remove any duplicate wells that come from the original data
 # 
 # We remove the duplicates that aren't re-imaged since they are of poor quality. We want to analyze the re-imaged data from those same wells.
 
-# In[7]:
+# In[6]:
 
 
 # Step 5: Concatenate DataFrames, drop duplicates, and save per BR00 ID
@@ -220,7 +185,7 @@ for br_id, dfs in br00_dataframes.items():
 
 # ### Confirm that all LoadData CSV files were included in previous concat (avoid data loss)
 
-# In[8]:
+# In[7]:
 
 
 # Step 6: Verify all files were used
@@ -236,7 +201,7 @@ else:
 
 # ### Remove the original CSV files to prevent CellProfiler from using them
 
-# In[9]:
+# In[8]:
 
 
 # Step 7: Remove all non-concatenated CSVs to avoid confusion

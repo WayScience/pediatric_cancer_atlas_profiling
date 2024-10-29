@@ -16,7 +16,7 @@ dependencies:
   - conda-forge::seaborn
   - conda-forge::umap-learn
   - conda-forge::matplotlib
+  - conda-forge::pycytominer=1.2.0
   - pip:
-    - pycytominer
     - Cytotable
     - coSMicQC

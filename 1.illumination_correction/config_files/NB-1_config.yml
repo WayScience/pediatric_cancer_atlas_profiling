@@ -1,4 +1,6 @@
-channels: # Keep empty since we are using a Harmony v7 output
+# Keep empty since we are using a Harmony v7 output 
+# (see issue #34 https://github.com/broadinstitute/pe2loaddata/issues/34)
+channels:
 channelid:
     1: OrigBrightfield
     2: OrigER
