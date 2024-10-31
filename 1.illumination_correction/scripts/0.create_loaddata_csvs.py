@@ -105,6 +105,9 @@ br00_ids = {br00_pattern.search(csv_file.stem).group(1)
             for csv_file in csv_files 
             if br00_pattern.search(csv_file.stem)}
 
+# Sort BR00 IDs numerically to be consistent in ordering
+br00_ids = sorted(br00_ids, key=lambda x: int(x[4:]))  # Convert digits part to integer for numerical sorting
+
 print(f"Found {len(br00_ids)} BR00 IDs: {br00_ids}")
 
 
@@ -113,7 +116,7 @@ print(f"Found {len(br00_ids)} BR00 IDs: {br00_ids}")
 # In[5]:
 
 
-# Step 4: Initialize storage to track used files and find proper column order 
+# Step 3: Initialize storage to track used files and find proper column order 
 br00_dataframes = {br_id: [] for br_id in br00_ids}
 used_files = set()  # Store filenames used in the process
 concat_files = []  # Track new concatenated CSV files
@@ -121,7 +124,7 @@ concat_files = []  # Track new concatenated CSV files
 # Load one BR00 starting CSV that will have the correct column order
 column_order = pd.read_csv(pathlib.Path(f"{output_csv_dir}/{list(br00_ids)[0]}_loaddata_original.csv"), nrows=0).columns.tolist()
 
-# Step 5: Add 'Metadata_Reimaged' column and group by BR00 ID
+# Step 4: Add 'Metadata_Reimaged' column and group by BR00 ID
 for csv_file in csv_files:
     filename = csv_file.stem
     match = br00_pattern.search(filename)

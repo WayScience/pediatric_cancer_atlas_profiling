@@ -44,8 +44,9 @@ def results_to_log(
         )
         handler.setFormatter(formatter)
 
-        # Add the handler to the logger
-        logger.addHandler(handler)
+        # Add the handler to the logger only if it doesn't already exist
+        if not any(isinstance(h, logging.FileHandler) and h.baseFilename == handler.baseFilename for h in logger.handlers):
+            logger.addHandler(handler)
 
         # Log the output
         logger.info(f"Plate Name: {plate_name}")
