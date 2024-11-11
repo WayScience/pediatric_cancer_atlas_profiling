@@ -1,13 +1,21 @@
 # Ignore python related folders/files
 *__pycache__
 
-*data/
-
 # Ignore any log files
 *logs/
+*runinfo/
 
 # Ignore the Experiment.csv files since they are repeating the pipeline file (not used)
 *Experiment.csv
 
 # Ignore "in-progress" work (removed later)
 *in_progress
+
+# Ignore SQLite and outline outputs (too large, SQLites are ~7 to 12GBs)
+sqlite_outputs*
+
+# Ignore very large parquet files from being added (not including bulk)
+3.preprocessing_features/data/converted_profiles
+3.preprocessing_features/data/cleaned_profiles
+3.preprocessing_features/data/single_cell_profiles
+

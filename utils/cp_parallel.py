@@ -13,48 +13,55 @@ from typing import List
 from errors.exceptions import MaxWorkerError
 
 
+import logging
+import pathlib
+from typing import List
+import subprocess
+
+
 def results_to_log(
     results: List[subprocess.CompletedProcess], log_dir: pathlib.Path, run_name: str
 ) -> None:
     """
     This function converts the list of subprocess results from a CellProfiler parallelization run
-    into a separate log file for each process.
+    into a single log file for the entire run.
 
     Args:
         results (List[subprocess.CompletedProcess]): Outputs from subprocess.run
         log_dir (pathlib.Path): Directory for log files
         run_name (str): Name for the type of CellProfiler run (e.g., whole image features)
     """
+    # Create a logger instance specific to this run name
+    logger = logging.getLogger(run_name)
+    logger.setLevel(logging.INFO)
+
+    # Clear any existing handlers to prevent duplicate logging
+    for handler in logger.handlers[:]:
+        logger.removeHandler(handler)
+
+    # Set up the log file path
+    log_file_path = log_dir / f"{run_name}_combined_run.log"
+    handler = logging.FileHandler(
+        log_file_path, mode="w"
+    )  # Overwrite each time with 'w'
+    formatter = logging.Formatter(
+        "[%(asctime)s] %(message)s"
+    )  # Simple format without process ID
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+
+    # Log each result's output
     for result in results:
-        # Extract plate name and decoded output
         plate_name = result.args[6].name
         output_string = result.stderr.decode("utf-8")
 
-        # Set the log file path
-        log_file_path = log_dir / f"{plate_name}_{run_name}_run.log"
-
-        # Create a new logger instance for each plate
-        logger = logging.getLogger(plate_name)
-        logger.setLevel(logging.INFO)
-
-        # Create a file handler for the logger
-        handler = logging.FileHandler(log_file_path)
-        formatter = logging.Formatter(
-            "[%(asctime)s] [Process ID: %(process)d] %(message)s"
-        )
-        handler.setFormatter(formatter)
-
-        # Add the handler to the logger only if it doesn't already exist
-        if not any(isinstance(h, logging.FileHandler) and h.baseFilename == handler.baseFilename for h in logger.handlers):
-            logger.addHandler(handler)
-
-        # Log the output
+        # Log plate name and output string
         logger.info(f"Plate Name: {plate_name}")
         logger.info(f"Output String: {output_string}")
 
-        # Close the handler after logging to avoid resource leaks
-        handler.close()
-        logger.removeHandler(handler)
+    # Clean up by closing and removing the handler after all logs are written
+    handler.close()
+    logger.removeHandler(handler)
 
 
 def run_cellprofiler_parallel(

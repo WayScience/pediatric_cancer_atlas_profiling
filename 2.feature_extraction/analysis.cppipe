@@ -1,0 +1,467 @@
+CellProfiler Pipeline: http://www.cellprofiler.org
+Version:5
+DateRevision:428
+GitHash:
+ModuleCount:21
+HasImagePlaneDetails:False
+
+LoadData:[module_num:1|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Input data file location:Default Input Folder|pediatric_cancer_atlas_profiling/2.feature_extraction/loaddata_csvs
+    Name of the file:
+    Load images based on this data?:Yes
+    Base image location:None|
+    Process just a range of rows?:No
+    Rows to process:1,100000
+    Group images by metadata?:Yes
+    Select metadata tags for grouping:Plate
+    Rescale intensities?:Yes
+
+MeasureImageQuality:[module_num:2|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:['Calculate image quality metrics to then flag and not process images with IC and further.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Calculate metrics for which images?:All loaded images
+    Image count:1
+    Scale count:1
+    Threshold count:1
+    Select the images to measure:
+    Include the image rescaling value?:No
+    Calculate blur metrics?:Yes
+    Spatial scale for blur measurements:20
+    Calculate saturation metrics?:Yes
+    Calculate intensity metrics?:No
+    Calculate thresholds?:No
+    Use all thresholding methods?:No
+    Select a thresholding method:Otsu
+    Typical fraction of the image covered by objects:0.1
+    Two-class or three-class thresholding?:Two classes
+    Minimize the weighted variance or the entropy?:Weighted variance
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+
+FlagImage:[module_num:3|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:["Flag and prevent any image set from being processes if it doesn't pass any of the poor quality QC thresholds for either blur or saturation."]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Hidden:1
+    Hidden:10
+    Name the flag's category:Blur_and_Saturation
+    Name the flag:QCFlag
+    How should measurements be linked?:Flag if any fail
+    Skip image set if flagged?:Yes
+    Flag is based on:Whole-image measurement
+    Select the object to be used for flagging:None
+    Which measurement?:ImageQuality_PowerLogLogSlope_OrigDNA
+    Flag images based on low values?:Yes
+    Minimum value:-2.7976730166487322
+    Flag images based on high values?:Yes
+    Maximum value:-1.1262448982947686
+    Rules file location:Elsewhere...|
+    Rules file name:rules.txt
+    Class number:
+    Allow fuzzy feature matching?:No
+    Flag is based on:Whole-image measurement
+    Select the object to be used for flagging:None
+    Which measurement?:ImageQuality_PowerLogLogSlope_OrigAGP
+    Flag images based on low values?:Yes
+    Minimum value:-2.7976730166487322
+    Flag images based on high values?:Yes
+    Maximum value:-1.1262448982947686
+    Rules file location:Elsewhere...|
+    Rules file name:rules.txt
+    Class number:
+    Allow fuzzy feature matching?:No
+    Flag is based on:Whole-image measurement
+    Select the object to be used for flagging:None
+    Which measurement?:ImageQuality_PowerLogLogSlope_OrigER
+    Flag images based on low values?:Yes
+    Minimum value:-2.7976730166487322
+    Flag images based on high values?:Yes
+    Maximum value:-1.1262448982947686
+    Rules file location:Elsewhere...|
+    Rules file name:rules.txt
+    Class number:
+    Allow fuzzy feature matching?:No
+    Flag is based on:Whole-image measurement
+    Select the object to be used for flagging:None
+    Which measurement?:ImageQuality_PowerLogLogSlope_OrigMito
+    Flag images based on low values?:Yes
+    Minimum value:-2.7976730166487322
+    Flag images based on high values?:Yes
+    Maximum value:-1.1262448982947686
+    Rules file location:Elsewhere...|
+    Rules file name:rules.txt
+    Class number:
+    Allow fuzzy feature matching?:No
+    Flag is based on:Whole-image measurement
+    Select the object to be used for flagging:None
+    Which measurement?:ImageQuality_PowerLogLogSlope_OrigRNA
+    Flag images based on low values?:Yes
+    Minimum value:-2.7976730166487322
+    Flag images based on high values?:Yes
+    Maximum value:-1.1262448982947686
+    Rules file location:Elsewhere...|
+    Rules file name:rules.txt
+    Class number:
+    Allow fuzzy feature matching?:No
+    Flag is based on:Whole-image measurement
+    Select the object to be used for flagging:None
+    Which measurement?:ImageQuality_PercentMaximal_OrigDNA
+    Flag images based on low values?:No
+    Minimum value:0.0
+    Flag images based on high values?:Yes
+    Maximum value:4.275261792593619
+    Rules file location:Elsewhere...|
+    Rules file name:rules.txt
+    Class number:
+    Allow fuzzy feature matching?:No
+    Flag is based on:Whole-image measurement
+    Select the object to be used for flagging:None
+    Which measurement?:ImageQuality_PercentMaximal_OrigAGP
+    Flag images based on low values?:No
+    Minimum value:0.0
+    Flag images based on high values?:Yes
+    Maximum value:4.275261792593619
+    Rules file location:Elsewhere...|
+    Rules file name:rules.txt
+    Class number:
+    Allow fuzzy feature matching?:No
+    Flag is based on:Whole-image measurement
+    Select the object to be used for flagging:None
+    Which measurement?:ImageQuality_PercentMaximal_OrigER
+    Flag images based on low values?:No
+    Minimum value:0.0
+    Flag images based on high values?:Yes
+    Maximum value:4.275261792593619
+    Rules file location:Elsewhere...|
+    Rules file name:rules.txt
+    Class number:
+    Allow fuzzy feature matching?:No
+    Flag is based on:Whole-image measurement
+    Select the object to be used for flagging:None
+    Which measurement?:ImageQuality_PercentMaximal_OrigMito
+    Flag images based on low values?:No
+    Minimum value:0.0
+    Flag images based on high values?:Yes
+    Maximum value:4.275261792593619
+    Rules file location:Elsewhere...|
+    Rules file name:rules.txt
+    Class number:
+    Allow fuzzy feature matching?:No
+    Flag is based on:Whole-image measurement
+    Select the object to be used for flagging:None
+    Which measurement?:ImageQuality_PercentMaximal_OrigRNA
+    Flag images based on low values?:No
+    Minimum value:0.0
+    Flag images based on high values?:Yes
+    Maximum value:4.275261792593619
+    Rules file location:Elsewhere...|
+    Rules file name:rules.txt
+    Class number:
+    Allow fuzzy feature matching?:No
+    Ignore flag skips on last cycle?:No
+
+CorrectIlluminationApply:[module_num:4|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:OrigDNA
+    Name the output image:CorrDNA
+    Select the illumination function:IllumDNA
+    Select how the illumination function is applied:Subtract
+    Select the input image:OrigAGP
+    Name the output image:CorrAGP
+    Select the illumination function:IllumAGP
+    Select how the illumination function is applied:Subtract
+    Select the input image:OrigER
+    Name the output image:CorrER
+    Select the illumination function:IllumAGP
+    Select how the illumination function is applied:Subtract
+    Select the input image:OrigMito
+    Name the output image:CorrMito
+    Select the illumination function:IllumMito
+    Select how the illumination function is applied:Subtract
+    Select the input image:OrigRNA
+    Name the output image:CorrRNA
+    Select the illumination function:IllumRNA
+    Select how the illumination function is applied:Subtract
+    Select the input image:OrigBrightfield
+    Name the output image:CorrBrightfield
+    Select the illumination function:IllumBrightfield
+    Select how the illumination function is applied:Divide
+    Set output image values less than 0 equal to 0?:Yes
+    Set output image values greater than 1 equal to 1?:Yes
+
+IdentifyPrimaryObjects:[module_num:5|svn_version:'Unknown'|variable_revision_number:15|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input image:CorrDNA
+    Name the primary objects to be identified:Nuclei
+    Typical diameter of objects, in pixel units (Min,Max):10,60
+    Discard objects outside the diameter range?:Yes
+    Discard objects touching the border of the image?:Yes
+    Method to distinguish clumped objects:Shape
+    Method to draw dividing lines between clumped objects:Shape
+    Size of smoothing filter:10
+    Suppress local maxima that are closer than this minimum allowed distance:7.0
+    Speed up by using lower-resolution image to find local maxima?:Yes
+    Fill holes in identified objects?:After both thresholding and declumping
+    Automatically calculate size of smoothing filter for declumping?:Yes
+    Automatically calculate minimum allowed distance between local maxima?:Yes
+    Handling of objects if excessive number of objects identified:Continue
+    Maximum number of objects:500
+    Use advanced settings?:Yes
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Minimum Cross-Entropy
+    Threshold smoothing scale:1.3488
+    Threshold correction factor:1.0
+    Lower and upper bounds on threshold:0.0,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Two classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Minimum Cross-Entropy
+
+IdentifySecondaryObjects:[module_num:6|svn_version:'Unknown'|variable_revision_number:10|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the input objects:Nuclei
+    Name the objects to be identified:Cells
+    Select the method to identify the secondary objects:Propagation
+    Select the input image:CorrAGP
+    Number of pixels by which to expand the primary objects:10
+    Regularization factor:0.05
+    Discard secondary objects touching the border of the image?:Yes
+    Discard the associated primary objects?:No
+    Name the new primary objects:FilteredNuclei
+    Fill holes in identified objects?:Yes
+    Threshold setting version:12
+    Threshold strategy:Global
+    Thresholding method:Minimum Cross-Entropy
+    Threshold smoothing scale:0
+    Threshold correction factor:1.0
+    Lower and upper bounds on threshold:0.0,1.0
+    Manual threshold:0.0
+    Select the measurement to threshold with:None
+    Two-class or three-class thresholding?:Two classes
+    Log transform before thresholding?:No
+    Assign pixels in the middle intensity class to the foreground or the background?:Foreground
+    Size of adaptive window:50
+    Lower outlier fraction:0.05
+    Upper outlier fraction:0.05
+    Averaging method:Mean
+    Variance method:Standard deviation
+    # of deviations:2.0
+    Thresholding method:Minimum Cross-Entropy
+
+IdentifyTertiaryObjects:[module_num:7|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:[]|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the larger identified objects:Cells
+    Select the smaller identified objects:Nuclei
+    Name the tertiary objects to be identified:Cytoplasm
+    Shrink smaller object prior to subtraction?:Yes
+
+MeasureColocalization:[module_num:8|svn_version:'Unknown'|variable_revision_number:5|show_window:False|notes:['Measure colocalization/correlation across objects and whole images across all channels.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:CorrAGP, CorrBrightfield, CorrDNA, CorrER, CorrMito, CorrRNA
+    Set threshold as percentage of maximum intensity for the images:15.0
+    Select where to measure correlation:Both
+    Select objects to measure:Cells, Cytoplasm, Nuclei
+    Run all metrics?:Yes
+    Calculate correlation and slope metrics?:Yes
+    Calculate the Manders coefficients?:Yes
+    Calculate the Rank Weighted Colocalization coefficients?:Yes
+    Calculate the Overlap coefficients?:Yes
+    Calculate the Manders coefficients using Costes auto threshold?:Yes
+    Method for Costes thresholding:Faster
+
+MeasureGranularity:[module_num:9|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:['Measure granularity across objects and whole images across all channels.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:CorrAGP, CorrBrightfield, CorrDNA, CorrER, CorrMito, CorrRNA
+    Measure within objects?:Yes
+    Select objects to measure:Cells, Cytoplasm, Nuclei
+    Subsampling factor for granularity measurements:0.25
+    Subsampling factor for background reduction:0.25
+    Radius of structuring element:10
+    Range of the granular spectrum:16
+
+MeasureImageIntensity:[module_num:10|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:['Measure whole image intensity.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:CorrAGP, CorrBrightfield, CorrDNA, CorrER, CorrMito, CorrRNA
+    Measure the intensity only from areas enclosed by objects?:No
+    Select input object sets:
+    Calculate custom percentiles:No
+    Specify percentiles to measure:10,90
+
+MeasureObjectIntensity:[module_num:11|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:['Measure object intensity across all channels.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:CorrAGP, CorrBrightfield, CorrDNA, CorrER, CorrMito, CorrRNA
+    Select objects to measure:Cells, Cytoplasm, Nuclei
+
+MeasureObjectIntensityDistribution:[module_num:12|svn_version:'Unknown'|variable_revision_number:6|show_window:False|notes:['Measure object radial distribution for magnitudes only with default parameters.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:CorrAGP, CorrBrightfield, CorrDNA, CorrER, CorrMito, CorrRNA
+    Hidden:3
+    Hidden:1
+    Hidden:0
+    Calculate intensity Zernikes?:Magnitudes only
+    Maximum zernike moment:9
+    Select objects to measure:Cells
+    Object to use as center?:These objects
+    Select objects to use as centers:None
+    Select objects to measure:Cytoplasm
+    Object to use as center?:These objects
+    Select objects to use as centers:None
+    Select objects to measure:Nuclei
+    Object to use as center?:These objects
+    Select objects to use as centers:None
+    Scale the bins?:Yes
+    Number of bins:4
+    Maximum radius:100
+
+MeasureObjectNeighbors:[module_num:13|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:['Measure nuclei neighbors that are adjacent.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select objects to measure:Nuclei
+    Select neighboring objects to measure:Nuclei
+    Method to determine neighbors:Adjacent
+    Neighbor distance:5
+    Consider objects discarded for touching image border?:Yes
+    Retain the image of objects colored by numbers of neighbors?:No
+    Name the output image:ObjectNeighborCount
+    Select colormap:Blues
+    Retain the image of objects colored by percent of touching pixels?:No
+    Name the output image:PercentTouching
+    Select colormap:Oranges
+
+MeasureObjectNeighbors:[module_num:14|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:['Measure cells neighbors that are adjacent.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select objects to measure:Cells
+    Select neighboring objects to measure:Cells
+    Method to determine neighbors:Adjacent
+    Neighbor distance:5
+    Consider objects discarded for touching image border?:Yes
+    Retain the image of objects colored by numbers of neighbors?:No
+    Name the output image:ObjectNeighborCount
+    Select colormap:Blues
+    Retain the image of objects colored by percent of touching pixels?:No
+    Name the output image:PercentTouching
+    Select colormap:Oranges
+
+MeasureObjectSizeShape:[module_num:15|svn_version:'Unknown'|variable_revision_number:3|show_window:False|notes:['Measure area and shape features for objects using default parameters.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select object sets to measure:Cells, Cytoplasm, Nuclei
+    Calculate the Zernike features?:Yes
+    Calculate the advanced features?:No
+
+MeasureTexture:[module_num:16|svn_version:'Unknown'|variable_revision_number:7|show_window:False|notes:['Measure texture across images and objects across all channels with default parameters.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select images to measure:CorrAGP, CorrBrightfield, CorrDNA, CorrER, CorrMito, CorrRNA
+    Select objects to measure:Cells, Cytoplasm, Nuclei
+    Enter how many gray levels to measure the texture at:256
+    Hidden:1
+    Measure whole images or objects?:Both
+    Texture scale to measure:3
+
+OverlayOutlines:[module_num:17|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:['Create overlay for nuclei objects.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Display outlines on a blank image?:Yes
+    Select image on which to display outlines:None
+    Name the output image:NucleiOutlines
+    Outline display mode:Color
+    Select method to determine brightness of outlines:Max of image
+    How to outline:Inner
+    Select outline color:#008000
+    Select objects to display:Nuclei
+
+OverlayOutlines:[module_num:18|svn_version:'Unknown'|variable_revision_number:4|show_window:False|notes:['Create overlay of cells outlines.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Display outlines on a blank image?:Yes
+    Select image on which to display outlines:None
+    Name the output image:CellsOutlines
+    Outline display mode:Color
+    Select method to determine brightness of outlines:Max of image
+    How to outline:Inner
+    Select outline color:#008000
+    Select objects to display:Cells
+
+SaveImages:[module_num:19|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:['Save nuclei outlines for each image set (well and site per plate).']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:NucleiOutlines
+    Select method for constructing file names:Single name
+    Select image name for file prefix:None
+    Enter single file name:NucleiOutlines_\g<Plate>_\g<Well>_\g<Site>
+    Number of digits:4
+    Append a suffix to the image file name?:No
+    Text to append to the image name:
+    Saved file format:tiff
+    Output file location:Default Output Folder|
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Elsewhere...|
+    How to save the series:T (Time)
+    Save with lossless compression?:Yes
+
+SaveImages:[module_num:20|svn_version:'Unknown'|variable_revision_number:16|show_window:False|notes:['Save cells object outlines for each image set (well and site per plate).']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Select the type of image to save:Image
+    Select the image to save:CellsOutlines
+    Select method for constructing file names:Single name
+    Select image name for file prefix:None
+    Enter single file name:CellsOutlines_\g<Plate>_\g<Well>_\g<Site>
+    Number of digits:4
+    Append a suffix to the image file name?:No
+    Text to append to the image name:
+    Saved file format:tiff
+    Output file location:Default Output Folder|
+    Image bit depth:16-bit integer
+    Overwrite existing files without warning?:No
+    When to save:Every cycle
+    Record the file and path information to the saved image?:No
+    Create subfolders in the output folder?:No
+    Base image folder:Elsewhere...|
+    How to save the series:T (Time)
+    Save with lossless compression?:Yes
+
+ExportToDatabase:[module_num:21|svn_version:'Unknown'|variable_revision_number:28|show_window:False|notes:['Export data as an SQLite file.']|batch_state:array([], dtype=uint8)|enabled:True|wants_pause:False]
+    Database type:SQLite
+    Database name:DefaultDB
+    Add a prefix to table names?:No
+    Table prefix:MyExpt_
+    Output file location:Default Output Folder|
+    Create a CellProfiler Analyst properties file?:No
+    Database host:
+    Username:
+    Password:
+    Name the SQLite database file:alsf_morphology_features.sqlite
+    Calculate the per-image mean values of object measurements?:No
+    Calculate the per-image median values of object measurements?:No
+    Calculate the per-image standard deviation values of object measurements?:No
+    Calculate the per-well mean values of object measurements?:No
+    Calculate the per-well median values of object measurements?:No
+    Calculate the per-well standard deviation values of object measurements?:No
+    Export measurements for all objects to the database?:All
+    Select the objects:
+    Maximum # of characters in a column name:64
+    Create one table per object, a single object table or a single object view?:One table per object type
+    Enter an image url prepend if you plan to access your files via http:
+    Write image thumbnails directly to the database?:No
+    Select the images for which you want to save thumbnails:
+    Auto-scale thumbnail pixel intensities?:Yes
+    Select the plate type:None
+    Select the plate metadata:None
+    Select the well metadata:None
+    Include information for all images, using default values?:Yes
+    Properties image group count:1
+    Properties group field count:1
+    Properties filter field count:0
+    Workspace measurement count:1
+    Experiment name:ALSF_features
+    Which objects should be used for locations?:None
+    Enter a phenotype class table name if using the Classifier tool in CellProfiler Analyst:
+    Export object relationships?:Yes
+    Overwrite without warning?:Never
+    Access CellProfiler Analyst images via URL?:No
+    Select the classification type:Object
+    Select an image to include:None
+    Use the image name for the display?:Yes
+    Image name:Channel1
+    Channel color:red
+    Do you want to add group fields?:No
+    Enter the name of the group:
+    Enter the per-image columns which define the group, separated by commas:ImageNumber, Image_Metadata_Plate, Image_Metadata_Well
+    Do you want to add filter fields?:No
+    Automatically create a filter for each plate?:No
+    Create a CellProfiler Analyst workspace file?:No
+    Select the measurement display tool:ScatterPlot
+    Type of measurement to plot on the X-axis:Image
+    Enter the object name:None
+    Select the X-axis measurement:None
+    Select the X-axis index:ImageNumber
+    Type of measurement to plot on the Y-axis:Image
+    Enter the object name:None
+    Select the Y-axis measurement:None
+    Select the Y-axis index:ImageNumber
