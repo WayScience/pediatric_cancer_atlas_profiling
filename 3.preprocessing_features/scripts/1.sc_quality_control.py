@@ -299,7 +299,7 @@ for plate_name, plate_df in plates_dict.items():
         [large_nuclei_high_int_outliers, solidity_nuclei_outliers]
     ).index
 
-    # Remove rows with outlier indices from plate_4_df
+    # Remove rows with outlier indices
     plate_df_cleaned = plate_df.drop(outlier_indices)
 
     # Save cleaned data for this plate
