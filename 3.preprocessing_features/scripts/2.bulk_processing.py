@@ -22,6 +22,9 @@ from pycytominer.cyto_utils import output
 # In[2]:
 
 
+# Condition for how to normalize the plates
+normalize_with_U2OS = True  # Set to False if normalizing to whole plate versus just U2OS cell line
+
 # Path to dir with cleaned data from single-cell QC
 cleaned_dir = pathlib.Path("./data/cleaned_profiles")
 
@@ -103,20 +106,27 @@ pprint.pprint(plate_info_dictionary, indent=4)
 # In[4]:
 
 
+# Determine suffix based on normalize_with_U2OS
+u2os_suffix = "_U2OS_samples" if normalize_with_U2OS else ""
+
+# If normalizing with U2OS, create a subfolder named 'U2OS_samples'
+if normalize_with_U2OS:
+    U2OS_output_dir = output_dir / "U2OS_samples"
+    U2OS_output_dir.mkdir(exist_ok=True)
+else:
+    U2OS_output_dir = output_dir  # Otherwise, use the root output_dir for whole plate normalization
+
 for plate, info in plate_info_dictionary.items():
     print(f"Now performing pycytominer pipeline for {plate}")
 
-    # Output file paths
+    # Output file paths for each file
     output_aggregated_file = str(pathlib.Path(f"{output_dir}/{plate}_bulk.parquet"))
-    output_annotated_file = str(
-        pathlib.Path(f"{output_dir}/{plate}_bulk_annotated.parquet")
-    )
-    output_normalized_file = str(
-        pathlib.Path(f"{output_dir}/{plate}_bulk_normalized.parquet")
-    )
-    output_feature_select_file = str(
-        pathlib.Path(f"{output_dir}/{plate}_bulk_feature_selected.parquet")
-    )
+    output_annotated_file = str(pathlib.Path(f"{output_dir}/{plate}_bulk_annotated.parquet"))
+    
+    # Save normalized and feature-selected files in U2OS_samples folder if needed
+    output_normalized_file = str(pathlib.Path(f"{U2OS_output_dir}/{plate}_bulk_normalized{u2os_suffix}.parquet"))
+    output_feature_select_file = str(pathlib.Path(f"{U2OS_output_dir}/{plate}_bulk_feature_selected{u2os_suffix}.parquet"))
+
 
     # Load single-cell profiles
     single_cell_df = pd.read_parquet(info["profile_path"])
@@ -151,11 +161,13 @@ for plate, info in plate_info_dictionary.items():
     )
 
     # Step 4: Normalization
+    samples = "Metadata_cell_line == 'U2-OS'" if normalize_with_U2OS else "all" # "all" is the default to perform on whole plate
     normalize(
         profiles=annotated_df,
         method="standardize",
         output_file=output_normalized_file,
         output_type="parquet",
+        samples=samples,
     )
 
     # Step 5: Feature selection
