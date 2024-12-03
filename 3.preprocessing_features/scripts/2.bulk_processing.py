@@ -19,12 +19,12 @@ from pycytominer.cyto_utils import output
 
 # ## Set paths and variables
 
-# In[2]:
+# In[ ]:
 
 
 # Condition for how to normalize the plates
 normalize_with_U2OS = (
-    True  # Set to False if normalizing to whole plate versus just U2OS cell line
+    True  # Set to False if normalizing to whole plate versus just `U2-OS` cell line
 )
 
 # Path to dir with cleaned data from single-cell QC
@@ -105,13 +105,13 @@ pprint.pprint(plate_info_dictionary, indent=4)
 
 # ## Process data with pycytominer
 
-# In[4]:
+# In[ ]:
 
 
 # Determine suffix based on normalize_with_U2OS
 u2os_suffix = "_U2OS_samples" if normalize_with_U2OS else ""
 
-# If normalizing with U2OS, create a subfolder named 'U2OS_samples'
+# If normalizing with U2-OS, create a subfolder named 'U2OS_samples'
 if normalize_with_U2OS:
     U2OS_output_dir = output_dir / "U2OS_samples"
     U2OS_output_dir.mkdir(exist_ok=True)
