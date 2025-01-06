@@ -26,4 +26,4 @@ dependencies:
 - conda-forge::sentry-sdk=0.18.0
 - pip:
     - cellprofiler==4.2.8
-    - git+https://github.com/broadinstitute/pe2loaddata.git@4c9aee0b9fbe74bb7308b1114dabf2895113552d
+    - pe2loaddata>=0.1.2
