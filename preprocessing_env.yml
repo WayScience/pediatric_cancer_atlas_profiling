@@ -19,5 +19,5 @@ dependencies:
   - conda-forge::pycytominer=1.2.0
   - pip:
     - Cytotable
-    - coSMicQC==0.1.0
+    - coSMicQC>=0.1.0
     - dask[dataframe]
