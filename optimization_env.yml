@@ -4,7 +4,7 @@ channels:
 - conda-forge
 
 dependencies:
-- conda-forge::python=3.11
+- conda-forge::python=3.10
 - conda-forge::ipykernel
 - conda-forge::jupyterlab
 - conda-forge::nbconvert
@@ -13,5 +13,6 @@ dependencies:
 - conda-forge::pandas
 - conda-forge::scikit-image
 - conda-forge::scikit-learn
+- conda-forge::seaborn
 - pip:
     - git+https://github.com/WayScience/pairwise_compare.git
