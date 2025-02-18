@@ -15,6 +15,7 @@ library(arrow)
 
 # Set the file path to your results folder
 file_dir <- file.path("results")
+dir.create(file_dir, showWarnings = FALSE) 
 
 compare_file <- file.path(file_dir, "pairwise_compare.parquet")
 
