@@ -28,7 +28,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-import gc
 import time
 
 from cosmicqc import find_outliers
@@ -186,6 +185,20 @@ def plot_nuclei_solidity_histogram(
 # In[4]:
 
 
+# Set parameter for papermill to use for processing
+plate_id = "BR00143976"
+
+
+# In[5]:
+
+
+# Parameters
+plate_id = "BR00143978"
+
+
+# In[6]:
+
+
 # Directory with data
 data_dir = pathlib.Path("./data/converted_profiles/")
 
@@ -196,6 +209,10 @@ cleaned_dir.mkdir(exist_ok=True)
 # Directory to save qc figures
 qc_fig_dir = pathlib.Path("./qc_figures")
 qc_fig_dir.mkdir(exist_ok=True)
+
+# Directory to save qc results
+qc_results_dir = pathlib.Path("./qc_results")
+qc_results_dir.mkdir(exist_ok=True)
 
 # Create an empty dictionary to store data frames for each plate
 all_qc_data_frames = {}
@@ -212,111 +229,169 @@ metadata_columns = [
 
 # ## Load in plate to perform QC on
 
-# In[5]:
+# In[7]:
 
 
-# List all converted parquet files
-all_files = list(data_dir.glob("*_converted.parquet"))
+# Construct the file path for the given plate_id
+file_path = data_dir / f"{plate_id}_converted.parquet"
 
-# Sort the files based on the plate name (assuming the plate name is the prefix before the first '_')
-all_files.sort(
-    key=lambda f: int(
-        f.stem.split("_")[0][2:]
-    )  # Assuming plate names are prefixed with 'BR' and followed by numbers
-)
-
-# Initialize an empty dictionary to hold DataFrames for each plate
-plates_dict = {}
-
-# Process each file in the sorted list
-for file_path in all_files:
+if file_path.exists():
     start_time = time.time()  # Start timer for loading
-
-    # Extract plate name for logging and as dictionary key
-    plate_name = file_path.stem.split("_")[0]
 
     # Load and compute the DataFrame
     plate_df = dd.read_parquet(file_path, engine="pyarrow").compute()
 
     end_time = time.time()  # End timer for loading
     print(
-        f"Loaded plate: {plate_name}, Shape: {plate_df.shape}, Time taken: {end_time - start_time:.2f} seconds"
+        f"Loaded plate: {plate_id}, Shape: {plate_df.shape}, Time taken: {end_time - start_time:.2f} seconds"
     )
-
-    # Store the DataFrame in the dictionary with the plate name as the key
-    plates_dict[plate_name] = plate_df
-
-# Check if no files were found and loaded
-if not plates_dict:
-    print("No parquet files found.")
+else:
+    print(f"Parquet file for plate {plate_id} not found.")
 
 
-# In[6]:
+# ## Filter down plate data to detect outliers to improve speed
+
+# In[8]:
 
 
-# Loop through each plate dataframe in plates_dict
-for plate_name, plate_df in plates_dict.items():
-    # Print the plate name being processed
-    print(f"Processing plate: {plate_name}")
+# Define the QC features
+qc_features = [
+    "Nuclei_AreaShape_Area",
+    "Nuclei_Intensity_IntegratedIntensity_CorrDNA",
+    "Nuclei_AreaShape_Solidity",
+]
 
-    # Find large nuclei outliers for the current plate
-    large_nuclei_high_int_outliers = find_outliers(
-        df=plate_df,
-        metadata_columns=metadata_columns,
-        feature_thresholds={
-            "Nuclei_AreaShape_Area": 2,
-            "Nuclei_Intensity_IntegratedIntensity_CorrDNA": 3,
-        },
-    )
+# Filter plate_df to only include metadata columns and QC features
+filtered_plate_df = plate_df[metadata_columns + qc_features]
 
-    # Save large nuclei scatterplot
-    plot_large_nuclei_outliers(
-        plate_df=plate_df,
-        outliers_df=large_nuclei_high_int_outliers,
-        plate_name=plate_name,
-        qc_fig_dir=qc_fig_dir,
-    )
 
-    # Find low nuclei solidity outliers for the current plate
-    solidity_nuclei_outliers = find_outliers(
-        df=plate_df,
-        metadata_columns=metadata_columns,
-        feature_thresholds={
-            "Nuclei_AreaShape_Solidity": -2,
-        },
-    )
+# ## Detect segmentations of large clusters of nuclei
 
-    # Save low nuclei solidity histogram
-    plot_nuclei_solidity_histogram(
-        plate_df=plate_df,
-        outliers_df=solidity_nuclei_outliers,
-        plate_name=plate_name,
-        qc_fig_dir=qc_fig_dir,
-    )
+# In[9]:
 
-    # Assuming nuclei_outliers_df and cells_outliers_df have the same index
-    outlier_indices = pd.concat(
-        [large_nuclei_high_int_outliers, solidity_nuclei_outliers]
-    ).index
 
-    # Remove rows with outlier indices
-    plate_df_cleaned = plate_df.drop(outlier_indices)
+# Find large nuclei outliers for the current plate
+large_nuclei_high_int_outliers = find_outliers(
+    df=filtered_plate_df,
+    metadata_columns=metadata_columns,
+    feature_thresholds={
+        "Nuclei_AreaShape_Area": 2,
+        "Nuclei_Intensity_IntegratedIntensity_CorrDNA": 3,
+    },
+)
 
-    # Save cleaned data for this plate
-    plate_df_cleaned.to_parquet(f"{cleaned_dir}/{plate_name}_cleaned.parquet")
 
-    # Calculate the number of outliers and the total number of cells
-    num_outliers = len(plate_df) - len(plate_df_cleaned)  # The number of outliers is the difference
-    total_cells = len(plate_df)
+# ### Plot the outliers
 
-    # Calculate the percentage of cells that failed QC
-    percent_failed_qc = (num_outliers / total_cells) * 100
+# In[10]:
 
-    # Print the plate name, the shape of the cleaned data, and the percentage of cells that failed QC
-    print(f"{plate_name} has been cleaned and saved with the shape: {plate_df_cleaned.shape}.\n"
-        f"Percentage of cells that failed QC: {percent_failed_qc:.2f}%")
 
-    # Clear variables used in this iteration to free up memory
-    del plate_df, large_nuclei_high_int_outliers, solidity_nuclei_outliers, plate_df_cleaned
-    gc.collect()  # Ensures that memory is actually freed if no other references exist
+# Save large nuclei scatterplot
+plot_large_nuclei_outliers(
+    plate_df=plate_df,
+    outliers_df=large_nuclei_high_int_outliers,
+    plate_name=plate_id,
+    qc_fig_dir=qc_fig_dir,
+)
+
+
+# ## Detect very irregular shaped nuclei, likely indicating mis-segmentation
+# 
+# NOTE: These datasets are meant for optimization so all cells should be in normal, control cell states. This mean there are likely to be not as interesting phenotypes to be mistaken as poor quality segmentations.
+
+# In[11]:
+
+
+# Find low nuclei solidity outliers for the current plate
+solidity_nuclei_outliers = find_outliers(
+    df=filtered_plate_df,
+    metadata_columns=metadata_columns,
+    feature_thresholds={
+        "Nuclei_AreaShape_Solidity": -2,
+    },
+)
+
+
+# ### Plot the outliers
+
+# In[12]:
+
+
+# Save low nuclei solidity histogram
+plot_nuclei_solidity_histogram(
+    plate_df=plate_df,
+    outliers_df=solidity_nuclei_outliers,
+    plate_name=plate_id,
+    qc_fig_dir=qc_fig_dir,
+)
+
+
+# ## Save the outlier indices to use for reporting
+
+# In[13]:
+
+
+# Identify failing indices from both outlier dataframes
+outlier_indices = pd.concat(
+    [large_nuclei_high_int_outliers, solidity_nuclei_outliers]
+).index.unique()
+
+# Create a new dataframe with only the failing rows
+failing_df = plate_df.loc[outlier_indices, metadata_columns].copy()
+
+# Add failure condition columns, marking all rows as True for each condition they failed
+failing_df["Failed_LargeNuclei_HighInt"] = failing_df.index.isin(
+    large_nuclei_high_int_outliers.index
+)
+failing_df["Failed_SolidityNuclei"] = failing_df.index.isin(
+    solidity_nuclei_outliers.index
+)
+
+# Ensure boolean dtype
+failing_df = failing_df.astype(
+    {"Failed_LargeNuclei_HighInt": bool, "Failed_SolidityNuclei": bool}
+)
+
+# Keep original indices for later
+failing_df = failing_df.reset_index().rename(columns={"index": "original_indices"})
+
+# Save the indices dataframe as CSV
+failing_df.to_csv(
+    pathlib.Path(f"{qc_results_dir}/{plate_id}_failed_qc_indices.csv.gz"),
+    compression="gzip",
+    index=False,
+)
+
+# Calculate percentage failed
+total_rows = plate_df.shape[0]
+failed_percentage = (failing_df.shape[0] / total_rows) * 100
+
+# Print summary with percentage
+print(f"Total failing single cells: {failing_df.shape[0]} ({failed_percentage:.2f}%)")
+
+
+# ## Clean and save the data
+
+# In[14]:
+
+
+# Remove rows with outlier indices
+plate_df_cleaned = plate_df.drop(outlier_indices)
+
+# Save cleaned data for this plate
+plate_df_cleaned.to_parquet(f"{cleaned_dir}/{plate_id}_cleaned.parquet")
+
+# Calculate the number of outliers and the total number of cells
+num_outliers = len(plate_df) - len(
+    plate_df_cleaned
+)  # The number of outliers is the difference
+total_cells = len(plate_df)
+
+# Calculate the percentage of cells that failed QC
+percent_failed_qc = (num_outliers / total_cells) * 100
+
+# Print the plate name, the shape of the cleaned data, and the percentage of cells that failed QC
+print(
+    f"{plate_id} has been cleaned and saved with the shape: {plate_df_cleaned.shape}."
+)
 
