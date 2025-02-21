@@ -37,4 +37,4 @@ done
 # Run the rest of the preprocessing and reporting
 python nbconverted/2.bulk_processing.py
 python nbconverted/3.single_cell_processing.py
-python nbconverted/3.single_cell_processing.py
+python nbconverted/4.sc_qc_report.py
