@@ -189,6 +189,8 @@ def plot_nuclei_solidity_histogram(
 plate_id = "BR00143976"
 
 
+# ## Injected parameter from papermill that updates for every plate being processed
+
 # In[5]:
 
 
@@ -297,7 +299,7 @@ plot_large_nuclei_outliers(
 
 # ## Detect very irregular shaped nuclei, likely indicating mis-segmentation
 # 
-# NOTE: These datasets are meant for optimization so all cells should be in normal, control cell states. This mean there are likely to be not as interesting phenotypes to be mistaken as poor quality segmentations.
+# **NOTE:** For the pilot data, we are determining optimal conditions (seeding density and time point). This means all cells are not treated and should be in a "healthy" state. Given that `solidity` measures how irregular the shape of a nuclei is, we would expect that cells treated with a drug/compound could yield interesting shapes or phenotypes. Since we are not working with drug treatments at this time, we can use this feature to identify technically incorrect segmentations.
 
 # In[11]:
 
