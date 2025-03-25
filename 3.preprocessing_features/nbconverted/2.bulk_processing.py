@@ -19,7 +19,7 @@ from pycytominer.cyto_utils import output
 
 # ## Set paths and variables
 
-# In[ ]:
+# In[2]:
 
 
 # Condition for how to normalize the plates
@@ -105,7 +105,7 @@ pprint.pprint(plate_info_dictionary, indent=4)
 
 # ## Process data with pycytominer
 
-# In[ ]:
+# In[4]:
 
 
 # Determine suffix based on normalize_with_U2OS

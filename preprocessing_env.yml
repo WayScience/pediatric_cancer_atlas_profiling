@@ -21,4 +21,5 @@ dependencies:
   - pip:
     - Cytotable
     - coSMicQC>=0.1.0
+    - cytodataframe>0.0.17
     - dask[dataframe]
