@@ -22,3 +22,6 @@ sqlite_outputs*
 3.preprocessing_features/data/cleaned_profiles
 3.preprocessing_features/data/single_cell_profiles
 
+# Ignore CP pipeline to extract example FOV images
+FOV_example_output.cppipe
+
