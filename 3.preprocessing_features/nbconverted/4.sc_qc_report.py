@@ -93,7 +93,7 @@ plate_info_dictionary = {
 pprint.pprint(plate_info_dictionary, indent=4)
 
 
-# In[4]:
+# In[ ]:
 
 
 # Set metadata columns to load in for the converted df
@@ -164,7 +164,7 @@ qc_report_df = pd.concat(qc_report_list, ignore_index=True)
 # Save QC report as parquet file
 qc_report_df.to_parquet(pathlib.Path(f"{output_dir}/qc_report.parquet"))
 
-# Display qc report info for the row with the highest percentage of failing cells
+# Display qc report info
 print(qc_report_df.shape)
 qc_report_df.head()
 
