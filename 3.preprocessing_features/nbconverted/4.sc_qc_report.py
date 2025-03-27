@@ -93,7 +93,7 @@ plate_info_dictionary = {
 pprint.pprint(plate_info_dictionary, indent=4)
 
 
-# In[4]:
+# In[ ]:
 
 
 # Set metadata columns to load in for the converted df
@@ -141,12 +141,15 @@ for plate, info in plate_info_dictionary.items():
     # Add 'Metadata_time_point' column based on the plate's time_point from dict
     annotated_df["Metadata_time_point"] = info["time_point"]
 
-    # Group by cell line and seeding density
+    # Group by cell line and seeding density, and calculate total nuclei segmented and failed QC
     failure_stats = (
-        annotated_df.groupby(["Metadata_cell_line", "Metadata_seeding_density", "Metadata_time_point"])["failed_qc"]
-        .mean()
+        annotated_df.groupby(["Metadata_cell_line", "Metadata_seeding_density", "Metadata_time_point"])
+        .agg(
+            total_nuclei_segmented=("failed_qc", "count"),
+            total_failed_qc=("failed_qc", "sum"),
+            percentage_failing_cells=("failed_qc", "mean")
+        )
         .reset_index()
-        .rename(columns={"failed_qc": "percentage_failing_cells"})
     )
 
     # Convert to percentage

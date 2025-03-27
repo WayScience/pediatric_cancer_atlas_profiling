@@ -7,17 +7,27 @@
 # 
 # ### Assessing poor nuclei segmentation
 # 
-# Due to high confluence with various seeding densities, sometimes nuclei overlap on top of each other, creating highly intense clusters within the Hoechst channel. To identify these nuclei, we use:
+# Due to high confluence with various seeding densities, sometimes nuclei overlap on top of each other, creating highly intense clusters within the Hoechst channel. 
+# To identify these nuclei, we use:
 # 
-# - **Nuclei Area:** This metric quantifies the number of pixels in a nucleus segmentation. 
-# We detect nuclei that are abnormally large, which likely indicates poor nucleus segmentation where overlapping nuclei are merged into one segmentation. 
-# - **Nuclei Intensity:** This metric quantifies the total intensity of all pixels in a nucleus segmentation. 
-# In combination with abnormally large nuclei, we detect nuclei that are also highly intense, likely indicating that this a group of overlapped nuclei.
+# - **Nuclei mass displacement:** This metric quantifies how different the segmentation versus intensity based centeroids are, which can reflect multiple nuclei within one segmentation. 
+# - **Nuclei intensity:** This metric quantifies the total intensity of all pixels in a nucleus segmentation. 
+# In combination with abnormally high mass displacement, we detect nuclei that are also highly intense, likely indicating that this a group of overlapped nuclei.
 # 
 # For the preliminary dataset, we are working with cells that have not been treated so we do not expect any crazy phenotypes. Given that context, we can use a feature called Solidity. From ChatGPT, the simple explanation is that this features compares the area of the object to its convex hull, which measures compactness in relation to convexity. High solidity implies few indentations, while lower solidity indicates more irregularity.
 # 
-# - **Nuclei Solidity:** This metric quantifies the compactness of the nuclei shape.
+# - **Nuclei solidity:** This metric quantifies the compactness of the nuclei shape.
 # When a nuclei is mis-segmented, we see more protrusions or harsh outlines around the segmentations, which we expect this is what this feature will detect.
+# 
+# ### Assessing poor cell segmentation
+# 
+# Also due to high confluence, overlapping nuclei can lead to the CellProfiler segmentation algorithm to sometimes keep bad segmentations (which is why we have coSMicQC) but can also detect these segmentations as being "too large" based on the parameters. 
+# This leads to poor cell segmentations because CellProfiler will remove the context of the nuclei it couldn't segment, leading to segmenting multiple cells as one cell and assigning it to one nuclei.
+# To identify these cells, we use:
+# 
+# - **Cell intensity in the nuclei channel:** This metric quantifies the total intensity of all pixels of a cell segmentation in the nuclei channel. We would expect fairly low total intensity in the nuclei channel for whole cells as there is only one 
+# 
+# 
 
 # In[1]:
 
@@ -30,7 +40,13 @@ import seaborn as sns
 
 import time
 
+from cytodataframe import CytoDataFrame
 from cosmicqc import find_outliers
+
+import warnings
+
+# Suppress all warnings
+warnings.filterwarnings('ignore')
 
 
 # # Set functions for plotting
@@ -40,13 +56,13 @@ from cosmicqc import find_outliers
 # In[2]:
 
 
-def plot_large_nuclei_outliers(
+def plot_cluster_nuclei_outliers(
     plate_df: pd.DataFrame,
     outliers_df: pd.DataFrame,
     plate_name: str,
     qc_fig_dir: pathlib.Path,
 ) -> None:
-    """Plot scatterplot of the large nuclei outliers.
+    """Plot scatterplot of the cluster nuclei outliers.
 
     Args:
         plate_df (pd.DataFrame): Dataframe of the CytoTable output with the morphology profiles.
@@ -69,7 +85,7 @@ def plot_large_nuclei_outliers(
     plt.figure(figsize=(10, 6))
     sns.scatterplot(
         data=plate_df,
-        x="Nuclei_AreaShape_Area",
+        x="Nuclei_Intensity_MassDisplacement_CorrDNA",
         y="Nuclei_Intensity_IntegratedIntensity_CorrDNA",
         hue="Outlier_Status",
         palette={
@@ -81,10 +97,10 @@ def plot_large_nuclei_outliers(
 
     # Add threshold lines
     plt.axvline(
-        x=outliers_df["Nuclei_AreaShape_Area"].min(),
+        x=outliers_df["Nuclei_Intensity_MassDisplacement_CorrDNA"].min(),
         color="r",
         linestyle="--",
-        label="Min. threshold for Nuclei Area",
+        label="Min. threshold for Nuclei Mass Displacement",
     )
     plt.axhline(
         y=outliers_df["Nuclei_Intensity_IntegratedIntensity_CorrDNA"].min(),
@@ -94,17 +110,17 @@ def plot_large_nuclei_outliers(
     )
 
     # Customize plot
-    plt.title(f"Nuclei Area vs. Nuclei Integrated Intensity for plate {plate_name}")
-    plt.xlabel("Nuclei Area")
+    plt.title(f"Nuclei Mass Displacement vs. Nuclei Integrated Intensity for plate {plate_name}")
+    plt.xlabel("Nuclei Mass Displacement (Hoechst)")
     plt.ylabel("Nuclei Integrated Intensity (Hoechst)")
     plt.tight_layout()
 
     # Show legend
-    plt.legend(loc="upper left", bbox_to_anchor=(0, 1.0), prop={"size": 10})
+    plt.legend(loc="upper right", bbox_to_anchor=(1.0, 1.0), prop={"size": 10})
 
     # Save figure without showing it
     plt.savefig(
-        pathlib.Path(f"{qc_fig_dir}/{plate_name}_large_nuclei_outliers.png"), dpi=500
+        pathlib.Path(f"{qc_fig_dir}/{plate_name}_cluster_nuclei_outliers.png"), dpi=500
     )
     plt.close()  # Close the plot to prevent it from displaying
 
@@ -189,14 +205,14 @@ def plot_nuclei_solidity_histogram(
 plate_id = "BR00143976"
 
 
-# ## Injected parameter from papermill that updates for every plate being processed
-
 # In[5]:
 
 
 # Parameters
 plate_id = "BR00143978"
 
+
+# ## Injected parameter from papermill that updates for every plate being processed
 
 # In[6]:
 
@@ -219,14 +235,8 @@ qc_results_dir.mkdir(exist_ok=True)
 # Create an empty dictionary to store data frames for each plate
 all_qc_data_frames = {}
 
-# metadata columns to include in output data frame
-metadata_columns = [
-    "Image_Metadata_Plate",
-    "Image_Metadata_Well",
-    "Image_Metadata_Site",
-    "Metadata_Nuclei_Location_Center_X",
-    "Metadata_Nuclei_Location_Center_Y",
-]
+# Set the compartment of choice to perform QC at the start (will change later)
+compartment = "Nuclei"
 
 
 # ## Load in plate to perform QC on
@@ -251,47 +261,116 @@ else:
     print(f"Parquet file for plate {plate_id} not found.")
 
 
-# ## Filter down plate data to detect outliers to improve speed
+# ## Set columns and mapping
 
 # In[8]:
 
 
+# metadata columns to include in output data frame
+metadata_columns = [
+    "Image_Metadata_Plate",
+    "Image_Metadata_Well",
+    "Image_Metadata_Site",
+    f"Metadata_{compartment}_Location_Center_X",
+    f"Metadata_{compartment}_Location_Center_Y",
+    "Image_FileName_OrigDNA",
+    "Image_FileName_OrigAGP",
+    "Image_PathName_OrigDNA",
+    "Image_PathName_OrigAGP",
+    f"{compartment}_AreaShape_BoundingBoxMaximum_X",
+    f"{compartment}_AreaShape_BoundingBoxMaximum_Y",
+    f"{compartment}_AreaShape_BoundingBoxMinimum_X",
+    f"{compartment}_AreaShape_BoundingBoxMinimum_Y",
+]
+
+# create an outline and orig mapping dictionary to map original images to outlines
+# note: we turn off formatting here to avoid the key-value pairing definition
+# from being reformatted by black, which is normally preferred.
+# fmt: off
+outline_to_orig_mapping = {
+    rf"{compartment}Outlines_{record['Image_Metadata_Plate']}_{record['Image_Metadata_Well']}_{record['Image_Metadata_Site']}.tiff": 
+    rf"r{int(record['Image_Metadata_Row']):02d}c{int(record['Image_Metadata_Col']):02d}f{int(record['Image_Metadata_Site']):02d}p(\d{{2}})-ch\d+sk\d+fk\d+fl\d+\.tiff"
+    for record in plate_df[
+        [
+            "Image_Metadata_Plate",
+            "Image_Metadata_Well",
+            "Image_Metadata_Site",
+            "Image_Metadata_Row",
+            "Image_Metadata_Col",
+        ]
+    ].to_dict(orient="records")
+}
+# fmt: on
+
+next(iter(outline_to_orig_mapping.items()))
+
+
+# ## Filter down plate data to detect nuclei outliers (improves speed)
+
+# In[9]:
+
+
 # Define the QC features
 qc_features = [
-    "Nuclei_AreaShape_Area",
     "Nuclei_Intensity_IntegratedIntensity_CorrDNA",
     "Nuclei_AreaShape_Solidity",
+    "Nuclei_Intensity_MassDisplacement_CorrDNA",
 ]
 
 # Filter plate_df to only include metadata columns and QC features
 filtered_plate_df = plate_df[metadata_columns + qc_features]
 
 
-# ## Detect segmentations of large clusters of nuclei
-
-# In[9]:
-
-
-# Find large nuclei outliers for the current plate
-large_nuclei_high_int_outliers = find_outliers(
-    df=filtered_plate_df,
-    metadata_columns=metadata_columns,
-    feature_thresholds={
-        "Nuclei_AreaShape_Area": 2,
-        "Nuclei_Intensity_IntegratedIntensity_CorrDNA": 3,
-    },
-)
-
-
-# ### Plot the outliers
+# ## Detect segmentations of clustered nuclei
 
 # In[10]:
 
 
-# Save large nuclei scatterplot
-plot_large_nuclei_outliers(
+# Find large nuclei outliers for the current plate
+nuclei_clustered_outliers = find_outliers(
+    df=filtered_plate_df,
+    metadata_columns=metadata_columns,
+    feature_thresholds={
+        "Nuclei_Intensity_MassDisplacement_CorrDNA": 0.05, # Set very low as to detect all instances of clustering nuclei
+        "Nuclei_Intensity_IntegratedIntensity_CorrDNA": 1.5, # Set higher than displacement to avoid false positives
+    },
+)
+
+# MUST SET DATA AS DATAFRAME FOR OUTLINE DIR TO WORK
+nuclei_clustered_outliers_cdf = CytoDataFrame(
+    data=pd.DataFrame(nuclei_clustered_outliers),
+    data_outline_context_dir=f"../2.feature_extraction/sqlite_outputs/{plate_id}/outlines",
+    segmentation_file_regex=outline_to_orig_mapping,
+)[
+    [
+        "Nuclei_Intensity_MassDisplacement_CorrDNA",
+        "Nuclei_Intensity_IntegratedIntensity_CorrDNA",
+        "Image_FileName_OrigDNA",
+    ]
+]
+
+
+print(nuclei_clustered_outliers_cdf.shape)
+nuclei_clustered_outliers_cdf.sort_values(
+    by="Nuclei_Intensity_MassDisplacement_CorrDNA", ascending=True
+).head(2)
+
+
+# In[11]:
+
+
+nuclei_clustered_outliers_cdf.sample(n=2, random_state=0)
+
+
+# ### Plot the outliers
+
+# In[12]:
+
+
+# Save cluster nuclei scatterplot
+plot_cluster_nuclei_outliers(
     plate_df=plate_df,
-    outliers_df=large_nuclei_high_int_outliers,
+    outliers_df=nuclei_clustered_outliers_cdf,
     plate_name=plate_id,
     qc_fig_dir=qc_fig_dir,
 )
@@ -301,7 +380,7 @@ plot_large_nuclei_outliers(
 # 
 # **NOTE:** For the pilot data, we are determining optimal conditions (seeding density and time point). This means all cells are not treated and should be in a "healthy" state. Given that `solidity` measures how irregular the shape of a nuclei is, we would expect that cells treated with a drug/compound could yield interesting shapes or phenotypes. Since we are not working with drug treatments at this time, we can use this feature to identify technically incorrect segmentations.
 
-# In[11]:
+# In[13]:
 
 
 # Find low nuclei solidity outliers for the current plate
@@ -309,14 +388,38 @@ solidity_nuclei_outliers = find_outliers(
     df=filtered_plate_df,
     metadata_columns=metadata_columns,
     feature_thresholds={
-        "Nuclei_AreaShape_Solidity": -2,
+        "Nuclei_AreaShape_Solidity": -1.6, # Set at this point where it looks like it starts to detect good quality nuclei
     },
 )
+
+# MUST SET DATA AS DATAFRAME FOR OUTLINE DIR TO WORK
+solidity_nuclei_outliers_cdf = CytoDataFrame(
+    data=pd.DataFrame(solidity_nuclei_outliers),
+    data_outline_context_dir=f"../2.feature_extraction/sqlite_outputs/{plate_id}/outlines",
+    segmentation_file_regex=outline_to_orig_mapping,
+)[
+    [
+        "Nuclei_AreaShape_Solidity",
+        "Image_FileName_OrigDNA",
+    ]
+]
+
+
+print(solidity_nuclei_outliers_cdf.shape)
+solidity_nuclei_outliers_cdf.sort_values(
+    by="Nuclei_AreaShape_Solidity", ascending=False
+).head(2)
+
+
+# In[14]:
+
+
+solidity_nuclei_outliers_cdf.sample(n=2, random_state=0)
 
 
 # ### Plot the outliers
 
-# In[12]:
+# In[15]:
 
 
 # Save low nuclei solidity histogram
@@ -328,30 +431,145 @@ plot_nuclei_solidity_histogram(
 )
 
 
+# ## Detect cells that contain multiple nuclei due to segmentation issues
+# 
+# When CellProfiler segments a cluster of nuclei and decides that it is over the diameter range as specified in the parameters, it will not include that segmentation when segmenting whole cells. 
+# This can lead to a whole cell segmentation based on one nuclei including the adjacent nuclei that was not included as a segmentation.
+# 
+# This description requires prior knowledge of the `IdentifyPrimaryObjects` and `IdentifySecondaryObjects` modules.
+# 
+# As a metaphor, we can think of it as three apples on a plate.
+# One apple is detected correctly as one apple, but the other two were two close together, detected as one apple, and then removed from the plate because of it.
+# Now, it looks like the whole plate belongs to the one correct apple, but in reality the plate should be split between three apples.
+# This is the problem we want to avoid for a single-cell segmentation, we don't want to have a whole cell segmentation be assigned to one nuclei when it actually contains multiple nuclei.
+# 
+
+# In[16]:
+
+
+# change compartment to cells
+compartment = "Cells"
+
+# metadata columns to include in output data frame
+metadata_columns = [
+    "Image_Metadata_Plate",
+    "Image_Metadata_Well",
+    "Image_Metadata_Site",
+    f"Metadata_{compartment}_Location_Center_X",
+    f"Metadata_{compartment}_Location_Center_Y",
+    "Image_FileName_OrigDNA",
+    "Image_FileName_OrigAGP",
+    "Image_PathName_OrigDNA",
+    "Image_PathName_OrigAGP",
+    f"{compartment}_AreaShape_BoundingBoxMaximum_X",
+    f"{compartment}_AreaShape_BoundingBoxMaximum_Y",
+    f"{compartment}_AreaShape_BoundingBoxMinimum_X",
+    f"{compartment}_AreaShape_BoundingBoxMinimum_Y",
+]
+
+# create an outline and orig mapping dictionary to map original images to outlines
+# note: we turn off formatting here to avoid the key-value pairing definition
+# from being reformatted by black, which is normally preferred.
+# fmt: off
+outline_to_orig_mapping = {
+    rf"{compartment}Outlines_{record['Image_Metadata_Plate']}_{record['Image_Metadata_Well']}_{record['Image_Metadata_Site']}.tiff": 
+    rf"r{int(record['Image_Metadata_Row']):02d}c{int(record['Image_Metadata_Col']):02d}f{int(record['Image_Metadata_Site']):02d}p(\d{{2}})-ch\d+sk\d+fk\d+fl\d+\.tiff"
+    for record in plate_df[
+        [
+            "Image_Metadata_Plate",
+            "Image_Metadata_Well",
+            "Image_Metadata_Site",
+            "Image_Metadata_Row",
+            "Image_Metadata_Col",
+        ]
+    ].to_dict(orient="records")
+}
+# fmt: on
+
+next(iter(outline_to_orig_mapping.items()))
+
+
+# ### Filter down plate data to detect cells outliers (improves speed)
+
+# In[17]:
+
+
+# Define the QC features
+qc_features = [
+    "Cells_Intensity_IntegratedIntensity_CorrDNA"
+]
+
+# Filter plate_df to only include metadata columns and QC features
+filtered_plate_df = plate_df[metadata_columns + qc_features]
+
+
+# ### Detect cell outliers
+
+# In[18]:
+
+
+# Find cell outliers for the current plate
+cell_outliers = find_outliers(
+    df=filtered_plate_df,
+    metadata_columns=metadata_columns,
+    feature_thresholds={
+        # Set low to attempt to detect all instances of abnormally high int in nuclei for whole cells
+        "Cells_Intensity_IntegratedIntensity_CorrDNA": 0.5, 
+    },
+)
+
+# MUST SET DATA AS DATAFRAME FOR OUTLINE DIR TO WORK
+cell_outliers_cdf = CytoDataFrame(
+    data=pd.DataFrame(cell_outliers),
+    data_outline_context_dir=f"../2.feature_extraction/sqlite_outputs/{plate_id}/outlines",
+    segmentation_file_regex=outline_to_orig_mapping,
+)[
+    [
+        "Cells_Intensity_IntegratedIntensity_CorrDNA",
+        "Image_FileName_OrigDNA",
+    ]
+]
+
+
+print(cell_outliers_cdf.shape)
+cell_outliers_cdf.sort_values(
+    by="Cells_Intensity_IntegratedIntensity_CorrDNA", ascending=True
+).head(2)
+
+
+# In[19]:
+
+
+cell_outliers_cdf.sample(n=2, random_state=0)
+
+
 # ## Save the outlier indices to use for reporting
 
-# In[13]:
+# In[20]:
 
 
 # Identify failing indices from both outlier dataframes
 outlier_indices = pd.concat(
-    [large_nuclei_high_int_outliers, solidity_nuclei_outliers]
+    [nuclei_clustered_outliers, solidity_nuclei_outliers, cell_outliers]
 ).index.unique()
 
 # Create a new dataframe with only the failing rows
 failing_df = plate_df.loc[outlier_indices, metadata_columns].copy()
 
 # Add failure condition columns, marking all rows as True for each condition they failed
-failing_df["Failed_LargeNuclei_HighInt"] = failing_df.index.isin(
-    large_nuclei_high_int_outliers.index
+failing_df["Failed_ClusteredNuclei"] = failing_df.index.isin(
+    nuclei_clustered_outliers.index
 )
 failing_df["Failed_SolidityNuclei"] = failing_df.index.isin(
     solidity_nuclei_outliers.index
 )
+failing_df["Failed_CellsMultipleNuclei"] = failing_df.index.isin(
+    cell_outliers.index
+)
 
 # Ensure boolean dtype
 failing_df = failing_df.astype(
-    {"Failed_LargeNuclei_HighInt": bool, "Failed_SolidityNuclei": bool}
+    {"Failed_ClusteredNuclei": bool, "Failed_SolidityNuclei": bool, "Failed_CellsMultipleNuclei": bool}
 )
 
 # Keep original indices for later
@@ -374,7 +592,7 @@ print(f"Total failing single cells: {failing_df.shape[0]} ({failed_percentage:.2
 
 # ## Clean and save the data
 
-# In[14]:
+# In[21]:
 
 
 # Remove rows with outlier indices
@@ -383,16 +601,7 @@ plate_df_cleaned = plate_df.drop(outlier_indices)
 # Save cleaned data for this plate
 plate_df_cleaned.to_parquet(f"{cleaned_dir}/{plate_id}_cleaned.parquet")
 
-# Calculate the number of outliers and the total number of cells
-num_outliers = len(plate_df) - len(
-    plate_df_cleaned
-)  # The number of outliers is the difference
-total_cells = len(plate_df)
-
-# Calculate the percentage of cells that failed QC
-percent_failed_qc = (num_outliers / total_cells) * 100
-
-# Print the plate name, the shape of the cleaned data, and the percentage of cells that failed QC
+# Print the plate name and the shape of the cleaned data
 print(
     f"{plate_id} has been cleaned and saved with the shape: {plate_df_cleaned.shape}."
 )

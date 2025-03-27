@@ -8,9 +8,6 @@ conda activate alsf_preprocessing_env
 # convert all notebooks to script files into the nbconverted folder
 jupyter nbconvert --to script --output-dir=nbconverted/ *.ipynb
 
-# first, run CytoTable to generate merged single-cell profiles
-python nbconverted/0.convert_cytotable.py
-
 # Define the path to the parent folder to generate list of plate IDs
 PARENT_FOLDER="/home/jenna/pediatric_cancer_atlas_profiling/2.feature_extraction/sqlite_outputs/"
 
@@ -24,6 +21,14 @@ echo "Number of plates found: ${#plates[@]}"
 echo "Plates:"
 for plate in "${plates[@]}"; do
     echo "- $plate"
+done
+
+# First, using papermill, run CytoTable to generate merged single-cell profiles
+for plate in "${plates[@]}"; do
+    papermill \
+    0.convert_cytotable.ipynb \
+    0.convert_cytotable.ipynb \
+    -p plate_id $plate
 done
 
 # Using papermill, run single cell quality control on all plates
