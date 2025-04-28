@@ -25,3 +25,5 @@ sqlite_outputs*
 # Ignore CP pipeline to extract example FOV images
 FOV_example_output.cppipe
 
+# Ignore jupyter artifacts
+.ipynb_checkpoints/
