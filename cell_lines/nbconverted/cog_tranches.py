@@ -28,6 +28,11 @@
 # - longdoubling: If the cell line has a doubling time >80 hours (we included these sparingly)
 # - PDmatch: If cell lines have matches for progressive disease (we increased these in priority)
 # - DXmatch: If cell lines have matches for both diagnosis and progressive disease (we increased these in priority)
+# 
+# ### Updated prioritization
+# 
+# Because not all cell lines pass Cell Painting onboarding, we need to recalibrate at each tranche.
+# We will use this notebook for recalibration.
 
 # In[1]:
 
