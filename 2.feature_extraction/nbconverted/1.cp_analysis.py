@@ -8,6 +8,7 @@
 # In[1]:
 
 
+import argparse
 import pathlib
 import pprint
 
@@ -15,6 +16,13 @@ import sys
 
 sys.path.append("../utils")
 import cp_parallel
+
+# check if in a jupyter notebook
+try:
+    cfg = get_ipython().config
+    in_notebook = True
+except NameError:
+    in_notebook = False
 
 
 # ## Set paths and variables
@@ -36,10 +44,7 @@ output_dir.mkdir(exist_ok=True)
 loaddata_dir = pathlib.Path("./loaddata_csvs").resolve(strict=True)
 
 # Extract plate names and include as list
-plate_names = [
-    file.stem.split('_')[0] 
-    for file in loaddata_dir.glob("*.csv")
-]
+plate_names = [file.stem.split("_")[0] for file in loaddata_dir.glob("*.csv")]
 
 # Print the number of plates and their names
 print(f"Total number of plates: {len(plate_names)}")
@@ -60,7 +65,8 @@ plate_info_dictionary = {
         "path_to_output": output_dir / name,
         "path_to_pipeline": path_to_pipeline,
     }
-    for name in plate_names if next(loaddata_dir.glob(f"{name}*.csv"), None)
+    for name in plate_names
+    if next(loaddata_dir.glob(f"{name}*.csv"), None)
 }
 
 # view the dictionary to assess that all info is added correctly
