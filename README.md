@@ -44,22 +44,28 @@ Below are the examples of the plate map layouts based on seeding density:
 
 ## Repository structure
 
-| Module | Purpose | Description |
-| :---- | :----- | :---------- |
-| [0.download_data](0.download_data/) | Download plates and platemaps | Download all relevant data (images, XML files, platemap files) to process. All metadata information will be found in this module. |
+| Module                                                    | Purpose                               | Description                                                                                                                                    |
+| :-------------------------------------------------------- | :------------------------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------- |
+| [0.download_data](./0.download_data/)                     | Download plates and platemaps         | Download all relevant data (images, XML files, platemap files) to process. All metadata information will be found in this module.              |
+| [1.illumination_correction](./1.illumination_correction/) | Save illumination correction function | Perform illumination correction on the raw images and extract the function as an `npy` to apply during feature extraction                      |
+| [2.feature_extraction](./2.feature_extraction/)           | Extract morphology features           | Using CellProfiler, images are corrected, segmented for cell compartments and  features are extracted and outputted as SQLite files.           |
+| [3.preprocessing_features](./3.preprocessing_features/)   | Preprocess morphology profiles        | Format the SQLite output into single-cell profiles and perform single-cell QC and pycytominer to get normalized and feature selected profiles. |
+| [4.preliminary_results](./4.preliminary_results/)         | Generate exploratory data analysis    | Generate plots to explore the data for any interesting patterns or phenotypes (e.g., UMAP).                                                    |
+| [5.optimization](./5.optimization/)                       | Determine optimal conditions          | Perform analyses to determine the best conditions for each cell line in the pilot datasets.                                                    |
 
 ## Environments
 
-In this module, we include three different environments:
+In this module, we include four different environments found in the [environments](./environments/) folder:
 
-- **[CellProfiler environment](./cellprofiler_env.yml):** This environment is used for the illumination correction and feature extraction modules as we will be using CellProfiler v4.2.8 to perform these tasks. 
+- **[CellProfiler environment](./cellprofiler_env.yml):** This environment is used for the illumination correction and feature extraction modules as we will be using CellProfiler v4.2.8 to perform these tasks.
 - **[R environment](./r_environment.yml):** This environment is used for any notebook that requires visualization of results and figure generation in R language.
 - **[Image profiling environment](./preprocessing_env.yml)**: This environment is used during the preprocessing module after we extract morphology features using CellProfiler, which includes installing relevant formatting software such as pycytominer, CytoTable, and coSMicQC.
+- - **[Optimization environment](./r_environment.yml):** This environment is optimization analyses to determine best conditions (seeding density, time point, media) per cell line.
 
 These environments can be installed either via conda or mamba.
 Below is an example of how to install via the terminal.
 
 ```bash
-# Make sure to be in this repo as the current directory
+# Make sure to be in the environments folder
 mamba env create -f ...
 ```
