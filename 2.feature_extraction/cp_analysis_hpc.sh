@@ -1,13 +1,14 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks=6 # number of cores (plates)
+#SBATCH --mem-per-cpu=4.5G
 #SBATCH --partition=amilan
 #SBATCH --qos=long
 #SBATCH --account=amc-general
-#SBATCH --time=6-00:00 (days-hours:min:sec) # estimate time 6 days-ish (local took 5 days)
-#SBATCH --output=run_CP_pwease-%j.out
+#SBATCH --time=5-00:00 (days-hours:min:sec) # estimate time for one plate testing
+#SBATCH --output=run_CP-%j.out
 
-module load anaconda
+module load miniforge
 conda init bash
 # activate the CellProfiler environment
 conda activate alsf_cp_env

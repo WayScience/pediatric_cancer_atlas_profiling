@@ -3,7 +3,6 @@ This collection of functions runs CellProfiler in parallel and can convert the r
 for each process.
 """
 
-import logging
 import multiprocessing
 import pathlib
 import subprocess
@@ -11,12 +10,6 @@ from concurrent.futures import ProcessPoolExecutor, Future
 from typing import List
 
 from errors.exceptions import MaxWorkerError
-
-
-import logging
-import pathlib
-from typing import List
-import subprocess
 
 
 def results_to_log(
@@ -32,36 +25,12 @@ def results_to_log(
         run_name (str): Name for the type of CellProfiler run (e.g., whole image features)
     """
     # Create a logger instance specific to this run name
-    logger = logging.getLogger(run_name)
-    logger.setLevel(logging.INFO)
-
-    # Clear any existing handlers to prevent duplicate logging
-    for handler in logger.handlers[:]:
-        logger.removeHandler(handler)
-
-    # Set up the log file path
-    log_file_path = log_dir / f"{run_name}_combined_run.log"
-    handler = logging.FileHandler(
-        log_file_path, mode="w"
-    )  # Overwrite each time with 'w'
-    formatter = logging.Formatter(
-        "[%(asctime)s] %(message)s"
-    )  # Simple format without process ID
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-
-    # Log each result's output
+    log_dir.mkdir(parents=True, exist_ok=True)
     for result in results:
         plate_name = result.args[6].name
-        output_string = result.stderr.decode("utf-8")
-
-        # Log plate name and output string
-        logger.info(f"Plate Name: {plate_name}")
-        logger.info(f"Output String: {output_string}")
-
-    # Clean up by closing and removing the handler after all logs are written
-    handler.close()
-    logger.removeHandler(handler)
+        log_path = log_dir / f"{plate_name}_{run_name}_run.log"
+        with open(log_path, "w") as f:
+            f.write(result.stderr.decode("utf-8"))
 
 
 def run_cellprofiler_parallel(
@@ -77,6 +46,7 @@ def run_cellprofiler_parallel(
 
     Raises:
         FileNotFoundError: if paths to pipeline and images do not exist
+        MaxWorkerError: If CPU count is exceeded.
     """
     # create a list of commands for each plate with their respective log file
     commands = []
@@ -169,15 +139,16 @@ def run_cellprofiler_parallel(
 
     print("All processes have been completed!")
 
-    # for each process, confirm that the process completed successfully and return a log file
+    # Write each result's logs individually
     for result in results:
-        plate_name = result.args[6].name
-        # convert the results into log files
-        results_to_log(results=results, log_dir=log_dir, run_name=run_name)
+        results_to_log(results=[result], log_dir=log_dir, run_name=run_name)
+        try:
+            plate_name = result.args[6].name
+        except Exception:
+            plate_name = "unknown_plate"
         if result.returncode == 1:
             print(
-                f"A return code of {result.returncode} was returned for {plate_name}, which means there was an error in the CellProfiler run."
+                f"A return code of {result.returncode} was returned for {plate_name}, which means there was an error."
             )
 
-    # to avoid having multiple print statements due to for loop, confirmation that logs are converted is printed here
     print("All results have been converted to log files!")

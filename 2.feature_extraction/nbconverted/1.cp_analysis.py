@@ -66,7 +66,7 @@ plate_info_dictionary = {
         "path_to_pipeline": path_to_pipeline,
     }
     for name in plate_names
-    if next(loaddata_dir.glob(f"{name}*.csv"), None)
+    if name == "BR00143976" and next(loaddata_dir.glob(f"{name}*.csv"), None)
 }
 
 # view the dictionary to assess that all info is added correctly
@@ -77,7 +77,7 @@ pprint.pprint(plate_info_dictionary, indent=4)
 # 
 # Note: This code cell was not ran as we prefer to perform CellProfiler processing tasks via `sh` file (bash script) which is more stable.
 
-# In[ ]:
+# In[4]:
 
 
 cp_parallel.run_cellprofiler_parallel(
