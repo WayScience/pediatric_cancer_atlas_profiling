@@ -1,4 +1,4 @@
-name: alsf_cp_env
+name: alsf_cp_env_test
 
 channels:
 - conda-forge

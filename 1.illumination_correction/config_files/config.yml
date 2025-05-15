@@ -1,13 +1,12 @@
-# Keep empty since we are using a Harmony v7 output 
-# (see issue #34 https://github.com/broadinstitute/pe2loaddata/issues/34)
+# This is the configuration file for the main plates of data (prior to re-imaging).
 channels:
-channelid:
-    1: OrigBrightfield
-    2: OrigER
-    3: OrigAGP
-    4: OrigMito
-    5: OrigDNA
-    6: OrigRNA
+    Brightfield high: OrigBrightfield
+    Alexa 488: OrigER
+    Alexa 568: OrigAGP
+    Alexa 647: OrigMito
+    HOECHST 33342: OrigDNA
+    Alexa 488 Long (CP): OrigRNA
+
 metadata:
     Row: Row
     Col: Col
