@@ -5,7 +5,7 @@
 #SBATCH --partition=amilan
 #SBATCH --qos=long
 #SBATCH --account=amc-general
-#SBATCH --time=5-00:00 (days-hours:min:sec) # estimate time for one plate testing
+#SBATCH --time=5-00:00:00 (days-hours:min:sec) # estimate time for one plate testing
 #SBATCH --output=run_CP-%j.out
 
 module load miniforge
