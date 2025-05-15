@@ -9,7 +9,7 @@
 
 # Adapted from Mike Lippincott's script in NF1_3D_organoid_profiling_pipeline repository on GitHub
 
-module load mambaforge
+module load miniforge
 
 yaml_files=$(ls *.yml)
 
