@@ -69,3 +69,9 @@ Below is an example of how to install via the terminal.
 # Make sure to be in the environments folder
 mamba env create -f ...
 ```
+
+## Citations
+
+If you use or reference this work in your own projects, please cite us.
+You can find citation information in the 'cite this repository' link at the top right under about section within GitHub.
+This information may also be referenced within the [`CITATION.cff`](CITATION.cff) file.
