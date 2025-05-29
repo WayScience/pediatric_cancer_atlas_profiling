@@ -27,3 +27,6 @@ FOV_example_output.cppipe
 
 # Ignore jupyter artifacts
 .ipynb_checkpoints/
+
+# Ignore mac-specific files
+.DS_Store
