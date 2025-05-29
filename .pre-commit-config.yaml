@@ -1,5 +1,9 @@
 # configures pre-commit checks for project
 repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+    -   id: end-of-file-fixer
 -   repo: https://github.com/citation-file-format/cffconvert
     rev: b6045d78aac9e02b039703b030588d54d53262ac
     hooks:
