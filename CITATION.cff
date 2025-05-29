@@ -1,0 +1,34 @@
+# CITATION.cff file to describe project metadata
+---
+cff-version: 1.2.0
+title: pediatric_cancer_atlas_profiling
+message: >-
+  If you use this software, please cite it using the
+  metadata from the CITATION.cff file.
+type: software
+authors:
+  - given-names: Jenna
+    family-names: Tomkinson
+    orcid: 'https://orcid.org/0000-0003-2676-5813'
+  - given-names: Erik
+    family-names: Serrano
+    orcid: 'https://orcid.org/0000-0003-4188-9080'
+  - given-names: Julia
+    family-names: Curd
+    orcid: 'https://orcid.org/0009-0003-7475-9490'
+  - given-names: Weishan
+    family-names: Li
+    orcid: 'https://orcid.org/0009-0001-4643-9372'
+  - given-names: Gregory
+    family-names: Way
+    orcid: 'https://orcid.org/0000-0002-0503-9348'
+repository-code: 'https://github.com/WayScience/pediatric_cancer_atlas_profiling'
+url: 'https://github.com/WayScience/pediatric_cancer_atlas_profiling'
+abstract: >-
+  Image analysis and image-based profiling of pediatic cancer cell lines to extract morphological profiles.
+keywords:
+  - image-based-profiling
+  - pediatric-cancer
+  - single-cell-analysis
+  - way-lab
+license: CC0-1.0
