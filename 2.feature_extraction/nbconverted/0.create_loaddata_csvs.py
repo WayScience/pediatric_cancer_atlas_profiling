@@ -41,16 +41,19 @@ print(f"HPC: {HPC}")
 # In[3]:
 
 
+# Batch name to find images
+batch_name = "SN0313537"
+# Set the index directory based on whether HPC is used or not
 if HPC:
     # Path for index directory to make loaddata csvs though compute cluster (HPC)
-    index_directory = pathlib.Path("/pl/active/koala/ALSF_pilot_data/SN0313537/")
+    index_directory = pathlib.Path(f"/pl/active/koala/ALSF_pilot_data/{batch_name}/")
 else:
     # Path for index directory  to make loaddata csv locally
-    index_directory = pathlib.Path("/media/18tbdrive/ALSF_pilot_data/SN0313537/")
+    index_directory = pathlib.Path(f"/media/18tbdrive/ALSF_pilot_data/{batch_name}/")
 
 # Set all paths that are common to both HPC and local
 config_dir_path = pathlib.Path("../1.illumination_correction/config_files").absolute()
-output_csv_dir = pathlib.Path("./loaddata_csvs")
+output_csv_dir = pathlib.Path(f"./loaddata_csvs/{batch_name}").absolute()
 output_csv_dir.mkdir(parents=True, exist_ok=True)
 illum_directory = pathlib.Path("../1.illumination_correction/illum_directory")
 
@@ -217,6 +220,33 @@ for br_id, dfs in br00_dataframes.items():
             ["Metadata_Col", "Metadata_Row", "Metadata_Site"], ascending=True
         )
 
+        # Define the expected base path for images
+        expected_base_path = str(index_directory.resolve())
+
+        # List of columns that contain image paths (not illum functions)
+        image_path_columns = [
+            col
+            for col in loaddata_df.columns
+            if col.startswith("PathName_") and "Illum" not in col
+        ]
+
+        # Sanity check: Ensure all image paths start with the expected base path
+        warning_found = False
+        for col in image_path_columns:
+            if (
+                not loaddata_df[col]
+                .astype(str)
+                .str.startswith(expected_base_path)
+                .all()
+            ):
+                print(
+                    f"Warning: Not all paths in column '{col}' start with '{expected_base_path}'"
+                )
+                warning_found = True
+
+        if not warning_found:
+            print(f"All image path columns start correctly for {plate_name}")
+
         # Save the cleaned, concatenated, and sorted DataFrame to a new CSV file
         output_path = output_csv_dir / f"{br_id}_concatenated_with_illum.csv"
         sorted_df.to_csv(output_path, index=False)
@@ -252,5 +282,6 @@ else:
 for csv_file in csv_files:
     if csv_file not in concat_files:  # Keep only new concatenated files
         csv_file.unlink()  # Delete the file
-        print(f"Removed: {csv_file}")
+        print(f"Removed: {csv_file.name}")
+print("All non-concatenated CSV files have been removed.")
 

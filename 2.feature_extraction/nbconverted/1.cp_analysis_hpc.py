@@ -30,6 +30,33 @@ except NameError:
 # In[2]:
 
 
+# Batch name to process
+batch_name = "Round_1_data"
+
+#  directory where loaddata CSVs are located within the folder
+loaddata_dir = pathlib.Path(f"./loaddata_csvs/{batch_name}").resolve(strict=True)
+
+if not in_notebook:
+    print("Running as script")
+    # set up arg parser
+    parser = argparse.ArgumentParser(
+        description="CellProfiler segmentation and feature extraction"
+    )
+
+    parser.add_argument(
+        "--input_csv",
+        type=str,
+        help="Path to the LoadData CSV file to process images",
+    )
+
+    args = parser.parse_args()
+    loaddata_csv = pathlib.Path(args.input_csv).resolve(strict=True)
+else:
+    print("Running in a notebook")
+    loaddata_csv = pathlib.Path(
+        f"{loaddata_dir}/BR00143976_concatenated_with_illum.csv"
+    )
+
 # set the run type for the parallelization
 run_name = "analysis"
 
@@ -40,33 +67,22 @@ path_to_pipeline = pathlib.Path("./analysis.cppipe").resolve(strict=True)
 output_dir = pathlib.Path("./sqlite_outputs")
 output_dir.mkdir(exist_ok=True)
 
-# directory where loaddata CSVs are located within the folder
-loaddata_dir = pathlib.Path("./loaddata_csvs").resolve(strict=True)
-
-# Extract plate names and include as list
-plate_names = [file.stem.split("_")[0] for file in loaddata_dir.glob("*.csv")]
-
-# Print the number of plates and their names
-print(f"Total number of plates: {len(plate_names)}")
-print("Plate Names:")
-for name in plate_names:
-    print(name)
-
 
 # ## Create dictionary to process data
 
 # In[3]:
 
 
+# Extract name from LoadData CSV path
+name = loaddata_csv.stem.split("_")[0]
+
 # create plate info dictionary with all parts of the CellProfiler CLI command to run in parallel
 plate_info_dictionary = {
     name: {
-        "path_to_loaddata": next(loaddata_dir.glob(f"{name}*.csv"), None),
+        "path_to_loaddata": loaddata_csv,
         "path_to_output": output_dir / name,
         "path_to_pipeline": path_to_pipeline,
     }
-    for name in plate_names
-    if name == "BR00143976" and next(loaddata_dir.glob(f"{name}*.csv"), None)
 }
 
 # view the dictionary to assess that all info is added correctly
