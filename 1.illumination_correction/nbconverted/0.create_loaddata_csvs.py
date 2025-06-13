@@ -27,9 +27,10 @@ import loaddata_utils as ld_utils
 
 
 # Paths for parameters to make loaddata csv
-index_directory = pathlib.Path("/media/18tbdrive/ALSF_pilot_data/SN0313537/")
+batch_name = "Round_2_data"
+index_directory = pathlib.Path(f"/media/18tbdrive/ALSF_pilot_data/{batch_name}/")
 config_dir_path = pathlib.Path("./config_files").absolute()
-output_csv_dir = pathlib.Path("./loaddata_csvs")
+output_csv_dir = pathlib.Path(f"./loaddata_csvs/{batch_name}")
 output_csv_dir.mkdir(parents=True, exist_ok=True)
 
 # Find all 'Images' folders within the directory
@@ -38,42 +39,57 @@ images_folders = list(index_directory.rglob("Images"))
 
 # ## Create LoadData CSVs for all data
 
-# In[3]:
+# In[ ]:
 
 
 # Define the one config path to use
 config_path = config_dir_path / "config.yml"
 
-# Loop through each folder and create a LoadData CSV
-for folder in images_folders:
-    relative_path = folder.relative_to(index_directory)
-    first_folder = relative_path.parts[0]
+# Find all Plate folders
+plate_folders = list(index_directory.glob("Plate *"))
 
-    # Set plate_name based on folder structure
-    if first_folder.startswith("BR00"):
-        plate_name = first_folder.split("_")[0]
+# Build mapping of BR00 IDs to plate number
+br00_to_plate = {}
 
-    elif first_folder.startswith("2024"):
-        second_folder = relative_path.parts[1]
-        part1 = "_".join(first_folder.split("_")[-2:])
-        part2 = second_folder.split("_")[0]
-        plate_name = f"{part1}_{part2}"
+# First parse "All Cell Lines" folders to get BR00 IDs
+for plate_folder in plate_folders:
+    if "All Cell Lines" in plate_folder.name:
+        for subfolder in plate_folder.iterdir():
+            if subfolder.is_dir():
+                br00_id = subfolder.name.split("__")[0]
+                plate_num = plate_folder.name.split()[1]
+                br00_to_plate[br00_id] = plate_num
 
-    else:
-        print(f"Unexpected folder pattern: {folder}")
-        continue
+# Now process everything
+for plate_folder in plate_folders:
+    for subfolder in plate_folder.iterdir():
+        if not subfolder.is_dir():
+            continue
 
-    path_to_output_csv = (
-        output_csv_dir / f"{plate_name}_loaddata_original.csv"
-    ).absolute()
+        br00_id = subfolder.name.split("__")[0]
 
-    # Call the function with the single config
-    ld_utils.create_loaddata_csv(
-        index_directory=folder,
-        config_path=config_path,
-        path_to_output=path_to_output_csv,
-    )
-    print(f"Created LoadData CSV for {plate_name} at {path_to_output_csv}")
+        if "All Cell Lines" in plate_folder.name:
+            # Original run
+            plate_name = f"{br00_id}"
+        else:
+            # Reimaged
+            parts = plate_folder.name.split()
+            plate_num = parts[1]
+            cell_line = (
+                " ".join(parts[2:]).replace("Reimage", "").strip().replace(" ", "_")
+            )
+            plate_name = f"{br00_id}_{cell_line}_Reimage"
+
+        path_to_output_csv = (
+            output_csv_dir / f"{plate_name}_loaddata_original.csv"
+        ).absolute()
+
+        ld_utils.create_loaddata_csv(
+            index_directory=subfolder / "Images",
+            config_path=config_path,
+            path_to_output=path_to_output_csv,
+        )
+        print(f"Created LoadData CSV for {plate_name} at {path_to_output_csv}")
 
 
 # ## Concat the re-imaged data back to their original plate and remove the original poor quality data paths
@@ -136,7 +152,9 @@ for csv_file in csv_files:
         ]  # Ensure the columns are in the correct order
 
         # Add 'Metadata_Reimaged' column based on filename
-        loaddata_df["Metadata_Reimaged"] = "Re-imaged" in filename
+        loaddata_df["Metadata_Reimaged"] = any(
+            sub in filename for sub in ["Reimage", "Re-imaged", "Reimaged", "Re-image"]
+        )
 
         # Append the DataFrame to the corresponding BR00 group
         br00_dataframes[br_id].append(loaddata_df)
@@ -172,6 +190,9 @@ for br_id, dfs in br00_dataframes.items():
         sorted_df = deduplicated_df.sort_values(
             ["Metadata_Col", "Metadata_Row", "Metadata_Site"], ascending=True
         )
+
+        # Enforce correct plate ID for all rows
+        sorted_df["Metadata_Plate"] = br_id
 
         # Save the cleaned, concatenated, and sorted DataFrame to a new CSV file
         output_path = output_csv_dir / f"{br_id}_concatenated.csv"

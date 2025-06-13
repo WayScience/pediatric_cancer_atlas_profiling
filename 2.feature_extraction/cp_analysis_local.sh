@@ -10,4 +10,4 @@ jupyter nbconvert --to script --output-dir=nbconverted/ *.ipynb
 
 # run Python scripts to create LoadData CSVs and perform segmentation + feature extraction with CellProfiler
 python nbconverted/0.create_loaddata_csvs.py
-python nbconverted/1.cp_analysis.py
+python nbconverted/1.cp_analysis_local.py
