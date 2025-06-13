@@ -25,5 +25,5 @@ dependencies:
 - conda-forge::wxpython=4.2.0
 - conda-forge::sentry-sdk=0.18.0
 - pip:
-    - cellprofiler
+    - cellprofiler==4.2.8
     - pe2loaddata>=0.1.2

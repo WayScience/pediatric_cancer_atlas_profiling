@@ -4,7 +4,7 @@
 #SBATCH --partition=amilan
 #SBATCH --qos=normal
 #SBATCH --account=amc-general
-#SBATCH --time=60:00
+#SBATCH --time=5:00
 #SBATCH --output=cp_parent-%j.out
 
 # activate cellprofiler environment
@@ -17,11 +17,16 @@ jupyter nbconvert --to=script --FilesWriter.build_directory=nbconverted/ *.ipynb
 
 cd nbconverted/ || exit 1
 
-# get a list of all LoadData CSV files in the raw data folder (update round as needed)
-data_dir="./loaddata_csvs/Round_1_data"
-mapfile -t loaddata_csvs < <(find "$data_dir" -type f -name "*_concatenated_with_illum.csv")
-echo "Number of LoadData CSV files: ${#loaddata_csvs[@]}"
+# define the round variable
+round="Round_1_data"
 
+# build the data directory path using the variable
+data_dir="./loaddata_csvs/${round}"
+
+# get a list of all LoadData CSV files in the raw data folder
+mapfile -t loaddata_csvs < <(find "$data_dir" -type f -name "*_concatenated_with_illum.csv")
+
+echo "Number of LoadData CSV files: ${#loaddata_csvs[@]}"
 cd ../ || exit 1
 
 # loop over each CSV and submit child jobs

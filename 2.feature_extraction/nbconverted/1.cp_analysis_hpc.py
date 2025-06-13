@@ -27,7 +27,7 @@ except NameError:
 
 # ## Set paths and variables
 
-# In[2]:
+# In[ ]:
 
 
 # Batch name to process
@@ -55,7 +55,7 @@ else:
     print("Running in a notebook")
     loaddata_csv = pathlib.Path(
         f"{loaddata_dir}/BR00143976_concatenated_with_illum.csv"
-    )
+    ).resolve(strict=True)
 
 # set the run type for the parallelization
 run_name = "analysis"

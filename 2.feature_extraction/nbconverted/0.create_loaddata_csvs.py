@@ -38,7 +38,7 @@ HPC = args.HPC
 print(f"HPC: {HPC}")
 
 
-# In[3]:
+# In[ ]:
 
 
 # Batch name to find images
@@ -46,7 +46,7 @@ batch_name = "SN0313537"
 # Set the index directory based on whether HPC is used or not
 if HPC:
     # Path for index directory to make loaddata csvs though compute cluster (HPC)
-    index_directory = pathlib.Path(f"/pl/active/koala/ALSF_pilot_data/{batch_name}/")
+    index_directory = pathlib.Path(f"/scratch/alpine/jtomkinson@xsede.org/ALSF_pilot_data/{batch_name}/")
 else:
     # Path for index directory  to make loaddata csv locally
     index_directory = pathlib.Path(f"/media/18tbdrive/ALSF_pilot_data/{batch_name}/")
