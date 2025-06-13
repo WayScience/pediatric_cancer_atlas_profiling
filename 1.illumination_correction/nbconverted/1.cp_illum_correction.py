@@ -25,21 +25,21 @@ import cp_parallel
 # set the run type for the parallelization
 run_name = "illum_correction"
 
+# Batch name to process
+batch_name = "Round_2_data"
+
 # set path for CellProfiler pipeline
-path_to_pipeline = pathlib.Path("./illum.cppipe").resolve(strict=True)
+path_to_pipeline = pathlib.Path("./pipelines/illum.cppipe").resolve(strict=True)
 
 # set main output dir for all plates if it doesn't exist
-output_dir = pathlib.Path("./illum_directory")
+output_dir = pathlib.Path(f"./illum_directory/{batch_name}")
 output_dir.mkdir(exist_ok=True)
 
 # directory where loaddata CSVs are located within the folder
-loaddata_dir = pathlib.Path("./loaddata_csvs").resolve(strict=True)
+loaddata_dir = pathlib.Path(f"./loaddata_csvs/{batch_name}").resolve(strict=True)
 
 # Extract plate names and include as list
-plate_names = [
-    file.stem.split('_')[0] 
-    for file in loaddata_dir.glob("*.csv")
-]
+plate_names = [file.stem.split("_")[0] for file in loaddata_dir.glob("*.csv")]
 
 # Print the number of plates and their names
 print(f"Total number of plates: {len(plate_names)}")
@@ -60,7 +60,8 @@ plate_info_dictionary = {
         "path_to_output": output_dir / name,
         "path_to_pipeline": path_to_pipeline,
     }
-    for name in plate_names if next(loaddata_dir.glob(f"{name}*.csv"), None)
+    for name in plate_names
+    if next(loaddata_dir.glob(f"{name}*.csv"), None)
 }
 
 # view the dictionary to assess that all info is added correctly

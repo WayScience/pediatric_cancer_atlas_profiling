@@ -18,15 +18,20 @@ jupyter nbconvert --to=script --FilesWriter.build_directory=nbconverted/ *.ipynb
 cd nbconverted/ || exit 1
 
 # define the round variable
-round="Round_1_data"
+round="Round_2_data"
 
 # build the data directory path using the variable
-data_dir="./loaddata_csvs/${round}"
+data_dir="../loaddata_csvs/${round}"
 
 # get a list of all LoadData CSV files in the raw data folder
 mapfile -t loaddata_csvs < <(find "$data_dir" -type f -name "*_concatenated_with_illum.csv")
 
 echo "Number of LoadData CSV files: ${#loaddata_csvs[@]}"
+
+for file in "${loaddata_csvs[@]}"; do
+    echo "Found: $file"
+done
+
 cd ../ || exit 1
 
 # loop over each CSV and submit child jobs

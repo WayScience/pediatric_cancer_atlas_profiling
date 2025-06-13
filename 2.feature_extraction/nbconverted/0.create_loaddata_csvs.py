@@ -38,24 +38,30 @@ HPC = args.HPC
 print(f"HPC: {HPC}")
 
 
-# In[ ]:
+# In[3]:
 
 
 # Batch name to find images
-batch_name = "SN0313537"
+batch_name = "Round_2_data"
 # Set the index directory based on whether HPC is used or not
 if HPC:
     # Path for index directory to make loaddata csvs though compute cluster (HPC)
-    index_directory = pathlib.Path(f"/scratch/alpine/jtomkinson@xsede.org/ALSF_pilot_data/{batch_name}/")
+    index_directory = pathlib.Path(
+        f"/scratch/alpine/jtomkinson@xsede.org/ALSF_pilot_data/{batch_name}/"
+    )
 else:
     # Path for index directory  to make loaddata csv locally
     index_directory = pathlib.Path(f"/media/18tbdrive/ALSF_pilot_data/{batch_name}/")
 
 # Set all paths that are common to both HPC and local
-config_dir_path = pathlib.Path("../1.illumination_correction/config_files").absolute()
+config_dir_path = pathlib.Path("../1.illumination_correction/config_files").resolve(
+    strict=True
+)
 output_csv_dir = pathlib.Path(f"./loaddata_csvs/{batch_name}").absolute()
 output_csv_dir.mkdir(parents=True, exist_ok=True)
-illum_directory = pathlib.Path("../1.illumination_correction/illum_directory")
+illum_directory = pathlib.Path(
+    f"../1.illumination_correction/illum_directory/{batch_name}"
+).resolve(strict=True)
 
 # Find all 'Images' folders within the directory
 images_folders = list(index_directory.rglob("Images"))
@@ -66,58 +72,63 @@ images_folders = list(index_directory.rglob("Images"))
 # In[4]:
 
 
-# Define the default config path for all plates (BR00 folders)
-default_config_path = pathlib.Path(f"{config_dir_path}/config.yml").resolve(strict=True)
+# Define the one config path to use
+config_path = config_dir_path / "config.yml"
 
-# Loop through each folder and create a LoadData CSV
-for folder in images_folders:
-    # Get the relative path of the folder and the first-level folder name
-    relative_path = folder.relative_to(index_directory)
-    first_folder = relative_path.parts[0]  # First-level folder
+# Find all Plate folders
+plate_folders = list(index_directory.glob("Plate *"))
 
-    # Initialize plate_name and config_path
-    plate_name = None
-    config_path = default_config_path
+# Build mapping of BR00 IDs to plate number
+br00_to_plate = {}
 
-    # For BR00 folders, use the default config.yml
-    if first_folder.startswith("BR00"):
-        plate_name = first_folder.split("_")[0]  # Take the first part as plate_nam
+# First parse "All Cell Lines" folders to get BR00 IDs
+for plate_folder in plate_folders:
+    if "All Cell Lines" in plate_folder.name:
+        for subfolder in plate_folder.iterdir():
+            if subfolder.is_dir():
+                br00_id = subfolder.name.split("__")[0]
+                plate_num = plate_folder.name.split()[1]
+                br00_to_plate[br00_id] = plate_num
 
-    # For 2024 folders, use the single config.yml
-    elif first_folder.startswith("2024"):
-        second_folder = relative_path.parts[1]
-        part1 = "_".join(first_folder.split("_")[-2:])  # Last two parts of first folder
-        part2 = second_folder.split("_")[0]  # First part of second folder
-        plate_name = f"{part1}_{part2}"
+# Now process everything
+for plate_folder in plate_folders:
+    for subfolder in plate_folder.iterdir():
+        if not subfolder.is_dir():
+            continue
 
-    else:
-        print(f"Unexpected folder pattern: {folder}")
-        continue
+        br00_id = subfolder.name.split("__")[0]
 
-    # Print the path of the config file being used
-    print(f"Config path for plate '{plate_name}': {config_path}")
+        if "All Cell Lines" in plate_folder.name:
+            # Original run
+            plate_name = f"{br00_id}"
+        else:
+            # Reimaged
+            parts = plate_folder.name.split()
+            plate_num = parts[1]
+            cell_line = (
+                " ".join(parts[2:]).replace("Reimage", "").strip().replace(" ", "_")
+            )
+            plate_name = f"{br00_id}_{cell_line}_Reimage"
 
-    # Proceed with creating LoadData CSV if config_path is defined
-    plate_id = next(part for part in plate_name.split("_") if part.startswith("BR00"))
-    illum_output_path = (
-        pathlib.Path(illum_directory / plate_id).absolute().resolve(strict=True)
-    )
-    path_to_output_csv = (
-        output_csv_dir / f"{plate_name}_loaddata_original.csv"
-    ).absolute()
-    path_to_output_with_illum_csv = path_to_output_csv.with_name(
-        path_to_output_csv.name.replace("original", "with_illum")
-    )
+        path_to_output_csv = (
+            output_csv_dir / f"{plate_name}_loaddata_original.csv"
+        ).absolute()
+        path_to_output_with_illum_csv = (
+            output_csv_dir / f"{plate_name}_loaddata_with_illum.csv"
+        ).absolute()
+        folder = subfolder.absolute()
+        plate_id = br00_id
+        illum_output_path = (illum_directory / plate_id).absolute().resolve(strict=True)
 
-    # Call the function to create the LoadData CSV
-    ld_utils.create_loaddata_illum_csv(
-        index_directory=folder,
-        config_path=config_path,
-        path_to_output=path_to_output_csv,
-        illum_directory=illum_output_path,
-        plate_id=plate_id,
-        illum_output_path=path_to_output_with_illum_csv,
-    )
+        # Call the function to create the LoadData CSV
+        ld_utils.create_loaddata_illum_csv(
+            index_directory=folder / "Images",
+            config_path=config_path,
+            path_to_output=path_to_output_csv,
+            illum_directory=illum_output_path,
+            plate_id=plate_id,
+            illum_output_path=path_to_output_with_illum_csv,
+        )
 
 
 # ## Concat the re-imaged data back to their original plate and remove the original poor quality data paths
@@ -219,6 +230,9 @@ for br_id, dfs in br00_dataframes.items():
         sorted_df = deduplicated_df.sort_values(
             ["Metadata_Col", "Metadata_Row", "Metadata_Site"], ascending=True
         )
+
+        # Enforce correct plate ID for all rows
+        sorted_df["Metadata_Plate"] = br_id
 
         # Define the expected base path for images
         expected_base_path = str(index_directory.resolve())
