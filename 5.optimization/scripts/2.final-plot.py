@@ -13,6 +13,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 # In[2]:
 
 
+#from bulk, quality controlled data
 qc_df = pd.read_parquet("../3.preprocessing_features/qc_report/qc_report.parquet")
 pearson_df = pd.read_parquet("../5.optimization/results/pearson_correlation.parquet")
 
