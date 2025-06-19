@@ -17,6 +17,9 @@ import pprint
 # In[2]:
 
 
+# Set round of data to be processed
+round_id = "Round_2_data"
+
 # path for platemap directory
 platemap_dir = pathlib.Path("../0.download_data/metadata/platemaps")
 
@@ -29,7 +32,7 @@ barcode_platemap = pd.read_csv(
 qc_results_dir = pathlib.Path("./qc_results")
 
 # Path to dir with converted data from single-cell QC
-converted_dir = pathlib.Path("./data/converted_profiles")
+converted_dir = pathlib.Path(f"./data/converted_profiles/{round_id}")
 
 # output path for reports
 output_dir = pathlib.Path("./qc_report")
@@ -93,18 +96,18 @@ plate_info_dictionary = {
 pprint.pprint(plate_info_dictionary, indent=4)
 
 
-# In[ ]:
+# In[4]:
 
 
 # Set metadata columns to load in for the converted df
 metadata_cols = [
-        "Metadata_ImageNumber",
-        "Image_Metadata_Plate",
-        "Image_Metadata_Well",
-        "Image_Metadata_Site",
-        "Metadata_Nuclei_Location_Center_X",
-        "Metadata_Nuclei_Location_Center_Y"
-    ]
+    "Metadata_ImageNumber",
+    "Image_Metadata_Plate",
+    "Image_Metadata_Well",
+    "Image_Metadata_Site",
+    "Metadata_Nuclei_Location_Center_X",
+    "Metadata_Nuclei_Location_Center_Y",
+]
 
 qc_report_list = []  # Initialize an empty list to store per-plate QC reports
 
@@ -117,7 +120,7 @@ for plate, info in plate_info_dictionary.items():
     converted_df["failed_qc"] = False  # Initialize all rows as False
 
     # Load in the qc_results_path and use the indices to change the rows that match to failing QC
-    qc_failed_indices = pd.read_csv(info["qc_results_path"], compression='gzip')
+    qc_failed_indices = pd.read_csv(info["qc_results_path"], compression="gzip")
 
     # Update failed_qc for rows matching the indices in qc_failed_indices
     converted_df.loc[qc_failed_indices["original_indices"], "failed_qc"] = True
@@ -126,7 +129,9 @@ for plate, info in plate_info_dictionary.items():
     num_failed_qc = converted_df["failed_qc"].sum()
     num_qc_failed_indices = len(qc_failed_indices)
 
-    assert num_failed_qc == num_qc_failed_indices, f"Mismatch: {num_failed_qc} != {num_qc_failed_indices}"
+    assert (
+        num_failed_qc == num_qc_failed_indices
+    ), f"Mismatch: {num_failed_qc} != {num_qc_failed_indices}"
 
     # Load platemap
     platemap_df = pd.read_csv(info["platemap_path"])
@@ -143,11 +148,13 @@ for plate, info in plate_info_dictionary.items():
 
     # Group by cell line and seeding density, and calculate total nuclei segmented and failed QC
     failure_stats = (
-        annotated_df.groupby(["Metadata_cell_line", "Metadata_seeding_density", "Metadata_time_point"])
+        annotated_df.groupby(
+            ["Metadata_cell_line", "Metadata_seeding_density", "Metadata_time_point"]
+        )
         .agg(
             total_nuclei_segmented=("failed_qc", "count"),
             total_failed_qc=("failed_qc", "sum"),
-            percentage_failing_cells=("failed_qc", "mean")
+            percentage_failing_cells=("failed_qc", "mean"),
         )
         .reset_index()
     )
@@ -162,9 +169,12 @@ for plate, info in plate_info_dictionary.items():
 qc_report_df = pd.concat(qc_report_list, ignore_index=True)
 
 # Save QC report as parquet file
-qc_report_df.to_parquet(pathlib.Path(f"{output_dir}/qc_report.parquet"))
+qc_report_df.to_parquet(pathlib.Path(f"{output_dir}/{round_id}_qc_report.parquet"))
 
-# Display qc report info
-print(qc_report_df.shape)
-qc_report_df.head()
+# Filter the QC report to only include rows for a cell line
+filter_qc_report_df = qc_report_df[qc_report_df["Metadata_cell_line"] == "U2-OS"]
+
+# Display filtered QC report info
+print(filter_qc_report_df.shape)
+filter_qc_report_df
 

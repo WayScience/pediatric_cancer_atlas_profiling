@@ -7,14 +7,14 @@
 
 
 # Set parameter for papermill to use for processing
-plate_id = "BR00143976"
+plate_id = "BR00145816"
 
 
 # In[2]:
 
 
 # Parameters
-plate_id = "BR00143978"
+plate_id = "BR00145440"
 
 
 # ## Import libraries
@@ -45,20 +45,23 @@ preset = "cellprofiler_sqlite_pycytominer"
 # update preset to include both the site metadata, cell counts, and PathName columns
 joins = presets.config["cellprofiler_sqlite_pycytominer"]["CONFIG_JOINS"].replace(
     "Image_Metadata_Well,",
-    "Image_Metadata_Well, Image_Metadata_Site, Image_Count_Cells, Image_Metadata_Row, Image_Metadata_Col, "
+    "Image_Metadata_Well, Image_Metadata_Site, Image_Count_Cells, Image_Metadata_Row, Image_Metadata_Col, ",
 )
 
 # Add the PathName columns separately
 joins = joins.replace(
     "COLUMNS('Image_FileName_.*'),",
-    "COLUMNS('Image_FileName_.*'),\n COLUMNS('Image_PathName_.*'),"
+    "COLUMNS('Image_FileName_.*'),\n COLUMNS('Image_PathName_.*'),",
 )
 
 # type of file output from cytotable (currently only parquet)
 dest_datatype = "parquet"
 
+# set the round of data that will be processed
+round_id = "Round_2_data"
+
 # set path to directory with SQLite files
-sqlite_dir = pathlib.Path("../2.feature_extraction/sqlite_outputs")
+sqlite_dir = pathlib.Path(f"../2.feature_extraction/sqlite_outputs/{round_id}")
 
 # directory for processed data
 output_dir = pathlib.Path("data")
@@ -81,7 +84,9 @@ for name in plate_names:
 
 
 file_path = sqlite_dir / plate_id
-output_path = pathlib.Path(f"{output_dir}/converted_profiles/{plate_id}_converted.parquet")
+output_path = pathlib.Path(
+    f"{output_dir}/converted_profiles/{round_id}/{plate_id}_converted.parquet"
+)
 
 print("Starting conversion with cytotable for plate:", plate_id)
 # Merge single cells and output as parquet file
@@ -103,7 +108,7 @@ print(f"Plate {plate_id} has been converted with cytotable!")
 
 
 # Directory with converted profiles
-converted_dir = pathlib.Path(f"{output_dir}/converted_profiles")
+converted_dir = pathlib.Path(f"{output_dir}/converted_profiles/{round_id}")
 
 # Define the list of columns to prioritize and prefix
 prioritized_columns = [
@@ -125,9 +130,7 @@ converted_df = converted_df.dropna(subset=["Metadata_ImageNumber"])
 converted_df = converted_df[
     prioritized_columns
     + [col for col in converted_df.columns if col not in prioritized_columns]
-].rename(
-    columns=lambda col: "Metadata_" + col if col in prioritized_columns else col
-)
+].rename(columns=lambda col: "Metadata_" + col if col in prioritized_columns else col)
 
 # assert that there are column names with PathName in the dataset
 assert any("PathName" in col for col in converted_df.columns)

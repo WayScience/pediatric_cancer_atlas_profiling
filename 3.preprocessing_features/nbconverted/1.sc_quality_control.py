@@ -32,21 +32,21 @@
 # In[1]:
 
 
-import dask.dataframe as dd
 import pathlib
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-
+import re
 import time
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
 
 from cytodataframe import CytoDataFrame
 from cosmicqc import find_outliers
 
+# Ignore FutureWarnings from cytodataframe due to skimage deprecation (does not affect functionality)
 import warnings
 
-# Suppress all warnings
-warnings.filterwarnings('ignore')
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 
 # # Set functions for plotting
@@ -110,7 +110,9 @@ def plot_cluster_nuclei_outliers(
     )
 
     # Customize plot
-    plt.title(f"Nuclei Mass Displacement vs. Nuclei Integrated Intensity for plate {plate_name}")
+    plt.title(
+        f"Nuclei Mass Displacement vs. Nuclei Integrated Intensity for plate {plate_name}"
+    )
     plt.xlabel("Nuclei Mass Displacement (Hoechst)")
     plt.ylabel("Nuclei Integrated Intensity (Hoechst)")
     plt.tight_layout()
@@ -202,14 +204,14 @@ def plot_nuclei_solidity_histogram(
 
 
 # Set parameter for papermill to use for processing
-plate_id = "BR00143976"
+plate_id = "BR00145816"
 
 
 # In[5]:
 
 
 # Parameters
-plate_id = "BR00143978"
+plate_id = "BR00145440"
 
 
 # ## Injected parameter from papermill that updates for every plate being processed
@@ -217,19 +219,22 @@ plate_id = "BR00143978"
 # In[6]:
 
 
-# Directory with data
-data_dir = pathlib.Path("./data/converted_profiles/")
+# Set the round of data being processed
+round_id = "Round_2_data"
+
+# Directory containing the converted profiles
+data_dir = pathlib.Path(f"./data/converted_profiles/{round_id}")
 
 # Directory to save cleaned data
-cleaned_dir = pathlib.Path("./data/cleaned_profiles/")
+cleaned_dir = pathlib.Path(f"./data/cleaned_profiles/{round_id}")
 cleaned_dir.mkdir(exist_ok=True)
 
 # Directory to save qc figures
-qc_fig_dir = pathlib.Path("./qc_figures")
+qc_fig_dir = pathlib.Path(f"./qc_figures/{round_id}")
 qc_fig_dir.mkdir(exist_ok=True)
 
 # Directory to save qc results
-qc_results_dir = pathlib.Path("./qc_results")
+qc_results_dir = pathlib.Path(f"./qc_results/{round_id}")
 qc_results_dir.mkdir(exist_ok=True)
 
 # Create an empty dictionary to store data frames for each plate
@@ -250,8 +255,8 @@ file_path = data_dir / f"{plate_id}_converted.parquet"
 if file_path.exists():
     start_time = time.time()  # Start timer for loading
 
-    # Load and compute the DataFrame
-    plate_df = dd.read_parquet(file_path, engine="pyarrow").compute()
+    # Load the DataFrame with pandas
+    plate_df = pd.read_parquet(file_path, engine="pyarrow")
 
     end_time = time.time()  # End timer for loading
     print(
@@ -261,9 +266,32 @@ else:
     print(f"Parquet file for plate {plate_id} not found.")
 
 
-# ## Set columns and mapping
+# ## Correct all columns with PathName to have the correct parent path
+# 
+# When ran on HPC, the path will reflect that of the HPC and not local when we are processing this data.
 
 # In[8]:
+
+
+correct_parent = "/media/18tbdrive/ALSF_pilot_data"
+
+for col in plate_df.columns:
+    if "PathName" in col and "Illum" not in col:
+        plate_df[col] = plate_df[col].apply(
+            lambda x: (
+                re.sub(r"^.*ALSF_pilot_data/", correct_parent + "/", x)
+                if isinstance(x, str)
+                else x
+            )
+        )
+
+# Print example image path after fix
+print(plate_df["Image_PathName_OrigDNA"].dropna().iloc[0])
+
+
+# ## Reduce down the plate columns to the features to be used for QC and metadata (improves speed)
+
+# In[9]:
 
 
 # metadata columns to include in output data frame
@@ -282,6 +310,29 @@ metadata_columns = [
     f"{compartment}_AreaShape_BoundingBoxMinimum_X",
     f"{compartment}_AreaShape_BoundingBoxMinimum_Y",
 ]
+
+# Define the QC features
+qc_features = [
+    "Nuclei_Intensity_IntegratedIntensity_CorrDNA",
+    "Nuclei_AreaShape_Solidity",
+    "Nuclei_Intensity_MassDisplacement_CorrDNA",
+]
+
+# Filter plate_df to only include metadata columns and QC features
+filtered_plate_df = plate_df[metadata_columns + qc_features]
+
+
+# In[10]:
+
+
+# Print example image path after fix
+print(filtered_plate_df["Image_PathName_OrigDNA"].dropna().iloc[0])
+
+
+# ## Set mapping for outlines
+
+# In[11]:
+
 
 # create an outline and orig mapping dictionary to map original images to outlines
 # note: we turn off formatting here to avoid the key-value pairing definition
@@ -305,25 +356,9 @@ outline_to_orig_mapping = {
 next(iter(outline_to_orig_mapping.items()))
 
 
-# ## Filter down plate data to detect nuclei outliers (improves speed)
-
-# In[9]:
-
-
-# Define the QC features
-qc_features = [
-    "Nuclei_Intensity_IntegratedIntensity_CorrDNA",
-    "Nuclei_AreaShape_Solidity",
-    "Nuclei_Intensity_MassDisplacement_CorrDNA",
-]
-
-# Filter plate_df to only include metadata columns and QC features
-filtered_plate_df = plate_df[metadata_columns + qc_features]
-
-
 # ## Detect segmentations of clustered nuclei
 
-# In[10]:
+# In[12]:
 
 
 # Find large nuclei outliers for the current plate
@@ -331,15 +366,15 @@ nuclei_clustered_outliers = find_outliers(
     df=filtered_plate_df,
     metadata_columns=metadata_columns,
     feature_thresholds={
-        "Nuclei_Intensity_MassDisplacement_CorrDNA": 0.05, # Set very low as to detect all instances of clustering nuclei
-        "Nuclei_Intensity_IntegratedIntensity_CorrDNA": 1.5, # Set higher than displacement to avoid false positives
+        "Nuclei_Intensity_MassDisplacement_CorrDNA": 0.05,  # Set very low as to detect all instances of clustering nuclei
+        "Nuclei_Intensity_IntegratedIntensity_CorrDNA": 1.5,  # Set higher than displacement to avoid false positives
     },
 )
 
 # MUST SET DATA AS DATAFRAME FOR OUTLINE DIR TO WORK
 nuclei_clustered_outliers_cdf = CytoDataFrame(
     data=pd.DataFrame(nuclei_clustered_outliers),
-    data_outline_context_dir=f"../2.feature_extraction/sqlite_outputs/{plate_id}/outlines",
+    data_outline_context_dir=f"../2.feature_extraction/sqlite_outputs/{round_id}/{plate_id}/outlines",
     segmentation_file_regex=outline_to_orig_mapping,
 )[
     [
@@ -356,7 +391,7 @@ nuclei_clustered_outliers_cdf.sort_values(
 ).head(2)
 
 
-# In[11]:
+# In[13]:
 
 
 nuclei_clustered_outliers_cdf.sample(n=2, random_state=0)
@@ -364,7 +399,7 @@ nuclei_clustered_outliers_cdf.sample(n=2, random_state=0)
 
 # ### Plot the outliers
 
-# In[12]:
+# In[14]:
 
 
 # Save cluster nuclei scatterplot
@@ -380,7 +415,7 @@ plot_cluster_nuclei_outliers(
 # 
 # **NOTE:** For the pilot data, we are determining optimal conditions (seeding density and time point). This means all cells are not treated and should be in a "healthy" state. Given that `solidity` measures how irregular the shape of a nuclei is, we would expect that cells treated with a drug/compound could yield interesting shapes or phenotypes. Since we are not working with drug treatments at this time, we can use this feature to identify technically incorrect segmentations.
 
-# In[13]:
+# In[15]:
 
 
 # Find low nuclei solidity outliers for the current plate
@@ -388,14 +423,14 @@ solidity_nuclei_outliers = find_outliers(
     df=filtered_plate_df,
     metadata_columns=metadata_columns,
     feature_thresholds={
-        "Nuclei_AreaShape_Solidity": -1.6, # Set at this point where it looks like it starts to detect good quality nuclei
+        "Nuclei_AreaShape_Solidity": -1.6,  # Set at this point where it looks like it starts to detect good quality nuclei
     },
 )
 
 # MUST SET DATA AS DATAFRAME FOR OUTLINE DIR TO WORK
 solidity_nuclei_outliers_cdf = CytoDataFrame(
     data=pd.DataFrame(solidity_nuclei_outliers),
-    data_outline_context_dir=f"../2.feature_extraction/sqlite_outputs/{plate_id}/outlines",
+    data_outline_context_dir=f"../2.feature_extraction/sqlite_outputs/{round_id}/{plate_id}/outlines",
     segmentation_file_regex=outline_to_orig_mapping,
 )[
     [
@@ -411,7 +446,7 @@ solidity_nuclei_outliers_cdf.sort_values(
 ).head(2)
 
 
-# In[14]:
+# In[16]:
 
 
 solidity_nuclei_outliers_cdf.sample(n=2, random_state=0)
@@ -419,7 +454,7 @@ solidity_nuclei_outliers_cdf.sample(n=2, random_state=0)
 
 # ### Plot the outliers
 
-# In[15]:
+# In[17]:
 
 
 # Save low nuclei solidity histogram
@@ -444,7 +479,7 @@ plot_nuclei_solidity_histogram(
 # This is the problem we want to avoid for a single-cell segmentation, we don't want to have a whole cell segmentation be assigned to one nuclei when it actually contains multiple nuclei.
 # 
 
-# In[16]:
+# In[18]:
 
 
 # change compartment to cells
@@ -491,13 +526,11 @@ next(iter(outline_to_orig_mapping.items()))
 
 # ### Filter down plate data to detect cells outliers (improves speed)
 
-# In[17]:
+# In[19]:
 
 
 # Define the QC features
-qc_features = [
-    "Cells_Intensity_IntegratedIntensity_CorrDNA"
-]
+qc_features = ["Cells_Intensity_IntegratedIntensity_CorrDNA"]
 
 # Filter plate_df to only include metadata columns and QC features
 filtered_plate_df = plate_df[metadata_columns + qc_features]
@@ -505,7 +538,7 @@ filtered_plate_df = plate_df[metadata_columns + qc_features]
 
 # ### Detect cell outliers
 
-# In[18]:
+# In[20]:
 
 
 # Find cell outliers for the current plate
@@ -514,14 +547,14 @@ cell_outliers = find_outliers(
     metadata_columns=metadata_columns,
     feature_thresholds={
         # Set low to attempt to detect all instances of abnormally high int in nuclei for whole cells
-        "Cells_Intensity_IntegratedIntensity_CorrDNA": 0.5, 
+        "Cells_Intensity_IntegratedIntensity_CorrDNA": 0.5,
     },
 )
 
 # MUST SET DATA AS DATAFRAME FOR OUTLINE DIR TO WORK
 cell_outliers_cdf = CytoDataFrame(
     data=pd.DataFrame(cell_outliers),
-    data_outline_context_dir=f"../2.feature_extraction/sqlite_outputs/{plate_id}/outlines",
+    data_outline_context_dir=f"../2.feature_extraction/sqlite_outputs/{round_id}/{plate_id}/outlines",
     segmentation_file_regex=outline_to_orig_mapping,
 )[
     [
@@ -537,7 +570,7 @@ cell_outliers_cdf.sort_values(
 ).head(2)
 
 
-# In[19]:
+# In[21]:
 
 
 cell_outliers_cdf.sample(n=2, random_state=0)
@@ -545,7 +578,7 @@ cell_outliers_cdf.sample(n=2, random_state=0)
 
 # ## Save the outlier indices to use for reporting
 
-# In[20]:
+# In[22]:
 
 
 # Identify failing indices from both outlier dataframes
@@ -563,13 +596,15 @@ failing_df["Failed_ClusteredNuclei"] = failing_df.index.isin(
 failing_df["Failed_SolidityNuclei"] = failing_df.index.isin(
     solidity_nuclei_outliers.index
 )
-failing_df["Failed_CellsMultipleNuclei"] = failing_df.index.isin(
-    cell_outliers.index
-)
+failing_df["Failed_CellsMultipleNuclei"] = failing_df.index.isin(cell_outliers.index)
 
 # Ensure boolean dtype
 failing_df = failing_df.astype(
-    {"Failed_ClusteredNuclei": bool, "Failed_SolidityNuclei": bool, "Failed_CellsMultipleNuclei": bool}
+    {
+        "Failed_ClusteredNuclei": bool,
+        "Failed_SolidityNuclei": bool,
+        "Failed_CellsMultipleNuclei": bool,
+    }
 )
 
 # Keep original indices for later
@@ -592,7 +627,7 @@ print(f"Total failing single cells: {failing_df.shape[0]} ({failed_percentage:.2
 
 # ## Clean and save the data
 
-# In[21]:
+# In[23]:
 
 
 # Remove rows with outlier indices

@@ -24,14 +24,17 @@ from pycytominer.cyto_utils import output
 
 # Condition for how to normalize the plates
 normalize_with_U2OS = (
-    True  # Set to False if normalizing to whole plate versus just `U2-OS` cell line
+    False  # Set to False if normalizing to whole plate versus just `U2-OS` cell line
 )
 
+# Set round to be processed
+round_id = "Round_2_data"
+
 # Path to dir with cleaned data from single-cell QC
-cleaned_dir = pathlib.Path("./data/cleaned_profiles")
+cleaned_dir = pathlib.Path(f"./data/cleaned_profiles/{round_id}")
 
 # output path for bulk profiles
-output_dir = pathlib.Path("./data/bulk_profiles")
+output_dir = pathlib.Path(f"./data/bulk_profiles/{round_id}")
 output_dir.mkdir(parents=True, exist_ok=True)
 
 # extract the plate names from the file name

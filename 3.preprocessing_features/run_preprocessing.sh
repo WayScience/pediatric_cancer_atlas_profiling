@@ -8,8 +8,11 @@ conda activate alsf_preprocessing_env
 # convert all notebooks to script files into the nbconverted folder
 jupyter nbconvert --to script --output-dir=nbconverted/ *.ipynb
 
+# Set the round of data to be processed
+ROUND="Round_2_data"
+
 # Define the path to the parent folder to generate list of plate IDs
-PARENT_FOLDER="/home/jenna/pediatric_cancer_atlas_profiling/2.feature_extraction/sqlite_outputs/"
+PARENT_FOLDER="/home/jenna/pediatric_cancer_atlas_profiling/2.feature_extraction/sqlite_outputs/${ROUND}"
 
 # Create an array of folder names (excluding files)
 plates=($(find "$PARENT_FOLDER" -mindepth 1 -maxdepth 1 -type d -exec basename {} \;))
