@@ -23,11 +23,14 @@ from pycytominer.cyto_utils import output
 # In[2]:
 
 
+# Set round of plates to process
+round_id = "Round_2_data"
+
 # Path to dir with cleaned data from single-cell QC
-cleaned_dir = pathlib.Path("./data/cleaned_profiles")
+cleaned_dir = pathlib.Path(f"./data/cleaned_profiles/{round_id}")
 
 # output path for bulk profiles
-output_dir = pathlib.Path("./data/single_cell_profiles")
+output_dir = pathlib.Path(f"./data/single_cell_profiles/{round_id}")
 output_dir.mkdir(parents=True, exist_ok=True)
 
 # extract the plate names from the file name
