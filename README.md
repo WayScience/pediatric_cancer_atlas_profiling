@@ -25,24 +25,25 @@ These channels are listed in the number order that you can find for the TIFF ima
 
 ### Pilot dataset
 
-To assess the optimal seeding density and time point across all cell lines, we acquired six plates of preliminary data with 18 unique cell lines.
-There are two platemap layouts, with each layout having three time points (24, 48, and 72 hours) per plate (e.g., 2 layouts * 3 time points = 6 plates).
-Per plate, there are five different seeding densities across the wells (1000, 2000, 4000, 8000, 12000).
+To assess the optimal seeding density, time point, and plating conditions across all cell lines, we acquired multiple rounds of preliminary data.
+Each round has two or three platemap layouts.
+There are three plates per layout, each at different time points (24, 48, and 72 hours).
+Per plate, there are five different seeding densities for each cell line with two replicate wells per density (1000, 2000, 4000, 8000, 12000).
+Each plate layout includes specific plate conditions, such as:
+
+1. Standard
+2. Synthemax coated
+3. Synthemax coated and double PFA fixation
+4. Laminin coated
+
+Platemap files and visualizations can be found in the [metadata folder](./0.download_data/metadata/) inside the download data module.
+
 **We will use various methods to determine what are the best conditions per cell line.**
 One method we will perform in this repository is single-cell quality control (QC), in which we will output a QC report that can tell us which seeding densities and time points yielded the worst quality segmentations.
 This can be due to high confluence or poor staining.
+Another method is pairwise Pearson's correlation, which computes how similar wells are within the same cell line.
 
-Below are the examples of the plate map layouts based on seeding density:
-
-![Assay Plate 1 layout](./0.download_data/metadata/platemap_figures/Assay_Plate1_platemap_figure_seeding_density.png)
-
-> First plate layout labelled by seeding density per well.
-
-![Assay Plate 2 layout](./0.download_data/metadata/platemap_figures/Assay_Plate2_platemap_figure_seeding_density.png)
-
-> Second plate layout labelled by seeding density per well. There are less wells used on this plate.
-
-**NOTE:** Both plate layouts contain U2-OS cell line in the same place. Also, any empty portions of the layout only contain media and no cells so they are not included on figure.
+**NOTE:** All plate layouts contain the U2-OS cell line, which is used as an "anchor" to compare profiles across plates and for developing segmentation parameters. Also, any empty portions of the layout contain media and no cells so they are not included on figure or in the platemap files.
 
 ## Repository structure
 

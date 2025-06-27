@@ -104,7 +104,7 @@ for (plate in names(platemap_dfs)) {
         ggtitle(paste(updated_plate, "layout based on cell line")) +
         theme(plot.title = element_text(size = 10, face = "bold")) +
         ggplot2::geom_point(aes(fill = factor(platemap_dfs[[plate]]$cell_line)), shape = 21, size = 3) +  # Fill by cell line
-        ggplot2::scale_fill_manual(values = colorRampPalette(RColorBrewer::brewer.pal(8, "Set1"))(length(unique(platemap_dfs[[plate]]$cell_line))),
+        ggplot2::scale_fill_manual(values = colorRampPalette(RColorBrewer::brewer.pal(12, "Paired"))(length(unique(platemap_dfs[[plate]]$cell_line))),
                                    name = "Cell Line") +
         theme(
             legend.position = "right",             # Keep legend on the right side
@@ -125,6 +125,4 @@ for (plate in names(platemap_dfs)) {
         width = 6.5
     )
 }
-
-
 
