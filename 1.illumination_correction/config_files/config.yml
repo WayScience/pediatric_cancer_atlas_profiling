@@ -1,4 +1,6 @@
-# This is the configuration file for the main plates of data (prior to re-imaging).
+# This is the configuration file for all plates regardless of reimaging status.
+# We are using the channel names and not channel IDs, which means that regardless
+# of the channel ID number, the names will keep the LoadData CSVs consistent.
 channels:
     Brightfield high: OrigBrightfield
     Alexa 488: OrigER

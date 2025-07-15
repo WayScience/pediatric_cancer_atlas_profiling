@@ -19,7 +19,7 @@ jupyter nbconvert --to=script --FilesWriter.build_directory=nbconverted/ *.ipynb
 python nbconverted/0.create_loaddata_csvs.py --HPC
 
 # define the round variable
-round="Round_2_data"
+round="Round_3_data"
 
 # build the data directory path using the variable
 data_dir="./loaddata_csvs/${round}"

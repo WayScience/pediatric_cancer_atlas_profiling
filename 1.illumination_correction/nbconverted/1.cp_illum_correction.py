@@ -26,7 +26,7 @@ import cp_parallel
 run_name = "illum_correction"
 
 # Batch name to process
-batch_name = "Round_2_data"
+batch_name = "Round_3_data"
 
 # set path for CellProfiler pipeline
 path_to_pipeline = pathlib.Path("./pipelines/illum.cppipe").resolve(strict=True)
