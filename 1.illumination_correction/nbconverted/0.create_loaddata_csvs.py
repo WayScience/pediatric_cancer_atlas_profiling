@@ -27,7 +27,7 @@ import loaddata_utils as ld_utils
 
 
 # Paths for parameters to make loaddata csv
-batch_name = "Round_2_data"
+batch_name = "Round_3_data"
 index_directory = pathlib.Path(f"/media/18tbdrive/ALSF_pilot_data/{batch_name}/")
 config_dir_path = pathlib.Path("./config_files").absolute()
 output_csv_dir = pathlib.Path(f"./loaddata_csvs/{batch_name}")
@@ -39,7 +39,7 @@ images_folders = list(index_directory.rglob("Images"))
 
 # ## Create LoadData CSVs for all data
 
-# In[ ]:
+# In[3]:
 
 
 # Define the one config path to use

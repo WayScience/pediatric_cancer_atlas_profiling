@@ -149,7 +149,12 @@ for plate, info in plate_info_dictionary.items():
     # Group by cell line and seeding density, and calculate total nuclei segmented and failed QC
     failure_stats = (
         annotated_df.groupby(
-            ["Metadata_cell_line", "Metadata_seeding_density", "Metadata_time_point"]
+            [
+                "Metadata_cell_line",
+                "Metadata_seeding_density",
+                "Metadata_time_point",
+                "Metadata_condition",
+            ]
         )
         .agg(
             total_nuclei_segmented=("failed_qc", "count"),
