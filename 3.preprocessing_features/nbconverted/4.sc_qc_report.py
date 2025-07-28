@@ -18,7 +18,7 @@ import pprint
 
 
 # Set round of data to be processed
-round_id = "Round_2_data"
+round_id = "Round_3_data"
 
 # path for platemap directory
 platemap_dir = pathlib.Path("../0.download_data/metadata/platemaps")

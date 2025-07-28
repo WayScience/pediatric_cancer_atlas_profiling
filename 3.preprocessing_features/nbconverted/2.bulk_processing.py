@@ -24,11 +24,11 @@ from pycytominer.cyto_utils import output
 
 # Condition for how to normalize the plates
 normalize_with_U2OS = (
-    False  # Set to False if normalizing to whole plate versus just `U2-OS` cell line
+    True  # Set to False if normalizing to whole plate versus just `U2-OS` cell line
 )
 
 # Set round to be processed
-round_id = "Round_2_data"
+round_id = "Round_3_data"
 
 # Path to dir with cleaned data from single-cell QC
 cleaned_dir = pathlib.Path(f"./data/cleaned_profiles/{round_id}")
@@ -175,9 +175,28 @@ for plate, info in plate_info_dictionary.items():
     )
 
     # Step 4: Normalization
-    samples = (
-        "Metadata_cell_line == 'U2-OS'" if normalize_with_U2OS else "all"
-    )  # "all" is the default to perform on whole plate
+    # Accept any of the following: 'U2-OS', 'U2OS', or 'U-2OS'
+    possible_cell_line_keys = ["U2-OS", "U2OS", "U-2OS"]
+    # Find which spelling is present in the annotated_df
+    cell_line_col = None
+    for key in possible_cell_line_keys:
+        if (
+            "Metadata_cell_line" in annotated_df.columns
+            and annotated_df["Metadata_cell_line"].astype(str).str.contains(key).any()
+        ):
+            cell_line_col = key
+            break
+
+    if normalize_with_U2OS:
+        if cell_line_col is not None:
+            samples = f"Metadata_cell_line == '{cell_line_col}'"
+        else:
+            raise ValueError(
+                "Could not find a valid U2-OS cell line spelling in 'Metadata_cell_line' column."
+            )
+    else:
+        samples = "all"  # "all" is the default to perform on whole plate
+
     print(f"Normalizing using samples: {samples}")
 
     normalize(
