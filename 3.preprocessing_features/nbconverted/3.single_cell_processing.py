@@ -104,7 +104,7 @@ pprint.pprint(plate_info_dictionary, indent=4)
 
 # ## Process data with pycytominer
 
-# In[ ]:
+# In[4]:
 
 
 # Set up map for renaming metadata column(s)
@@ -184,7 +184,7 @@ for plate, info in plate_info_dictionary.items():
     print(f"Preprocessing features completed for {plate}!")
 
 
-# In[ ]:
+# In[5]:
 
 
 # Check output file

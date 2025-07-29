@@ -175,27 +175,23 @@ for plate, info in plate_info_dictionary.items():
     )
 
     # Step 4: Normalization
-    # Accept any of the following: 'U2-OS', 'U2OS', or 'U-2OS'
-    possible_cell_line_keys = ["U2-OS", "U2OS", "U-2OS"]
-    # Find which spelling is present in the annotated_df
-    cell_line_col = None
-    for key in possible_cell_line_keys:
-        if (
-            "Metadata_cell_line" in annotated_df.columns
-            and annotated_df["Metadata_cell_line"].astype(str).str.contains(key).any()
-        ):
-            cell_line_col = key
-            break
-
     if normalize_with_U2OS:
-        if cell_line_col is not None:
-            samples = f"Metadata_cell_line == '{cell_line_col}'"
+        if "Metadata_cell_line" in annotated_df.columns:
+            if (
+                annotated_df["Metadata_cell_line"]
+                .astype(str)
+                .str.contains("U2-OS")
+                .any()
+            ):
+                samples = "Metadata_cell_line == 'U2-OS'"
+            else:
+                raise ValueError(
+                    "U2-OS not found in 'Metadata_cell_line'. Please ensure it is spelled exactly as 'U2-OS'."
+                )
         else:
-            raise ValueError(
-                "Could not find a valid U2-OS cell line spelling in 'Metadata_cell_line' column."
-            )
+            raise ValueError("'Metadata_cell_line' column not found in the dataframe.")
     else:
-        samples = "all"  # "all" is the default to perform on whole plate
+        samples = "all"
 
     print(f"Normalizing using samples: {samples}")
 
