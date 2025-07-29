@@ -14,7 +14,7 @@ plate_id = "BR00145816"
 
 
 # Parameters
-plate_id = "BR00145440"
+plate_id = "BR00147495"
 
 
 # ## Import libraries
@@ -58,7 +58,7 @@ joins = joins.replace(
 dest_datatype = "parquet"
 
 # set the round of data that will be processed
-round_id = "Round_2_data"
+round_id = "Round_3_data"
 
 # set path to directory with SQLite files
 sqlite_dir = pathlib.Path(f"../2.feature_extraction/sqlite_outputs/{round_id}")

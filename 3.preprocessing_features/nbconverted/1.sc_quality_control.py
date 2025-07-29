@@ -211,7 +211,7 @@ plate_id = "BR00145816"
 
 
 # Parameters
-plate_id = "BR00145440"
+plate_id = "BR00147495"
 
 
 # ## Injected parameter from papermill that updates for every plate being processed
@@ -220,7 +220,7 @@ plate_id = "BR00145440"
 
 
 # Set the round of data being processed
-round_id = "Round_2_data"
+round_id = "Round_3_data"
 
 # Directory containing the converted profiles
 data_dir = pathlib.Path(f"./data/converted_profiles/{round_id}")
@@ -374,7 +374,7 @@ nuclei_clustered_outliers = find_outliers(
 # MUST SET DATA AS DATAFRAME FOR OUTLINE DIR TO WORK
 nuclei_clustered_outliers_cdf = CytoDataFrame(
     data=pd.DataFrame(nuclei_clustered_outliers),
-    data_outline_context_dir=f"../2.feature_extraction/sqlite_outputs/{round_id}/{plate_id}/outlines",
+    data_outline_context_dir=f"../2.feature_extraction/sqlite_outputs/{round_id}/{plate_id}",
     segmentation_file_regex=outline_to_orig_mapping,
 )[
     [
@@ -430,7 +430,7 @@ solidity_nuclei_outliers = find_outliers(
 # MUST SET DATA AS DATAFRAME FOR OUTLINE DIR TO WORK
 solidity_nuclei_outliers_cdf = CytoDataFrame(
     data=pd.DataFrame(solidity_nuclei_outliers),
-    data_outline_context_dir=f"../2.feature_extraction/sqlite_outputs/{round_id}/{plate_id}/outlines",
+    data_outline_context_dir=f"../2.feature_extraction/sqlite_outputs/{round_id}/{plate_id}",
     segmentation_file_regex=outline_to_orig_mapping,
 )[
     [
@@ -554,7 +554,7 @@ cell_outliers = find_outliers(
 # MUST SET DATA AS DATAFRAME FOR OUTLINE DIR TO WORK
 cell_outliers_cdf = CytoDataFrame(
     data=pd.DataFrame(cell_outliers),
-    data_outline_context_dir=f"../2.feature_extraction/sqlite_outputs/{round_id}/{plate_id}/outlines",
+    data_outline_context_dir=f"../2.feature_extraction/sqlite_outputs/{round_id}/{plate_id}",
     segmentation_file_regex=outline_to_orig_mapping,
 )[
     [

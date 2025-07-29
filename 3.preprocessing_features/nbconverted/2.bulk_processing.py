@@ -24,11 +24,11 @@ from pycytominer.cyto_utils import output
 
 # Condition for how to normalize the plates
 normalize_with_U2OS = (
-    False  # Set to False if normalizing to whole plate versus just `U2-OS` cell line
+    True  # Set to False if normalizing to whole plate versus just `U2-OS` cell line
 )
 
 # Set round to be processed
-round_id = "Round_2_data"
+round_id = "Round_3_data"
 
 # Path to dir with cleaned data from single-cell QC
 cleaned_dir = pathlib.Path(f"./data/cleaned_profiles/{round_id}")
@@ -175,9 +175,24 @@ for plate, info in plate_info_dictionary.items():
     )
 
     # Step 4: Normalization
-    samples = (
-        "Metadata_cell_line == 'U2-OS'" if normalize_with_U2OS else "all"
-    )  # "all" is the default to perform on whole plate
+    if normalize_with_U2OS:
+        if "Metadata_cell_line" in annotated_df.columns:
+            if (
+                annotated_df["Metadata_cell_line"]
+                .astype(str)
+                .str.contains("U2-OS")
+                .any()
+            ):
+                samples = "Metadata_cell_line == 'U2-OS'"
+            else:
+                raise ValueError(
+                    "U2-OS not found in 'Metadata_cell_line'. Please ensure it is spelled exactly as 'U2-OS'."
+                )
+        else:
+            raise ValueError("'Metadata_cell_line' column not found in the dataframe.")
+    else:
+        samples = "all"
+
     print(f"Normalizing using samples: {samples}")
 
     normalize(

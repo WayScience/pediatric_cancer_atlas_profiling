@@ -24,7 +24,7 @@ from pycytominer.cyto_utils import output
 
 
 # Set round of plates to process
-round_id = "Round_2_data"
+round_id = "Round_3_data"
 
 # Path to dir with cleaned data from single-cell QC
 cleaned_dir = pathlib.Path(f"./data/cleaned_profiles/{round_id}")
