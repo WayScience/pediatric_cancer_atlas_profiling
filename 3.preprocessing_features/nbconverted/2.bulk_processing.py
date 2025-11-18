@@ -24,11 +24,11 @@ from pycytominer.cyto_utils import output
 
 # Condition for how to normalize the plates
 normalize_with_U2OS = (
-    True  # Set to False if normalizing to whole plate versus just `U2-OS` cell line
+    False  # Set to False if normalizing to whole plate versus just `U2-OS` cell line
 )
 
 # Set round to be processed
-round_id = "Round_3_data"
+round_id = "Round_4_data"
 
 # Path to dir with cleaned data from single-cell QC
 cleaned_dir = pathlib.Path(f"./data/cleaned_profiles/{round_id}")
