@@ -1,0 +1,217 @@
+cell_line,row,column,well,seeding_density,condition
+X0092 (Cure MEC Line #1),C,3,C03,1000,synthemax
+X0092 (Cure MEC Line #1),C,4,C04,1000,synthemax
+X0092 (Cure MEC Line #1),C,5,C05,2000,synthemax
+X0092 (Cure MEC Line #1),C,6,C06,2000,synthemax
+X0092 (Cure MEC Line #1),C,7,C07,4000,synthemax
+X0092 (Cure MEC Line #1),C,8,C08,4000,synthemax
+X0092 (Cure MEC Line #1),C,9,C09,8000,synthemax
+X0092 (Cure MEC Line #1),C,10,C10,8000,synthemax
+X0092 (Cure MEC Line #1),C,11,C11,12000,synthemax
+X0092 (Cure MEC Line #1),C,12,C12,12000,synthemax
+X0092 (Cure MEC Line #1),C,13,C13,1000,synthemax
+CHP212-1020,C,14,C14,1000,synthemax
+CHP212-1020,C,15,C15,2000,synthemax
+CHP212-1020,C,16,C16,2000,synthemax
+CHP212-1020,C,17,C17,4000,synthemax
+CHP212-1020,C,18,C18,4000,synthemax
+CHP212-1020,C,19,C19,8000,synthemax
+CHP212-1020,C,20,C20,8000,synthemax
+CHP212-1020,C,21,C21,12000,synthemax
+CHP212-1020,C,22,C22,12000,synthemax
+X0092 (Cure MEC Line #1),D,3,D03,1000,synthemax
+X0092 (Cure MEC Line #1),D,4,D04,1000,synthemax
+X0092 (Cure MEC Line #1),D,5,D05,2000,synthemax
+X0092 (Cure MEC Line #1),D,6,D06,2000,synthemax
+X0092 (Cure MEC Line #1),D,7,D07,4000,synthemax
+X0092 (Cure MEC Line #1),D,8,D08,4000,synthemax
+X0092 (Cure MEC Line #1),D,9,D09,8000,synthemax
+X0092 (Cure MEC Line #1),D,10,D10,8000,synthemax
+X0092 (Cure MEC Line #1),D,11,D11,12000,synthemax
+X0092 (Cure MEC Line #1),D,12,D12,12000,synthemax
+X0092 (Cure MEC Line #1),D,13,D13,1000,synthemax
+CHP212-1020,D,14,D14,1000,synthemax
+CHP212-1020,D,15,D15,2000,synthemax
+CHP212-1020,D,16,D16,2000,synthemax
+CHP212-1020,D,17,D17,4000,synthemax
+CHP212-1020,D,18,D18,4000,synthemax
+CHP212-1020,D,19,D19,8000,synthemax
+CHP212-1020,D,20,D20,8000,synthemax
+CHP212-1020,D,21,D21,12000,synthemax
+CHP212-1020,D,22,D22,12000,synthemax
+CF1500 (Cure MEC Line #2),E,3,E03,1000,synthemax
+CF1500 (Cure MEC Line #2),E,4,E04,1000,synthemax
+CF1500 (Cure MEC Line #2),E,5,E05,2000,synthemax
+CF1500 (Cure MEC Line #2),E,6,E06,2000,synthemax
+CF1500 (Cure MEC Line #2),E,7,E07,4000,synthemax
+CF1500 (Cure MEC Line #2),E,8,E08,4000,synthemax
+CF1500 (Cure MEC Line #2),E,9,E09,8000,synthemax
+CF1500 (Cure MEC Line #2),E,10,E10,8000,synthemax
+CF1500 (Cure MEC Line #2),E,11,E11,12000,synthemax
+CF1500 (Cure MEC Line #2),E,12,E12,12000,synthemax
+CF1500 (Cure MEC Line #2),E,13,E13,1000,synthemax
+CHP212-EV,E,14,E14,1000,synthemax
+CHP212-EV,E,15,E15,2000,synthemax
+CHP212-EV,E,16,E16,2000,synthemax
+CHP212-EV,E,17,E17,4000,synthemax
+CHP212-EV,E,18,E18,4000,synthemax
+CHP212-EV,E,19,E19,8000,synthemax
+CHP212-EV,E,20,E20,8000,synthemax
+CHP212-EV,E,21,E21,12000,synthemax
+CHP212-EV,E,22,E22,12000,synthemax
+CF1500 (Cure MEC Line #2),F,3,F03,1000,synthemax
+CF1500 (Cure MEC Line #2),F,4,F04,1000,synthemax
+CF1500 (Cure MEC Line #2),F,5,F05,2000,synthemax
+CF1500 (Cure MEC Line #2),F,6,F06,2000,synthemax
+CF1500 (Cure MEC Line #2),F,7,F07,4000,synthemax
+CF1500 (Cure MEC Line #2),F,8,F08,4000,synthemax
+CF1500 (Cure MEC Line #2),F,9,F09,8000,synthemax
+CF1500 (Cure MEC Line #2),F,10,F10,8000,synthemax
+CF1500 (Cure MEC Line #2),F,11,F11,12000,synthemax
+CF1500 (Cure MEC Line #2),F,12,F12,12000,synthemax
+CF1500 (Cure MEC Line #2),F,13,F13,1000,synthemax
+CHP212-EV,F,14,F14,1000,synthemax
+CHP212-EV,F,15,F15,2000,synthemax
+CHP212-EV,F,16,F16,2000,synthemax
+CHP212-EV,F,17,F17,4000,synthemax
+CHP212-EV,F,18,F18,4000,synthemax
+CHP212-EV,F,19,F19,8000,synthemax
+CHP212-EV,F,20,F20,8000,synthemax
+CHP212-EV,F,21,F21,12000,synthemax
+CHP212-EV,F,22,F22,12000,synthemax
+D425,G,3,G03,1000,synthemax
+D425,G,4,G04,1000,synthemax
+D425,G,5,G05,2000,synthemax
+D425,G,6,G06,2000,synthemax
+D425,G,7,G07,4000,synthemax
+D425,G,8,G08,4000,synthemax
+D425,G,9,G09,8000,synthemax
+D425,G,10,G10,8000,synthemax
+D425,G,11,G11,12000,synthemax
+D425,G,12,G12,12000,synthemax
+D425,G,13,G13,1000,synthemax
+CHP212 (EMEM:F-12 - preferred),G,14,G14,1000,synthemax
+CHP212 (EMEM:F-12 - preferred),G,15,G15,2000,synthemax
+CHP212 (EMEM:F-12 - preferred),G,16,G16,2000,synthemax
+CHP212 (EMEM:F-12 - preferred),G,17,G17,4000,synthemax
+CHP212 (EMEM:F-12 - preferred),G,18,G18,4000,synthemax
+CHP212 (EMEM:F-12 - preferred),G,19,G19,8000,synthemax
+CHP212 (EMEM:F-12 - preferred),G,20,G20,8000,synthemax
+CHP212 (EMEM:F-12 - preferred),G,21,G21,12000,synthemax
+CHP212 (EMEM:F-12 - preferred),G,22,G22,12000,synthemax
+D425,H,3,H03,1000,synthemax
+D425,H,4,H04,1000,synthemax
+D425,H,5,H05,2000,synthemax
+D425,H,6,H06,2000,synthemax
+D425,H,7,H07,4000,synthemax
+D425,H,8,H08,4000,synthemax
+D425,H,9,H09,8000,synthemax
+D425,H,10,H10,8000,synthemax
+D425,H,11,H11,12000,synthemax
+D425,H,12,H12,12000,synthemax
+D425,H,13,H13,1000,synthemax
+CHP212 (EMEM:F-12 - preferred),H,14,H14,1000,synthemax
+CHP212 (EMEM:F-12 - preferred),H,15,H15,2000,synthemax
+CHP212 (EMEM:F-12 - preferred),H,16,H16,2000,synthemax
+CHP212 (EMEM:F-12 - preferred),H,17,H17,4000,synthemax
+CHP212 (EMEM:F-12 - preferred),H,18,H18,4000,synthemax
+CHP212 (EMEM:F-12 - preferred),H,19,H19,8000,synthemax
+CHP212 (EMEM:F-12 - preferred),H,20,H20,8000,synthemax
+CHP212 (EMEM:F-12 - preferred),H,21,H21,12000,synthemax
+CHP212 (EMEM:F-12 - preferred),H,22,H22,12000,synthemax
+SH-SY5Y(EMEM:F-12 - preferred),I,15,I15,2000,synthemax
+SH-SY5Y(EMEM:F-12 - preferred),I,16,I16,2000,synthemax
+SH-SY5Y(EMEM:F-12 - preferred),I,17,I17,4000,synthemax
+SH-SY5Y(EMEM:F-12 - preferred),I,18,I18,4000,synthemax
+SH-SY5Y(EMEM:F-12 - preferred),I,19,I19,8000,synthemax
+SH-SY5Y(EMEM:F-12 - preferred),I,20,I20,8000,synthemax
+SH-SY5Y(EMEM:F-12 - preferred),I,21,I21,12000,synthemax
+SH-SY5Y(EMEM:F-12 - preferred),I,22,I22,12000,synthemax
+SH-SY5Y(EMEM:F-12 - preferred),J,15,J15,2000,synthemax
+SH-SY5Y(EMEM:F-12 - preferred),J,16,J16,2000,synthemax
+SH-SY5Y(EMEM:F-12 - preferred),J,17,J17,4000,synthemax
+SH-SY5Y(EMEM:F-12 - preferred),J,18,J18,4000,synthemax
+SH-SY5Y(EMEM:F-12 - preferred),J,19,J19,8000,synthemax
+SH-SY5Y(EMEM:F-12 - preferred),J,20,J20,8000,synthemax
+SH-SY5Y(EMEM:F-12 - preferred),J,21,J21,12000,synthemax
+SH-SY5Y(EMEM:F-12 - preferred),J,22,J22,12000,synthemax
+SKNAS-1020,K,3,K03,1000,synthemax
+SKNAS-1020,K,4,K04,1000,synthemax
+SKNAS-1020,K,5,K05,2000,synthemax
+SKNAS-1020,K,6,K06,2000,synthemax
+SKNAS-1020,K,7,K07,4000,synthemax
+SKNAS-1020,K,8,K08,4000,synthemax
+SKNAS-1020,K,9,K09,8000,synthemax
+SKNAS-1020,K,10,K10,8000,synthemax
+SKNAS-1020,K,11,K11,12000,synthemax
+SKNAS-1020,K,12,K12,12000,synthemax
+SKNAS-1020,K,13,K13,1000,synthemax
+CHP-134,K,14,K14,1000,synthemax
+CHP-134,K,15,K15,2000,synthemax
+CHP-134,K,16,K16,2000,synthemax
+CHP-134,K,17,K17,4000,synthemax
+CHP-134,K,18,K18,4000,synthemax
+CHP-134,K,19,K19,8000,synthemax
+CHP-134,K,20,K20,8000,synthemax
+CHP-134,K,21,K21,12000,synthemax
+CHP-134,K,22,K22,12000,synthemax
+SKNAS-1020,L,3,L03,1000,synthemax
+SKNAS-1020,L,4,L04,1000,synthemax
+SKNAS-1020,L,5,L05,2000,synthemax
+SKNAS-1020,L,6,L06,2000,synthemax
+SKNAS-1020,L,7,L07,4000,synthemax
+SKNAS-1020,L,8,L08,4000,synthemax
+SKNAS-1020,L,9,L09,8000,synthemax
+SKNAS-1020,L,10,L10,8000,synthemax
+SKNAS-1020,L,11,L11,12000,synthemax
+SKNAS-1020,L,12,L12,12000,synthemax
+SKNAS-1020,L,13,L13,1000,synthemax
+CHP-134,L,14,L14,1000,synthemax
+CHP-134,L,15,L15,2000,synthemax
+CHP-134,L,16,L16,2000,synthemax
+CHP-134,L,17,L17,4000,synthemax
+CHP-134,L,18,L18,4000,synthemax
+CHP-134,L,19,L19,8000,synthemax
+CHP-134,L,20,L20,8000,synthemax
+CHP-134,L,21,L21,12000,synthemax
+CHP-134,L,22,L22,12000,synthemax
+U2-OS,M,3,M03,1000,synthemax
+U2-OS,M,4,M04,1000,synthemax
+U2-OS,M,5,M05,2000,synthemax
+U2-OS,M,6,M06,2000,synthemax
+U2-OS,M,7,M07,4000,synthemax
+U2-OS,M,8,M08,4000,synthemax
+U2-OS,M,9,M09,8000,synthemax
+U2-OS,M,10,M10,8000,synthemax
+U2-OS,M,11,M11,12000,synthemax
+U2-OS,M,12,M12,12000,synthemax
+U2-OS,M,13,M13,1000,synthemax
+U2-OS,M,14,M14,1000,synthemax
+U2-OS,M,15,M15,2000,synthemax
+U2-OS,M,16,M16,2000,synthemax
+U2-OS,M,17,M17,4000,synthemax
+U2-OS,M,18,M18,4000,synthemax
+U2-OS,M,19,M19,8000,synthemax
+U2-OS,M,20,M20,8000,synthemax
+U2-OS,M,21,M21,12000,synthemax
+U2-OS,M,22,M22,12000,synthemax
+U2-OS,N,3,N03,1000,synthemax
+U2-OS,N,4,N04,1000,synthemax
+U2-OS,N,5,N05,2000,synthemax
+U2-OS,N,6,N06,2000,synthemax
+U2-OS,N,7,N07,4000,synthemax
+U2-OS,N,8,N08,4000,synthemax
+U2-OS,N,9,N09,8000,synthemax
+U2-OS,N,10,N10,8000,synthemax
+U2-OS,N,11,N11,12000,synthemax
+U2-OS,N,12,N12,12000,synthemax
+U2-OS,N,13,N13,1000,synthemax
+U2-OS,N,14,N14,1000,synthemax
+U2-OS,N,15,N15,2000,synthemax
+U2-OS,N,16,N16,2000,synthemax
+U2-OS,N,17,N17,4000,synthemax
+U2-OS,N,18,N18,4000,synthemax
+U2-OS,N,19,N19,8000,synthemax
+U2-OS,N,20,N20,8000,synthemax
+U2-OS,N,21,N21,12000,synthemax
+U2-OS,N,22,N22,12000,synthemax

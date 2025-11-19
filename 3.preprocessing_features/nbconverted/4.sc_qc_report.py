@@ -18,7 +18,7 @@ import pprint
 
 
 # Set round of data to be processed
-round_id = "Round_3_data"
+round_id = "Round_4_data"
 
 # path for platemap directory
 platemap_dir = pathlib.Path("../0.download_data/metadata/platemaps")
@@ -154,6 +154,7 @@ for plate, info in plate_info_dictionary.items():
                 "Metadata_seeding_density",
                 "Metadata_time_point",
                 "Metadata_condition",
+                "Metadata_Plate",
             ]
         )
         .agg(

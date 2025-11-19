@@ -204,14 +204,14 @@ def plot_nuclei_solidity_histogram(
 
 
 # Set parameter for papermill to use for processing
-plate_id = "BR00145816"
+plate_id = "BR00147482"
 
 
 # In[5]:
 
 
 # Parameters
-plate_id = "BR00147495"
+plate_id = "BR00148746"
 
 
 # ## Injected parameter from papermill that updates for every plate being processed
@@ -220,7 +220,7 @@ plate_id = "BR00147495"
 
 
 # Set the round of data being processed
-round_id = "Round_3_data"
+round_id = "Round_4_data"
 
 # Directory containing the converted profiles
 data_dir = pathlib.Path(f"./data/converted_profiles/{round_id}")
@@ -386,20 +386,15 @@ nuclei_clustered_outliers_cdf = CytoDataFrame(
 
 
 print(nuclei_clustered_outliers_cdf.shape)
-nuclei_clustered_outliers_cdf.sort_values(
-    by="Nuclei_Intensity_MassDisplacement_CorrDNA", ascending=True
-).head(2)
-
-
-# In[13]:
-
-
+# nuclei_clustered_outliers_cdf.sort_values(
+#     by="Nuclei_Intensity_MassDisplacement_CorrDNA", ascending=True
+# ).head(2)
 nuclei_clustered_outliers_cdf.sample(n=2, random_state=0)
 
 
 # ### Plot the outliers
 
-# In[14]:
+# In[13]:
 
 
 # Save cluster nuclei scatterplot
@@ -415,7 +410,7 @@ plot_cluster_nuclei_outliers(
 # 
 # **NOTE:** For the pilot data, we are determining optimal conditions (seeding density and time point). This means all cells are not treated and should be in a "healthy" state. Given that `solidity` measures how irregular the shape of a nuclei is, we would expect that cells treated with a drug/compound could yield interesting shapes or phenotypes. Since we are not working with drug treatments at this time, we can use this feature to identify technically incorrect segmentations.
 
-# In[15]:
+# In[14]:
 
 
 # Find low nuclei solidity outliers for the current plate
@@ -441,20 +436,15 @@ solidity_nuclei_outliers_cdf = CytoDataFrame(
 
 
 print(solidity_nuclei_outliers_cdf.shape)
-solidity_nuclei_outliers_cdf.sort_values(
-    by="Nuclei_AreaShape_Solidity", ascending=False
-).head(2)
-
-
-# In[16]:
-
-
+# solidity_nuclei_outliers_cdf.sort_values(
+#     by="Nuclei_AreaShape_Solidity", ascending=False
+# ).head(2)
 solidity_nuclei_outliers_cdf.sample(n=2, random_state=0)
 
 
 # ### Plot the outliers
 
-# In[17]:
+# In[15]:
 
 
 # Save low nuclei solidity histogram
@@ -479,7 +469,7 @@ plot_nuclei_solidity_histogram(
 # This is the problem we want to avoid for a single-cell segmentation, we don't want to have a whole cell segmentation be assigned to one nuclei when it actually contains multiple nuclei.
 # 
 
-# In[18]:
+# In[16]:
 
 
 # change compartment to cells
@@ -526,7 +516,7 @@ next(iter(outline_to_orig_mapping.items()))
 
 # ### Filter down plate data to detect cells outliers (improves speed)
 
-# In[19]:
+# In[17]:
 
 
 # Define the QC features
@@ -538,7 +528,7 @@ filtered_plate_df = plate_df[metadata_columns + qc_features]
 
 # ### Detect cell outliers
 
-# In[20]:
+# In[18]:
 
 
 # Find cell outliers for the current plate
@@ -565,20 +555,15 @@ cell_outliers_cdf = CytoDataFrame(
 
 
 print(cell_outliers_cdf.shape)
-cell_outliers_cdf.sort_values(
-    by="Cells_Intensity_IntegratedIntensity_CorrDNA", ascending=True
-).head(2)
-
-
-# In[21]:
-
-
+# cell_outliers_cdf.sort_values(
+#     by="Cells_Intensity_IntegratedIntensity_CorrDNA", ascending=True
+# ).head(2)
 cell_outliers_cdf.sample(n=2, random_state=0)
 
 
 # ## Save the outlier indices to use for reporting
 
-# In[22]:
+# In[19]:
 
 
 # Identify failing indices from both outlier dataframes
@@ -627,7 +612,7 @@ print(f"Total failing single cells: {failing_df.shape[0]} ({failed_percentage:.2
 
 # ## Clean and save the data
 
-# In[23]:
+# In[20]:
 
 
 # Remove rows with outlier indices

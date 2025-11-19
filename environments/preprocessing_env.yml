@@ -18,6 +18,7 @@ dependencies:
   - conda-forge::matplotlib
   - conda-forge::pycytominer>=1.2.0
   - conda-forge::papermill
+  - conda-forge::tabulate
   - pip:
     - Cytotable
     - coSMicQC>=0.1.0
