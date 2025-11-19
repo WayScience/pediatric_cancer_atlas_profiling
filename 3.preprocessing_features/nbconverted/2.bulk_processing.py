@@ -19,13 +19,8 @@ from pycytominer.cyto_utils import output
 
 # ## Set paths and variables
 
-# In[2]:
+# In[ ]:
 
-
-# Condition for how to normalize the plates
-normalize_with_U2OS = (
-    False  # Set to False if normalizing to whole plate versus just `U2-OS` cell line
-)
 
 # Set round to be processed
 round_id = "Round_4_data"
@@ -108,21 +103,10 @@ pprint.pprint(plate_info_dictionary, indent=4)
 
 # ## Process data with pycytominer
 
-# In[4]:
+# In[ ]:
 
 
-# Determine suffix based on normalize_with_U2OS
-u2os_suffix = "_U2OS_samples" if normalize_with_U2OS else ""
-
-# If normalizing with U2-OS, create a subfolder named 'U2OS_samples'
-if normalize_with_U2OS:
-    U2OS_output_dir = output_dir / "U2OS_samples"
-    U2OS_output_dir.mkdir(exist_ok=True)
-else:
-    U2OS_output_dir = (
-        output_dir  # Otherwise, use the root output_dir for whole plate normalization
-    )
-
+# Process plates with pycytominer (U2-OS specific normalization removed)
 for plate, info in plate_info_dictionary.items():
     print(f"Now performing pycytominer pipeline for {plate}")
 
@@ -132,14 +116,12 @@ for plate, info in plate_info_dictionary.items():
         pathlib.Path(f"{output_dir}/{plate}_bulk_annotated.parquet")
     )
 
-    # Save normalized and feature-selected files in U2OS_samples folder if needed
+    # Normalized and feature-selected files (whole-plate normalization)
     output_normalized_file = str(
-        pathlib.Path(f"{U2OS_output_dir}/{plate}_bulk_normalized{u2os_suffix}.parquet")
+        pathlib.Path(f"{output_dir}/{plate}_bulk_normalized.parquet")
     )
     output_feature_select_file = str(
-        pathlib.Path(
-            f"{U2OS_output_dir}/{plate}_bulk_feature_selected{u2os_suffix}.parquet"
-        )
+        pathlib.Path(f"{output_dir}/{plate}_bulk_feature_selected.parquet")
     )
 
     # Load single-cell profiles
@@ -164,7 +146,7 @@ for plate, info in plate_info_dictionary.items():
         join_on=["Metadata_well", "Image_Metadata_Well"],
     )
 
-    # Step 2.5: Add 'Metadata_time_point' column based on the plate's time_point from dict
+    # Add 'Metadata_time_point' column based on the plate's time_point from dict
     annotated_df["Metadata_time_point"] = info["time_point"]
 
     # Step 3: Output annotated DataFrame
@@ -174,25 +156,8 @@ for plate, info in plate_info_dictionary.items():
         output_type="parquet",
     )
 
-    # Step 4: Normalization
-    if normalize_with_U2OS:
-        if "Metadata_cell_line" in annotated_df.columns:
-            if (
-                annotated_df["Metadata_cell_line"]
-                .astype(str)
-                .str.contains("U2-OS")
-                .any()
-            ):
-                samples = "Metadata_cell_line == 'U2-OS'"
-            else:
-                raise ValueError(
-                    "U2-OS not found in 'Metadata_cell_line'. Please ensure it is spelled exactly as 'U2-OS'."
-                )
-        else:
-            raise ValueError("'Metadata_cell_line' column not found in the dataframe.")
-    else:
-        samples = "all"
-
+    # Step 4: Normalization (always whole-plate)
+    samples = "all"
     print(f"Normalizing using samples: {samples}")
 
     normalize(
