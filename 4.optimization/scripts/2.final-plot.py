@@ -14,22 +14,8 @@ from matplotlib.backends.backend_pdf import PdfPages
 
 
 #from bulk, quality controlled data
-qc_2_df = pd.read_parquet("../3.preprocessing_features/qc_report/Round_2_data_qc_report.parquet")
-
-qc_1_df = pd.read_parquet("../3.preprocessing_features/qc_report/Round_1_data_qc_report.parquet")
-qc_1_df["Metadata_condition"] = "standard"
-
-qc_3_df = pd.read_parquet("../3.preprocessing_features/qc_report/Round_3_data_qc_report.parquet")
-
-qc_4_df = pd.read_parquet("../3.preprocessing_features/qc_report/Round_4_data_qc_report.parquet")
-pearson_df = pd.read_parquet("../5.optimization/results/round_1-4_pearson_correlation.parquet")
-
-
-for df in (qc_1_df, qc_2_df, qc_3_df, qc_4_df, pearson_df):
-    df["Metadata_cell_line"] = df["Metadata_cell_line"].str.replace("-", "", regex=False)
-
-qc_df = pd.concat([qc_1_df, qc_2_df, qc_3_df, qc_4_df], ignore_index=True)
-qc_df = qc_df.rename(columns={"Metadata_Plate": "Metadata_plate"})
+qc_df = pd.read_parquet("../3.preprocessing_features/qc_report/qc_report.parquet")
+pearson_df = pd.read_parquet("../5.optimization/results/pearson_correlation.parquet")
 
 
 # In[3]:
@@ -42,7 +28,7 @@ pearson_df.head()
 
 
 qc_df_sorted = qc_df.sort_values(by="Metadata_cell_line")
-qc_df_sorted.head()
+qc_df_sorted.head(50)
 
 
 # In[5]:
@@ -61,18 +47,11 @@ print("Data types in qc_df:\n", qc_df.dtypes)
 # In[6]:
 
 
-print(qc_df["Metadata_cell_line"].unique())
-print(pearson_df["Metadata_cell_line"].unique())
-
-
-# In[7]:
-
-
 # Merge pearson_df and qc_df
 merged_df = pd.merge(
     pearson_df[pearson_df["Shuffled"] == "False"],
     qc_df,
-    on=["Metadata_cell_line", "Metadata_seeding_density", "Metadata_time_point", "Metadata_condition", "Metadata_plate"],
+    on=["Metadata_cell_line", "Metadata_seeding_density", "Metadata_time_point"],
     how="inner"
 )
 
@@ -81,57 +60,50 @@ merged_df.to_parquet("../5.optimization/results/merged_pearson_qc_data.parquet")
 print("Merged dataframe saved to results/merged_pearson_qc_data.parquet")
 
 
-# In[8]:
+# In[7]:
 
 
 merged_df.head()
 
 
-# In[9]:
+# In[8]:
 
 
 custom_palette = sns.color_palette("Set1", n_colors=5)
 # Create a PdfPages object to save all plots in a single PDF
-with PdfPages("../5.optimization/results/rounds_1-4_pearson_vs_percentage_failing_cells.pdf") as pdf:
-    # Loop over each cell line
+with PdfPages('../5.optimization/results/pearson_vs_percentage_failing_cells.pdf') as pdf:
+    # Plot for each cell line
     for cell_line in merged_df["Metadata_cell_line"].unique():
+        # Filter data for the current cell line
         cell_line_df = merged_df[merged_df["Metadata_cell_line"] == cell_line]
-
-        # One figure with a column‑panel for every condition
-        g = sns.relplot(
+        
+        # Generate the scatter plot
+        plt.figure(figsize=(8, 6))
+        scatter = sns.scatterplot(
             data=cell_line_df,
             x="pearsons_correlation",
             y="percentage_failing_cells",
             hue="Metadata_seeding_density",
-            style="Metadata_time_point",
-            markers=["o", "X", "s"],      # list length ≥ number of unique time points
-            palette=custom_palette,
-            kind="scatter",
-            col="Metadata_condition",      # ← facet by condition
-            col_wrap=None,                 # all panels in a single row; use an int to wrap
-            height=6,
-            aspect=1,
+            palette=custom_palette,  # Choose a color palette for seeding density
+            style="Metadata_time_point",  # Different styles for each time point
+            markers=["o", "X", "s"],  # Customize markers
+            s=100,
         )
-
-        g.axes.flat[0].invert_yaxis() 
-
-        # Overall title & axis labels
-        g.fig.suptitle(
-            f"Pearson Correlation vs Percentage Failing Cells\nCell Line: {cell_line}",
-            fontsize=16,
-            y=1.1  # move title a bit up so it doesn’t overlap
-        )
-        g.set_axis_labels("Pearson Correlation", "Percentage Failing Cells")
-
-
-        # Move legend outside the grid
-        g._legend.set_title("Seeding Density")
-        g._legend.set_bbox_to_anchor((1, 1))
-        g._legend.set_loc("upper left")
-
-        # Save and close
-        pdf.savefig(g.fig, bbox_inches="tight", transparent=True)
-        plt.close(g.fig)
-
-print("Plots saved to results/round_1-4_pearson_vs_percentage_failing_cells.pdf")
+        
+        # Set plot title and labels
+        plt.title(f"Pearson Correlation vs Percentage Failing Cells\nCell Line: {cell_line}", fontsize=16)
+        plt.xlabel("Pearson Correlation")
+        plt.ylabel("Percentage Failing Cells")
+        
+        # Reverse the y-axis (since higher failing percentage is bad)
+        plt.gca().invert_yaxis()
+        
+        # Move the legend outside of the plot
+        plt.legend(title='Seeding Density', bbox_to_anchor=(1.05, 1), loc='upper left')
+        
+        # Save the plot to the PDF
+        pdf.savefig(bbox_inches="tight", transparent=True)
+        plt.close()  # Close the figure to avoid overlap in the next plot
+    
+    print("Plots saved to results/pearson_vs_percentage_failing_cells.pdf")
 

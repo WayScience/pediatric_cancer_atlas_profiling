@@ -22,6 +22,7 @@ sqlite_outputs*
 3.preprocessing_features/data/converted_profiles
 3.preprocessing_features/data/cleaned_profiles
 3.preprocessing_features/data/single_cell_profiles
+5.sknas-pipeline/pediatric_atlas_iceberg_warehouse/
 
 # Ignore CP pipeline to extract example FOV images
 FOV_example_output.cppipe
