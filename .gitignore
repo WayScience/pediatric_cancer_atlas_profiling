@@ -31,3 +31,6 @@ FOV_example_output.cppipe
 
 # Ignore mac-specific files
 .DS_Store
+
+# Ignore skill related files
+.run*
