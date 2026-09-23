@@ -1,0 +1,56 @@
+,cell_line,cancer_type,sex,age,source,subtype,origin,Doubling Time (5% CO2) (Observed),Cell Line link
+ACH-000052,A673,Ewing's Sarcoma,Female,15,ATCC CRL-1598,EWS_FLI,Primary,Approx. 20 hours,https://www.atcc.org/products/crl-1598
+ACH-000120,CHP212,Neuroblastoma,Male,NA,ATCC CRL-2273,MYCN_amp,,Approx. 26 hours,https://www.atcc.org/products/crl-2273
+ACH-000211,DAOY,Medulloblastoma,Male,4,ATCC HTB-186,non_MYC,Primary,Approx. 34 hours,https://www.atcc.org/products/htb-186
+ACH-000082,"G-292,CLONE A141B1",Osteosarcoma,Female,9,ATCC CRL-1423,,Primary,Approx. 35 hours,https://www.atcc.org/products/crl-1423
+ACH-000096,G-401,Malignant Rhabdoid Tumor,Male,0.25,ATCC CRL-1441,,Primary,Approx. 24 hours,https://www.atcc.org/products/crl-1441
+ACH-000375,G-402,Malignant Rhabdoid Tumor,Female,0.75,ATCC CRL-1440,,Primary,Approx. 24 hours,https://www.atcc.org/products/crl-1440
+ACH-000310,IMR32,Neuroblastoma,Male,1,ATCC CCL-127,MYCN_amp,Metastasis,Approx. 38 hours (Improves after P3),https://www.atcc.org/products/ccl-127
+ACH-000622,KNS42,Glioma,Male,16,HSRRB IFO50356,,Primary,,https://cellbank.nibiohn.go.jp/~cellbank/en/search_res_det.cgi?ID=1880
+ACH-000227,KP-N-YN,Neuroblastoma,Male,2,HSRRB IFO50431,MYCN_amp,Metastasis,Approx. 72 hours  (Improves after P3),https://cellbank.nibiohn.go.jp/~cellbank/en/search_res_det.cgi?ID=1919
+ACH-000804,NB-1,Neuroblastoma,Male,2,HSRRB IFO50295,,Metastasis,Approx. 24 hours,https://cellbank.nibiohn.go.jp/~cellbank/en/search_res_det.cgi?ID=1853
+ACH-000776,ONS-76,Medulloblastoma,Female,2,HSRRB IFO50355,non_MYC,Primary,Approx. 24 hours,https://cellbank.nibiohn.go.jp/~cellbank/en/search_res_det.cgi?ID=1879
+ACH-001374,PA1,Mixed Germ Cell,Female,12,ATCC CRL-1572,,Metastasis,Approx. 24 hours,https://www.atcc.org/products/crl-1572
+ACH-000410,SAOS-2,Osteosarcoma,Female,11,ATCC HTB-85,,Primary,Approx. 48 hours,https://www.atcc.org/products/htb-85
+ACH-001188,SH-SY5Y,Neuroblastoma,Female,4,ATCC CRL-2266,,Metastasis,,https://www.atcc.org/products/crl-2266
+ACH-000748,SJSA-1,Osteosarcoma,Male,19,ATCC CRL-2098,,Primary,Approx. 24 hours,https://www.atcc.org/products/crl-2098
+ACH-000260,SKNAS,Neuroblastoma,Female,6,ATCC CRL-2137,MYCN_wt,Metastasis,,https://www.atcc.org/products/crl-2137
+ACH-000039,SKNMC,Ewing's Sarcoma,Female,14,ATCC HTB-10,EWS_FLI,Metastasis,Approx. 24 hours,https://www.atcc.org/products/htb-10
+ACH-000364,U-2 OS,Osteosarcoma,Female,15,ATCC HTB-96,,Primary,Approx. 24 hours,https://www.atcc.org/products/htb-96
+ACH-000366,SKNDZ,Neuroblastoma,Female,2,ATCC CRL-2149,MYCN_amp,Metastasis,,https://www.atcc.org/products/crl-2149
+,CHLA-10,Primitive Neuroectodermal Tumor (PNET),Female,14,COG,,Metastasis,,
+,CHLA-25,Primitive Neuroectodermal Tumor (PNET),Female,2,COG,,Primary,,
+,CHLA-113,PNET / Medulloblastoma,,,COG,,,,
+,CHLA-200,Glioblastoma Multiforme,Male,12,COG,,Primary,,
+,CHLA-218,Primitive Neuroectodermal Tumor (PNET),,,COG,,,,
+,CHLA-210,Retinoblastoma,,,COG,,,,
+,CHLA-196,Retinoblastoma,,,COG,,,,
+,COG-E-352,Ewing's Sarcoma,,,COG,,,,
+,CHLA-262,Rhabdomyosarcoma,,,COG,,,,
+,COG-AR-397hnb,Atypical Teratoid Rhabdoid Tumor,,,COG,,,,
+,CHLA-194,Retinoblastoma,,,COG,,,,
+,CHLA-203,Retinoblastoma,,,COG,,,,
+,CHLA-186,Rhabdomyosarcoma,,,COG,,,,
+,CHLA-258,Primitive Neuroectodermal Tumor (PNET),,,COG,,,,
+,COG-R-466h,"Rhabdomyosarcoma, embryonal",,,COG,,,,
+,SJ-GBM2,Glioblastoma Multiforme,,,COG,,,,
+ACH-000424,TC-71,Ewing's Sarcoma,Male,22,COG,,Primary,24 hours ,
+,Rh 41 (Rh4),"Rhabdomyosarcoma, alveolar",,,COG,,,,
+,COG-EP-280,"Ependymoma, anaplastic",,,COG,,,,
+,D283 Med,Medulloblastoma,,,ATCC HTB-185 ,,,,https://www.atcc.org/products/htb-185
+,D341 Med,Medulloblastoma,,,ATCC HTB-187,,,,https://www.atcc.org/products/htb-187
+,D425,Medulloblastoma,,,Roussel Lab/St. Jude Research Institute,,,,
+,HDMB03,Medulloblastoma - Myc amplified,,,Milde Lab/DKFZ - German Cancer Research Institute,,,,
+,MB002,Medulloblastoma - Myc amplified,,,Cho Lab/Oregon Health & Science University,,,,
+,RH4 (RH41),"Rhabdomyosarcoma, alveolar",,,Koehler Lab/MIT,,,,
+ACH-000833,RH30,Rhabdomyosarcoma,Male,17,Koehler Lab/MIT,,Metastasis,35 hours,
+,RD,Rhabdomyosarcoma,,,Koehler Lab/MIT,,,,
+,Astro-111FHTC,Astrocytoma,,,Brain Tumor Resource Lab,,,approximately 36 to 48 hours,https:/btrl.org
+,GBM-109FHTC,High Grade Gliomas,,,Brain Tumor Resource Lab,,,approximately 36 to 48 hours,https:/btrl.org
+,PBT-04FHTC,High Grade Gliomas - MYCN,,,Brain Tumor Resource Lab,,,approximately 36 to 48 hours,https:/btrl.org
+,ATRT-310FHTC,Atypical Teratoid Rhabdoid Tumor,,,Brain Tumor Resource Lab,,,approximately 36 to 48 hours,https:/btrl.org
+,ATRT-311FHTC,Atypical Teratoid Rhabdoid Tumor,,,Brain Tumor Resource Lab,,,approximately 36 to 48 hours,https:/btrl.org
+,EPD-210FHTC,Ependymoma,,,Brain Tumor Resource Lab,,,approximately 36 to 48 hours,https:/btrl.org
+,GBM-110FHTC,High Grade Gliomas - pedRTK2,,,Brain Tumor Resource Lab,,,approximately 36 to 48 hours,https:/btrl.org
+,GBM-511FHTC,High Grade Gliomas - pedRTK1,,,Brain Tumor Resource Lab,,,approximately 36 to 48 hours,https:/btrl.org
+,PBT-05FHTC,High Grade Gliomas - MYCN,,,Brain Tumor Resource Lab,,,approximately 36 to 48 hours,https:/btrl.org

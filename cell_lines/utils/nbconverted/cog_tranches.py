@@ -45,7 +45,7 @@ import matplotlib
 # In[2]:
 
 
-data_file = pathlib.Path("pccma_cog_prioritization_list.csv")
+data_file = pathlib.Path("../raw_data/pccma_cog_prioritization_list.csv")
 cog_line_df = pd.read_csv(data_file)
 
 print(cog_line_df.shape)

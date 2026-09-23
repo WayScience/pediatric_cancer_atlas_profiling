@@ -1,0 +1,156 @@
+PCCMA cell line metadata: column descriptions
+
+Table:    pccma_cell_line_metadata.csv
+Built by: build_pccma_cell_line_metadata.ipynb
+Rows:     62 (56 cell lines; a line run under several plate conditions has one row per condition)
+Columns:  22
+
+Each entry gives the column name, what it holds, where it comes from, its type, and how many rows are empty.
+
+cell_line_key
+    Normalized join key: the cell line name uppercased with everything except letters and digits
+    removed (e.g. CHLA-10 -> CHLA10). Reconciles spelling differences across sheets and files.
+    Source: Derived from cell_line
+    Type: text; empty in 0 of 62 rows
+
+cell_line
+    Cell line name as written in the 'Atlas conditions' sheet.
+    Source: Rambutan_Atlasv2_April2026.xlsx: Atlas conditions
+    Type: text; empty in 0 of 62 rows
+
+depmap_id
+    DepMap model ID (ACH-XXXXXX). Empty for lines not in DepMap (e.g. most COG patient-derived
+    lines, normal reference lines).
+    Source: DepMap Model.csv (downloaded 2025-12-03), matched on normalized name; PedMap where
+    DepMap has no match
+    Type: text; empty in 24 of 62 rows
+
+cancer_type
+    Cancer type / diagnosis. First available of PedMap, COG list, DepMap OncotreePrimaryDisease,
+    then documented lookups (ATCC normal reference lines, parental line for derivatives, cureMEC).
+    Source: PedMap > COG list > DepMap > lookups
+    Type: text; empty in 0 of 62 rows
+
+sex
+    Sex of the patient the line was derived from (Male/Female). Empty when not recorded. The
+    derivative lines (CHP212-1020/EV, SKNAS-1020/EV) copy their parental line's value.
+    Source: Cellosaurus > repository data sheet > PedMap > DepMap > STR Amelogenin (a Y allele means
+    Male)
+    Type: text; empty in 15 of 62 rows
+
+age
+    Age in years of the patient the line was derived from (in most sources, age at diagnosis). Empty
+    when not recorded. The derivative lines (CHP212-1020/EV, SKNAS-1020/EV) copy their parental
+    line's value.
+    Source: Cellosaurus > repository data sheet > PedMap > COG list > repository catalog table >
+    DepMap
+    Type: number; empty in 19 of 62 rows
+
+subtype
+    Molecular subtype (e.g. MYCN_amp, EWS_FLI, SHH subgroup). Empty when not recorded. The
+    derivative lines (CHP212-1020/EV, SKNAS-1020/EV) copy their parental line's value.
+    Source: Cellosaurus (gene fusion) > repository data sheet > PedMap > repository catalog table
+    (EWS/FLI1 Status) > Seattle Children's Brain Tumor Resource Lab catalog for BTRL lines
+    Type: text; empty in 42 of 62 rows
+
+source
+    Where the cell line was obtained: repository and catalog number (e.g. ATCC CRL-1598, HSRRB
+    IFO50356), COG, or the originating lab.
+    Source: PedMap > documented lookups > membership in the COG list (COG) > DepMap SourceDetail
+    Type: text; empty in 0 of 62 rows
+
+origin
+    Anatomical origin of the specimen the line was derived from: the primary tumor site (Primary) or
+    a metastasis (Metastasis). This is not the phase of disease (see phase_of_disease): a relapse or
+    progressive-disease specimen taken at the primary site is still Primary here. Empty when not
+    established, and for the normal reference lines. The derivative lines (CHP212-1020/EV,
+    SKNAS-1020/EV) copy their parental line's value.
+    Source: Cellosaurus (metastatic / in situ) > repository data sheet > PedMap > repository catalog
+    table (explicit metastasis) > DepMap PrimaryOrMetastasis > specimen type (body fluid =
+    Metastasis)
+    Type: text; empty in 16 of 62 rows
+
+phase_of_disease
+    Phase of disease when the specimen was taken, in the Childhood Cancer Repository's codes: Dx
+    (before treatment), PD (progressive disease: relapse after chemotherapy), PD-BMT (relapse after
+    chemotherapy and bone marrow transplantation), PD-PM (post-mortem, relapsed), P-EBR (recorded by
+    the repository for CHLA-210; not defined on the site). Not the same as origin. Empty when no
+    source records it, which is the case for most non-COG lines. The derivative lines
+    (CHP212-1020/EV, SKNAS-1020/EV) copy their parental line's value.
+    Source: Repository catalog tables > PPTP paper (Kang 2011) Table 1 > repository Ewing panel PDF
+    > COG list Phase of Therapy > DepMap PatientTreatmentStatus
+    Type: text; empty in 40 of 62 rows
+
+approx_doubling_time_observed
+    Approximate doubling time observed in this lab at 5% CO2, as recorded (a number of hours, a
+    range, or a note such as '(Improves after P3)'), without the leading 'Approx.'.
+    Source: PedMap: Doubling Time (5% CO2) (Observed)
+    Type: text; empty in 38 of 62 rows
+
+cell_line_link
+    URL of the catalog page for the line (ATCC, HSRRB, or the Brain Tumor Resource Lab). For COG
+    lines: the line's data-sheet PDF from the Childhood Cancer Repository when one exists, otherwise
+    the repository disease catalog page that lists the line (a table page, not a per-line page).
+    Empty when there is none (e.g. CHLA262 is not in the repository).
+    Source: PedMap; Childhood Cancer Repository (cccells.org) for COG lines; ATCC product pages for
+    the four normal reference lines; DSMZ catalog entry for CHP134
+    Type: text; empty in 11 of 62 rows
+
+media_formulation
+    Growth media used to culture the line.
+    Source: Rambutan_Atlasv2_April2026.xlsx: Media
+    Type: text; empty in 3 of 62 rows
+
+plate_number
+    Atlas plate set (1, 2 or 3). Each plate set is three physical plates, one per time point (24,
+    48, 72 hr), each with its own barcode.
+    Source: Rambutan_Atlasv2_April2026.xlsx: position of the table within Atlas conditions; Plate-N
+    sheet names
+    Type: text; empty in 0 of 62 rows
+
+plate_conditions
+    Plate coating (Standard, Synthemax or Laminin), with a note if the plate used double PFA
+    fixation, exactly as recorded.
+    Source: Rambutan_Atlasv2_April2026.xlsx: Atlas conditions
+    Type: text; empty in 0 of 62 rows
+
+plate_ids
+    Plate barcodes, pipe-separated, ordered by time point: 24 hr | 48 hr | 72 hr.
+    Source: Rambutan_Atlasv2_April2026.xlsx: Plate-N Xhr Metadata sheets
+    Type: text; empty in 0 of 62 rows
+
+wells
+    Wells the cell line was seeded in, pipe-separated (row letter + two-digit column, e.g. B02). The
+    same wells are used on every plate listed in plate_ids.
+    Source: Rambutan_Atlasv2_April2026.xlsx: Plate-N Xhr Metadata sheets
+    Type: text; empty in 0 of 62 rows
+
+seeding_density_24hr
+    Seeding density (cells per well) for the 24 hr plate, as recorded in Atlas conditions. A few
+    disagree with the per-well sheets; see the data-quality check in the notebook.
+    Source: Rambutan_Atlasv2_April2026.xlsx: Atlas conditions
+    Type: number; empty in 0 of 62 rows
+
+seeding_density_48hr
+    Seeding density (cells per well) for the 48 hr plate, as recorded in Atlas conditions.
+    Source: Rambutan_Atlasv2_April2026.xlsx: Atlas conditions
+    Type: number; empty in 0 of 62 rows
+
+seeding_density_72hr
+    Seeding density (cells per well) for the 72 hr plate, as recorded in Atlas conditions.
+    Source: Rambutan_Atlasv2_April2026.xlsx: Atlas conditions
+    Type: number; empty in 0 of 62 rows
+
+cell_count_at_seeding
+    Cell count of the harvested stock suspension on the day of seeding, used to calculate how much
+    stock to dilute (units not stated in the sheet; consistent with cells/mL). Specific to the
+    seeding day of the plate (2026-05-15 for plates 1-2, 2026-05-29 for plate 3). Empty when not
+    recorded.
+    Source: Rambutan_Atlasv2_April2026.xlsx: Cell Density P1 & P2, Plate 3 Density+PlateMap
+    Type: number; empty in 2 of 62 rows
+
+qc_notes
+    Free-text imaging QC comments and confirmations for the line (e.g. clustering, sparse cells,
+    suggested density changes).
+    Source: Rambutan_Atlasv2_April2026.xlsx: Atlas conditions
+    Type: text; empty in 0 of 62 rows

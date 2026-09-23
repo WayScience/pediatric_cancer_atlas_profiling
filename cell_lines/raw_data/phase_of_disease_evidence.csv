@@ -1,0 +1,29 @@
+cell_line,evidence_source,value_as_published,phase_of_disease,url,retrieved
+CHLA10,PPTP paper (Kang 2011) Table 1,Post-Tx,PD,https://pmc.ncbi.nlm.nih.gov/articles/PMC3005554/,2026-09-23
+CHLA10,Repository catalog table,PD,PD,https://www.cccells.org/tables/cellreq-tbl_eft_ewings.php,2026-09-23
+CHLA113,Repository catalog table,PD,PD,https://www.cccells.org/tables/cellreq-tbl_eft_ewings.php,2026-09-23
+CHLA186,Repository catalog table,PD-BMT,PD-BMT,https://www.cccells.org/tables/cellreq-tbl_ped_sarcomas.php,2026-09-23
+CHLA194,Repository catalog table,PD,PD,https://www.cccells.org/tables/Retinoblastoma.php,2026-09-23
+CHLA196,Repository catalog table,PD,PD,https://www.cccells.org/tables/Retinoblastoma.php,2026-09-23
+CHLA200,Repository catalog table,PD-PM,PD-PM,https://www.cccells.org/tables/cellreq-tbl_braintumor.php,2026-09-23
+CHLA203,Repository catalog table,PD,PD,https://www.cccells.org/tables/Retinoblastoma.php,2026-09-23
+CHLA210,Repository catalog table,P-EBR,P-EBR,https://www.cccells.org/tables/Retinoblastoma.php,2026-09-23
+CHLA218,Repository catalog table,PD,PD,https://www.cccells.org/tables/cellreq-tbl_eft_ewings.php,2026-09-23
+CHLA25,Repository catalog table,PD,PD,https://www.cccells.org/tables/cellreq-tbl_eft_ewings.php,2026-09-23
+CHLA258,PPTP paper (Kang 2011) Table 1,Post-BMT**,PD-BMT,https://pmc.ncbi.nlm.nih.gov/articles/PMC3005554/,2026-09-23
+CHLA258,Repository catalog table,PD-BMT,PD-BMT,https://www.cccells.org/tables/cellreq-tbl_eft_ewings.php,2026-09-23
+COGAR397hnb,Repository catalog table,PD,PD,https://www.cccells.org/tables/cellreq-tbl_braintumor.php,2026-09-23
+COGE352,Repository catalog table,PD-PM,PD-PM,https://www.cccells.org/tables/cellreq-tbl_eft_ewings.php,2026-09-23
+COGEP280,Repository catalog table,PD,PD,https://www.cccells.org/tables/cellreq-tbl_braintumor.php,2026-09-23
+COGR466h,Repository catalog table,PD-PM,PD-PM,https://www.cccells.org/tables/cellreq-tbl_ped_sarcomas.php,2026-09-23
+COGW408,Repository catalog table,PD,PD,https://www.cccells.org/tables/Wilms.php,2026-09-23
+RD,PPTP paper (Kang 2011) Table 1,Post-Tx*,PD,https://pmc.ncbi.nlm.nih.gov/articles/PMC3005554/,2026-09-23
+RH30,PPTP paper (Kang 2011) Table 1,DX,Dx,https://pmc.ncbi.nlm.nih.gov/articles/PMC3005554/,2026-09-23
+RH30,Repository catalog table,Dx,Dx,https://www.cccells.org/tables/cellreq-tbl_ped_sarcomas.php,2026-09-23
+RH41,PPTP paper (Kang 2011) Table 1,Post-Tx,PD,https://pmc.ncbi.nlm.nih.gov/articles/PMC3005554/,2026-09-23
+RH41,Repository catalog table,PD,PD,https://www.cccells.org/tables/cellreq-tbl_ped_sarcomas.php,2026-09-23
+SJGBM2,PPTP paper (Kang 2011) Table 1,Post-Tx,PD,https://pmc.ncbi.nlm.nih.gov/articles/PMC3005554/,2026-09-23
+SJGBM2,Repository catalog table,PD,PD,https://www.cccells.org/tables/cellreq-tbl_braintumor.php,2026-09-23
+SK-N-MC,Repository Ewing panel PDF,Post Chemo,PD,https://www.cccells.org/dl/COG_EFT_Cell_Line_Panel.pdf,2026-09-23
+TC71,PPTP paper (Kang 2011) Table 1,Post-Tx,PD,https://pmc.ncbi.nlm.nih.gov/articles/PMC3005554/,2026-09-23
+TC71,Repository catalog table,PD,PD,https://www.cccells.org/tables/cellreq-tbl_eft_ewings.php,2026-09-23
