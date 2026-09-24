@@ -421,9 +421,11 @@ master["depmap_id"] = master["depmap_id"].fillna(master["depmap_id_pedmap"])
 #   Checked on 2026-09-23 against every atlas line with a known sex: `X,Y` was male in 7 of 7, but `X`-only or `X,X` calls
 #   occurred in 4 of 17 known-male lines (Y is lost in culture), so an X-only call is not evidence of female sex.
 # - **Specimen-type inference** (`origin_inferred_from_specimen`, weakest evidence): a body-fluid specimen from a solid-tumor
-#   patient (`cerebrospinal fluid`, `peritoneal fluid`) is disseminated disease, so `Metastasis`. Nothing is inferred as `Primary`: a bare `tumor`, `tumor (autopsy)`,
-#   `tumor, (relapse)` or an eye specimen in retinoblastoma gives no call. Every COG line in the catalog is a post-treatment
-#   specimen (PD, PD-BMT, PD-PM), so the specimen site alone does not show that a tumor is primary.
+#   patient (`cerebrospinal fluid`, `peritoneal fluid`) is disseminated disease, so `Metastasis`. A specimen taken from the eye in retinoblastoma (`CHLA-196` and `CHLA-210`,
+#   both `(from left eye)`) is `Primary`: retinoblastoma arises in the eye and cannot metastasize into it, so an eye specimen
+#   is from the primary tumor site (a relapse there is still `Primary`, see the `origin` column). A bare `tumor`,
+#   `tumor (autopsy)` or `tumor, (relapse)` gives no call. Every COG line in the catalog is a post-treatment specimen
+#   (PD, PD-BMT, PD-PM), so the phase of disease alone says nothing about primary vs metastasis.
 # 
 # Within the snapshot the order of precedence is **Cellosaurus > data sheet > catalog table**, with STR and specimen-type
 # inference last. For `sex`, `age`, `subtype` and `origin` the snapshot's Cellosaurus and data-sheet values also take
@@ -580,7 +582,7 @@ print("Lines whose sources disagree about Dx vs relapse:", phase_table.index[con
 # Lines missing from all three files are resolved with these explicit lookups:
 # 
 # - **ATCC normal (non-cancer) reference lines** used as imaging controls (`CCD 841 CoN`, `WI-38`, `HMC3`, `WPMY-1`).
-#   Catalog numbers and links were checked against the ATCC product pages (each page title names the right cell line). Their label takes precedence over DepMap's `Non-Cancerous`, and `origin` is left empty for them because they are not tumors.
+#   Catalog numbers and links were checked against the ATCC product pages (each page title names the right cell line). Their label takes precedence over DepMap's `Non-Cancerous`, and `origin` is left empty for them because they are not tumors. Their `sex` and `age` come from the same ATCC pages, cross-checked with Cellosaurus: CCD 841 CoN and WI-38 are female and WPMY-1 is male (54 years). CCD 841 CoN, WI-38 and HMC3 come from fetal tissue (21 weeks, 3 months and 8-10 weeks of gestation), so their age is recorded as 0 (a gestational age is not an age in years). HMC3's sex is unspecified in both sources, so it stays empty.
 # - **Derivative lines** (`CHP212-1020`, `CHP212-EV`, `SKNAS-1020`, `SKNAS-EV`). The `Media` sheet grows
 #   all four in puromycin, and their names suggest constructs / empty-vector controls of the parental lines, so they take the
 #   parent's tumor attributes (`cancer_type`, `sex`, `age`, `subtype`, `origin` and `phase_of_disease`). The parental line's source,
@@ -591,6 +593,9 @@ print("Lines whose sources disagree about Dx vs relapse:", phase_table.index[con
 # - **`CHP134`** is in neither PedMap nor the repository. DepMap gives its source as Sigma-Aldrich (ECACC 06122002, per
 #   Cellosaurus), but Sigma's catalog page could not be verified, so `cell_line_link` points to the DSMZ catalog entry for the
 #   same line (`ACC-653`, also cross-referenced by Cellosaurus), which resolves and names `CHP-134`. `source` stays as DepMap gives it.
+# - **`RH30`**: the repository's rhabdomyosarcoma catalog lists Rh30 with a data sheet (alveolar, male, 17 years at diagnosis,
+#   bone marrow, phase Dx, all consistent with this table), but PedMap has no link for it and gives its source as Koehler Lab/MIT.
+#   `cell_line_link` points to the repository's Rh30 data sheet; `source` stays as PedMap gives it.
 # - **COG lines with no other recorded source** (e.g. `COGW408`) get `source = COG`, since the COG prioritization list is
 #   a list of COG cell lines.
 # - **Molecular subtype** for the Seattle Children's
@@ -601,11 +606,14 @@ print("Lines whose sources disagree about Dx vs relapse:", phase_table.index[con
 # In[12]:
 
 
+# Sex and age come from the ATCC product pages, cross-checked against Cellosaurus (CVCL_2871, CVCL_0579, CVCL_II76, CVCL_3814).
+# CCD 841 CoN (21 weeks of gestation), WI-38 (3 months) and HMC3 (embryo, 8-10 weeks) are fetal-derived: they have only a
+# gestational age, so their age in years is recorded as 0. HMC3's sex is unspecified in both sources (None).
 normal_reference_lines = {
-    "CCD841CON": {"cancer_type": "Normal (colon epithelium)", "source": "ATCC CRL-1790", "link": "https://www.atcc.org/products/crl-1790"},
-    "WI38": {"cancer_type": "Normal (embryonic lung fibroblast)", "source": "ATCC CCL-75", "link": "https://www.atcc.org/products/ccl-75"},
-    "HMC3": {"cancer_type": "Normal (immortalized microglia)", "source": "ATCC CRL-3304", "link": "https://www.atcc.org/products/crl-3304"},
-    "WPMY1": {"cancer_type": "Normal (prostate stromal myofibroblast)", "source": "ATCC CRL-2854", "link": "https://www.atcc.org/products/crl-2854"},
+    "CCD841CON": {"cancer_type": "Normal (colon epithelium)", "sex": "Female", "age": 0, "source": "ATCC CRL-1790", "link": "https://www.atcc.org/products/crl-1790"},
+    "WI38": {"cancer_type": "Normal (embryonic lung fibroblast)", "sex": "Female", "age": 0, "source": "ATCC CCL-75", "link": "https://www.atcc.org/products/ccl-75"},
+    "HMC3": {"cancer_type": "Normal (immortalized microglia)", "sex": None, "age": 0, "source": "ATCC CRL-3304", "link": "https://www.atcc.org/products/crl-3304"},
+    "WPMY1": {"cancer_type": "Normal (prostate stromal myofibroblast)", "sex": "Male", "age": 54, "source": "ATCC CRL-2854", "link": "https://www.atcc.org/products/crl-2854"},
 }
 derivative_lines = {
     "CHP2121020": {"parent_key": "CHP212", "parent_name": "CHP-212"},
@@ -622,6 +630,7 @@ published_lookup_lines = {
     "CF1500": {"cancer_type": "Myoepithelial Carcinoma (MEC)", "source": "cureMEC (Cure MEC Line #2)"},
     "X0092": {"cancer_type": "Myoepithelial Carcinoma (MEC)", "source": "cureMEC (Cure MEC Line #1)"},
     "CHP134": {"link": "https://www.dsmz.de/collection/catalogue/details/culture/ACC-653"},
+    "RH30": {"link": "https://www.cccells.org/PDF_Files/Rhabdomyosarcoma/Rh30%20Cell%20Line%20Data%20Sheet.pdf"},
 }
 
 parent_lookup = master.drop_duplicates("cell_line_key").set_index("cell_line_key")[
@@ -681,14 +690,14 @@ manifest_rows = [
     ("cell_line", "Cell line name as written in the 'Atlas conditions' sheet.", "Rambutan_Atlasv2_April2026.xlsx: Atlas conditions"),
     ("depmap_id", "DepMap model ID (ACH-XXXXXX). Empty for lines not in DepMap (e.g. most COG patient-derived lines, normal reference lines).", "DepMap Model.csv (downloaded 2025-12-03), matched on normalized name; PedMap where DepMap has no match"),
     ("cancer_type", "Cancer type / diagnosis. ATCC normal reference lines use their documented label; otherwise the first available of PedMap, COG list, DepMap OncotreePrimaryDisease, then documented lookups (parental line for derivatives, cureMEC).", "ATCC normal-line lookup > PedMap > COG list > DepMap > other lookups"),
-    ("sex", "Sex of the patient the line was derived from (Male/Female). Empty when not recorded. The derivative lines (CHP212-1020/EV, SKNAS-1020/EV) copy their parental line's value.", "Cellosaurus > repository data sheet > PedMap > DepMap > STR Amelogenin (a Y allele means Male)"),
-    ("age", "Age in years of the patient the line was derived from (in most sources, age at diagnosis). Empty when not recorded. The derivative lines (CHP212-1020/EV, SKNAS-1020/EV) copy their parental line's value.", "Cellosaurus > repository data sheet > PedMap > COG list > repository catalog table > DepMap"),
+    ("sex", "Sex of the patient the line was derived from (Male/Female). Empty when not recorded. The derivative lines (CHP212-1020/EV, SKNAS-1020/EV) copy their parental line's value. The ATCC normal reference lines use the sex on their ATCC page (HMC3's is unspecified, so it is empty).", "ATCC normal-line lookup > Cellosaurus > repository data sheet > PedMap > DepMap > STR Amelogenin (a Y allele means Male)"),
+    ("age", "Age in years of the patient the line was derived from (in most sources, age at diagnosis). Empty when not recorded. The derivative lines (CHP212-1020/EV, SKNAS-1020/EV) copy their parental line's value. Of the ATCC normal reference lines, WPMY-1 is 54 years; CCD 841 CoN, WI-38 and HMC3 come from fetal tissue (21 weeks, 3 months and 8-10 weeks of gestation) and are recorded as age 0 because a gestational age is not an age in years.", "ATCC normal-line lookup > Cellosaurus > repository data sheet > PedMap > COG list > repository catalog table > DepMap"),
     ("subtype", "Molecular subtype (e.g. MYCN_amp, EWS_FLI, SHH subgroup). Empty when not recorded. The derivative lines (CHP212-1020/EV, SKNAS-1020/EV) copy their parental line's value.", "Cellosaurus (gene fusion) > repository data sheet > PedMap > repository catalog table (EWS/FLI1 Status) > Seattle Children's Brain Tumor Resource Lab catalog for BTRL lines"),
     ("source", "Where the cell line was obtained: repository and catalog number (e.g. ATCC CRL-1598, HSRRB IFO50356), COG, or the originating lab.", "PedMap > documented lookups > membership in the COG list (COG) > DepMap SourceDetail"),
-    ("origin", "Anatomical origin of the specimen the line was derived from: the primary tumor site (Primary) or a metastasis (Metastasis). This is not the phase of disease (see phase_of_disease): a relapse or progressive-disease specimen taken at the primary site is still Primary here. Empty when not established, and for the normal reference lines. The derivative lines (CHP212-1020/EV, SKNAS-1020/EV) copy their parental line's value.", "Cellosaurus (metastatic / in situ) > repository data sheet > PedMap > repository catalog table (explicit metastasis) > DepMap PrimaryOrMetastasis > specimen type (body fluid = Metastasis)"),
+    ("origin", "Anatomical origin of the specimen the line was derived from: the primary tumor site (Primary) or a metastasis (Metastasis). This is not the phase of disease (see phase_of_disease): a relapse or progressive-disease specimen taken at the primary site is still Primary here. Empty when not established, and for the normal reference lines. The derivative lines (CHP212-1020/EV, SKNAS-1020/EV) copy their parental line's value.", "Cellosaurus (metastatic / in situ) > repository data sheet > PedMap > repository catalog table (explicit metastasis) > DepMap PrimaryOrMetastasis > specimen type (body fluid = Metastasis; eye specimen in retinoblastoma = Primary)"),
     ("phase_of_disease", "Phase of disease when the specimen was taken, in the Childhood Cancer Repository's codes: Dx (before treatment), PD (progressive disease: relapse after chemotherapy), PD-BMT (relapse after chemotherapy and bone marrow transplantation), PD-PM (post-mortem, relapsed), P-EBR (recorded by the repository for CHLA-210; not defined on the site). Not the same as origin. Empty when no source records it, which is the case for most non-COG lines." + " The derivative lines (CHP212-1020/EV, SKNAS-1020/EV) copy their parental line's value.", "Repository catalog tables > PPTP paper (Kang 2011) Table 1 > repository Ewing panel PDF > COG list Phase of Therapy > DepMap PatientTreatmentStatus"),
     ("approx_doubling_time_observed", "Approximate doubling time observed in this lab at 5% CO2, as recorded (a number of hours, a range, or a note such as '(Improves after P3)'), without the leading 'Approx.'.", "PedMap: Doubling Time (5% CO2) (Observed)"),
-    ("cell_line_link", "URL of the catalog page for the line (ATCC, HSRRB, or the Brain Tumor Resource Lab). For COG lines: the line's data-sheet PDF from the Childhood Cancer Repository when one exists, otherwise the repository disease catalog page that lists the line (a table page, not a per-line page). Empty when there is none (e.g. CHLA262 is not in the repository).", "PedMap; Childhood Cancer Repository (cccells.org) for COG lines; ATCC product pages for the four normal reference lines; DSMZ catalog entry for CHP134"),
+    ("cell_line_link", "URL of the catalog page for the line (ATCC, HSRRB, or the Brain Tumor Resource Lab). For COG lines: the line's data-sheet PDF from the Childhood Cancer Repository when one exists, otherwise the repository disease catalog page that lists the line (a table page, not a per-line page). Empty when there is none: CHLA262 is not in the repository, the four derivative lines (CHP212-1020/EV, SKNAS-1020/EV) have no catalog page of their own, and PedMap has no link for the cureMEC lines (CF1500, X0092) or for RD, RH4 and D425.", "PedMap; Childhood Cancer Repository (cccells.org) for COG lines and the RH30 data sheet; ATCC product pages for the four normal reference lines; DSMZ catalog entry for CHP134"),
     ("media_formulation", "Growth media used to culture the line.", "Rambutan_Atlasv2_April2026.xlsx: Media"),
     ("plate_number", "Atlas plate set (1, 2 or 3). Each plate set is three physical plates, one per time point (24, 48, 72 hr), each with its own barcode.", "Rambutan_Atlasv2_April2026.xlsx: position of the table within Atlas conditions; Plate-N sheet names"),
     ("plate_conditions", "Plate coating (Standard, Synthemax or Laminin), with a note if the plate used double PFA fixation, exactly as recorded.", "Rambutan_Atlasv2_April2026.xlsx: Atlas conditions"),
@@ -698,7 +707,7 @@ manifest_rows = [
     ("seeding_density_48hr", "Seeding density (cells per well) for the 48 hr plate, as recorded in Atlas conditions.", "Rambutan_Atlasv2_April2026.xlsx: Atlas conditions"),
     ("seeding_density_72hr", "Seeding density (cells per well) for the 72 hr plate, as recorded in Atlas conditions.", "Rambutan_Atlasv2_April2026.xlsx: Atlas conditions"),
     ("cell_count_at_seeding", "Cell count of the harvested stock suspension on the day of seeding, used to calculate how much stock to dilute (units not stated in the sheet; consistent with cells/mL). Specific to the seeding day of the plate (2026-05-15 for plates 1-2, 2026-05-29 for plate 3). Empty when not recorded.", "Rambutan_Atlasv2_April2026.xlsx: Cell Density P1 & P2, Plate 3 Density+PlateMap"),
-    ("qc_notes", "Free-text imaging QC comments and confirmations for the line (e.g. clustering, sparse cells, suggested density changes).", "Rambutan_Atlasv2_April2026.xlsx: Atlas conditions"),
+    ("qc_notes", "Free-text imaging QC comments and confirmations for the line (e.g. clustering, sparse cells, suggested density changes), exactly as recorded in the workbook. This includes duplicated text (the U2-OS notes repeat '(Confirmed)') and notes such as 'was not part of 55 cell lines' (CCD 841 CoN and CHLA262).", "Rambutan_Atlasv2_April2026.xlsx: Atlas conditions"),
 ]
 manifest = pd.DataFrame(manifest_rows, columns=["column_name", "description", "source"])
 

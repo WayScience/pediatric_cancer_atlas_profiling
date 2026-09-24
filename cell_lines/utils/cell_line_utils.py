@@ -68,8 +68,8 @@ def resolve_row(row, normal_reference_lines, published_lookup_lines, derivative_
     Args:
         row: A row of the merged table (one cell line and plate condition) with the per-source columns
             (``*_pedmap``, ``*_cog``, ``*_depmap``, ``*_snapshot``, ``*_catalog``, ...).
-        normal_reference_lines: ATCC normal reference lines by ``cell_line_key``, with their cancer type, source and link.
-            Their label takes precedence over every other cancer type, and their ``origin`` is left empty.
+        normal_reference_lines: ATCC normal reference lines by ``cell_line_key``, with their cancer type, source, link, sex
+            and age. These values take precedence over every other source, and their ``origin`` is left empty.
         published_lookup_lines: Values taken from a public catalog or paper for lines that no other file covers.
         derivative_lines: Derivative lines by ``cell_line_key`` with the ``parent_key`` and ``parent_name`` of the parental
             line, whose cancer type they take when no other source has one.
@@ -94,8 +94,8 @@ def resolve_row(row, normal_reference_lines, published_lookup_lines, derivative_
                 normal.get("cancer_type"), row["cancer_type_pedmap"], row["cancer_type_cog"], row["cancer_type_depmap"],
                 derived_type, published.get("cancer_type"),
             ),
-            "sex": first_valid(row["sex_snapshot"], row["sex_pedmap"], row["sex_depmap"], row["sex_str"]),
-            "age": first_valid(row["age_snapshot"], row["age_pedmap"], row["age_cog"], row["age_catalog"], row["age_depmap"]),
+            "sex": first_valid(normal.get("sex"), row["sex_snapshot"], row["sex_pedmap"], row["sex_depmap"], row["sex_str"]),
+            "age": first_valid(normal.get("age"), row["age_snapshot"], row["age_pedmap"], row["age_cog"], row["age_catalog"], row["age_depmap"]),
             "subtype": first_valid(row["subtype_snapshot"], row["subtype_pedmap"], row["subtype_catalog"], published.get("subtype")),
             "source": first_valid(
                 row["source_pedmap"], normal.get("source"), derived_source, published.get("source"),

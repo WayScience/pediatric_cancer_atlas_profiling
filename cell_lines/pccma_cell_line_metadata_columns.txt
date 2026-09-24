@@ -34,18 +34,21 @@ cancer_type
 
 sex
     Sex of the patient the line was derived from (Male/Female). Empty when not recorded. The
-    derivative lines (CHP212-1020/EV, SKNAS-1020/EV) copy their parental line's value.
-    Source: Cellosaurus > repository data sheet > PedMap > DepMap > STR Amelogenin (a Y allele means
-    Male)
-    Type: text; empty in 15 of 62 rows
+    derivative lines (CHP212-1020/EV, SKNAS-1020/EV) copy their parental line's value. The ATCC
+    normal reference lines use the sex on their ATCC page (HMC3's is unspecified, so it is empty).
+    Source: ATCC normal-line lookup > Cellosaurus > repository data sheet > PedMap > DepMap > STR
+    Amelogenin (a Y allele means Male)
+    Type: text; empty in 13 of 62 rows
 
 age
     Age in years of the patient the line was derived from (in most sources, age at diagnosis). Empty
     when not recorded. The derivative lines (CHP212-1020/EV, SKNAS-1020/EV) copy their parental
-    line's value.
-    Source: Cellosaurus > repository data sheet > PedMap > COG list > repository catalog table >
-    DepMap
-    Type: number; empty in 19 of 62 rows
+    line's value. Of the ATCC normal reference lines, WPMY-1 is 54 years; CCD 841 CoN, WI-38 and
+    HMC3 come from fetal tissue (21 weeks, 3 months and 8-10 weeks of gestation) and are recorded as
+    age 0 because a gestational age is not an age in years.
+    Source: ATCC normal-line lookup > Cellosaurus > repository data sheet > PedMap > COG list >
+    repository catalog table > DepMap
+    Type: number; empty in 15 of 62 rows
 
 subtype
     Molecular subtype (e.g. MYCN_amp, EWS_FLI, SHH subgroup). Empty when not recorded. The
@@ -68,8 +71,8 @@ origin
     SKNAS-1020/EV) copy their parental line's value.
     Source: Cellosaurus (metastatic / in situ) > repository data sheet > PedMap > repository catalog
     table (explicit metastasis) > DepMap PrimaryOrMetastasis > specimen type (body fluid =
-    Metastasis)
-    Type: text; empty in 16 of 62 rows
+    Metastasis; eye specimen in retinoblastoma = Primary)
+    Type: text; empty in 14 of 62 rows
 
 phase_of_disease
     Phase of disease when the specimen was taken, in the Childhood Cancer Repository's codes: Dx
@@ -92,10 +95,12 @@ cell_line_link
     URL of the catalog page for the line (ATCC, HSRRB, or the Brain Tumor Resource Lab). For COG
     lines: the line's data-sheet PDF from the Childhood Cancer Repository when one exists, otherwise
     the repository disease catalog page that lists the line (a table page, not a per-line page).
-    Empty when there is none (e.g. CHLA262 is not in the repository).
-    Source: PedMap; Childhood Cancer Repository (cccells.org) for COG lines; ATCC product pages for
-    the four normal reference lines; DSMZ catalog entry for CHP134
-    Type: text; empty in 11 of 62 rows
+    Empty when there is none: CHLA262 is not in the repository, the four derivative lines
+    (CHP212-1020/EV, SKNAS-1020/EV) have no catalog page of their own, and PedMap has no link for
+    the cureMEC lines (CF1500, X0092) or for RD, RH4 and D425.
+    Source: PedMap; Childhood Cancer Repository (cccells.org) for COG lines and the RH30 data sheet;
+    ATCC product pages for the four normal reference lines; DSMZ catalog entry for CHP134
+    Type: text; empty in 10 of 62 rows
 
 media_formulation
     Growth media used to culture the line.
@@ -152,6 +157,8 @@ cell_count_at_seeding
 
 qc_notes
     Free-text imaging QC comments and confirmations for the line (e.g. clustering, sparse cells,
-    suggested density changes).
+    suggested density changes), exactly as recorded in the workbook. This includes duplicated text
+    (the U2-OS notes repeat '(Confirmed)') and notes such as 'was not part of 55 cell lines' (CCD
+    841 CoN and CHLA262).
     Source: Rambutan_Atlasv2_April2026.xlsx: Atlas conditions
     Type: text; empty in 0 of 62 rows
