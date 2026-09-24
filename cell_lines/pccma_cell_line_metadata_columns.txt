@@ -26,9 +26,10 @@ depmap_id
     Type: text; empty in 24 of 62 rows
 
 cancer_type
-    Cancer type / diagnosis. First available of PedMap, COG list, DepMap OncotreePrimaryDisease,
-    then documented lookups (ATCC normal reference lines, parental line for derivatives, cureMEC).
-    Source: PedMap > COG list > DepMap > lookups
+    Cancer type / diagnosis. ATCC normal reference lines use their documented label; otherwise the
+    first available of PedMap, COG list, DepMap OncotreePrimaryDisease, then documented lookups
+    (parental line for derivatives, cureMEC).
+    Source: ATCC normal-line lookup > PedMap > COG list > DepMap > other lookups
     Type: text; empty in 0 of 62 rows
 
 sex

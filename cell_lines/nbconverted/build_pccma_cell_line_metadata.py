@@ -35,13 +35,20 @@
 import pathlib
 import re
 import sys
-import textwrap
 
 import matplotlib.pyplot as plt
 import pandas as pd
 
 sys.path.insert(0, "utils")
-from cell_line_utils import clean_text, first_valid, merge_one_to_one, normalize_name  # noqa: E402
+from cell_line_utils import (  # noqa: E402
+    clean_text,
+    first_valid,
+    indent,
+    merge_one_to_one,
+    normalize_name,
+    phase_family,
+    resolve_row,
+)
 
 RAW_DIR = pathlib.Path("raw_data")
 
@@ -556,12 +563,6 @@ phase_table = (
 master["phase_of_disease"] = master["cell_line_key"].map(phase_table.bfill(axis=1).iloc[:, 0])
 
 
-def phase_family(value):
-    if pd.isna(value):
-        return None
-    return value if value in ("Dx", "Active treatment") else "relapse"
-
-
 conflicting = phase_table.apply(lambda column: column.map(phase_family)).nunique(axis=1) > 1
 lines = master.drop_duplicates("cell_line_key")
 print("Cell lines with a phase of disease:", lines["phase_of_disease"].notna().sum(), "of", len(lines))
@@ -572,7 +573,7 @@ print("Lines whose sources disagree about Dx vs relapse:", phase_table.index[con
 # ### 10. Consolidate into single columns; fill remaining gaps
 # 
 # For each of `cancer_type`, `sex`, `age`, `subtype`, `source` and `origin`, the value is the first one available in the
-# priority order **PedMap > COG list > DepMap > the lookups below** for `cancer_type`. For `sex`, `age`, `subtype` and `origin` the order is
+# priority order **ATCC normal-line lookup > PedMap > COG list > DepMap > the other lookups below** for `cancer_type`. For `sex`, `age`, `subtype` and `origin` the order is
 # **Cellosaurus > repository data sheet** (both from the step 8 snapshot) **> PedMap > COG list** (age only) **> repository catalog table > DepMap >** the snapshot's weakest evidence (STR Amelogenin for `sex`, specimen type for `origin`). Columns are coalesced independently, so a line can
 # take its cancer type from one source and its age from another.
 # 
@@ -628,36 +629,9 @@ parent_lookup = master.drop_duplicates("cell_line_key").set_index("cell_line_key
 ]
 
 
-def resolve_row(row):
-    key = row["cell_line_key"]
-    normal = normal_reference_lines.get(key, {})
-    published = published_lookup_lines.get(key, {})
-    derivative = derivative_lines.get(key)
-    derived_type = derived_source = None
-    if derivative is not None:
-        derived_type = first_valid(*parent_lookup.loc[derivative["parent_key"]])
-        derived_source = f"Derivative of {derivative['parent_name']}"
-    return pd.Series(
-        {
-            "cancer_type": first_valid(
-                normal.get("cancer_type"), row["cancer_type_pedmap"], row["cancer_type_cog"], row["cancer_type_depmap"],
-                derived_type, published.get("cancer_type"),
-            ),
-            "sex": first_valid(row["sex_snapshot"], row["sex_pedmap"], row["sex_depmap"], row["sex_str"]),
-            "age": first_valid(row["age_snapshot"], row["age_pedmap"], row["age_cog"], row["age_catalog"], row["age_depmap"]),
-            "subtype": first_valid(row["subtype_snapshot"], row["subtype_pedmap"], row["subtype_catalog"], published.get("subtype")),
-            "source": first_valid(
-                row["source_pedmap"], normal.get("source"), derived_source, published.get("source"),
-                "COG" if row["in_cog_list"] else None, row["source_depmap"],
-            ),
-            "origin": None if normal else first_valid(row["origin_snapshot"], row["origin_pedmap"], row["origin_catalog"], row["origin_depmap"], row["origin_inferred"]),
-            "approx_doubling_time_observed": row["doubling_time_observed_pedmap"],
-            "cell_line_link": first_valid(row["cell_line_link_pedmap"], row["cell_line_link_repository"], normal.get("link"), published.get("link")),
-        }
-    )
-
-
-consolidated = master.apply(resolve_row, axis=1)
+consolidated = master.apply(
+    resolve_row, axis=1, args=(normal_reference_lines, published_lookup_lines, derivative_lines, parent_lookup)
+)
 consolidated["age"] = pd.to_numeric(consolidated["age"], errors="coerce")
 master = pd.concat([master, consolidated], axis=1)
 
@@ -706,7 +680,7 @@ manifest_rows = [
     ("cell_line_key", "Normalized join key: the cell line name uppercased with everything except letters and digits removed (e.g. CHLA-10 -> CHLA10). Reconciles spelling differences across sheets and files.", "Derived from cell_line"),
     ("cell_line", "Cell line name as written in the 'Atlas conditions' sheet.", "Rambutan_Atlasv2_April2026.xlsx: Atlas conditions"),
     ("depmap_id", "DepMap model ID (ACH-XXXXXX). Empty for lines not in DepMap (e.g. most COG patient-derived lines, normal reference lines).", "DepMap Model.csv (downloaded 2025-12-03), matched on normalized name; PedMap where DepMap has no match"),
-    ("cancer_type", "Cancer type / diagnosis. First available of PedMap, COG list, DepMap OncotreePrimaryDisease, then documented lookups (ATCC normal reference lines, parental line for derivatives, cureMEC).", "PedMap > COG list > DepMap > lookups"),
+    ("cancer_type", "Cancer type / diagnosis. ATCC normal reference lines use their documented label; otherwise the first available of PedMap, COG list, DepMap OncotreePrimaryDisease, then documented lookups (parental line for derivatives, cureMEC).", "ATCC normal-line lookup > PedMap > COG list > DepMap > other lookups"),
     ("sex", "Sex of the patient the line was derived from (Male/Female). Empty when not recorded. The derivative lines (CHP212-1020/EV, SKNAS-1020/EV) copy their parental line's value.", "Cellosaurus > repository data sheet > PedMap > DepMap > STR Amelogenin (a Y allele means Male)"),
     ("age", "Age in years of the patient the line was derived from (in most sources, age at diagnosis). Empty when not recorded. The derivative lines (CHP212-1020/EV, SKNAS-1020/EV) copy their parental line's value.", "Cellosaurus > repository data sheet > PedMap > COG list > repository catalog table > DepMap"),
     ("subtype", "Molecular subtype (e.g. MYCN_amp, EWS_FLI, SHH subgroup). Empty when not recorded. The derivative lines (CHP212-1020/EV, SKNAS-1020/EV) copy their parental line's value.", "Cellosaurus (gene fusion) > repository data sheet > PedMap > repository catalog table (EWS/FLI1 Status) > Seattle Children's Brain Tumor Resource Lab catalog for BTRL lines"),
@@ -744,10 +718,6 @@ manifest["type"] = ["number" if pd.api.types.is_numeric_dtype(output[c]) else "t
 manifest["n_missing"] = [int(output[c].isna().sum()) for c in manifest["column_name"]]
 
 output.to_csv("pccma_cell_line_metadata.csv", index=False)
-
-
-def indent(text):
-    return textwrap.fill(text, width=100, initial_indent="    ", subsequent_indent="    ")
 
 
 description_lines = [

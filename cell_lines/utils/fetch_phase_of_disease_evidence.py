@@ -34,12 +34,14 @@ PPTP_CODES = {"DX": "Dx", "Post-Tx": "PD", "Post-BMT": "PD-BMT"}
 
 
 def fetch(url):
+    """Download a page and return its text (with a browser user agent, since some sites refuse the default one)."""
     request = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
     with urllib.request.urlopen(request, timeout=60) as response:
         return response.read().decode("utf-8", "ignore")
 
 
 def clean(cell):
+    """Plain text of an HTML table cell: strip tags and entities, collapse whitespace, drop a leading ">" marker."""
     return re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", "", cell))).strip().lstrip("> ").strip()
 
 
