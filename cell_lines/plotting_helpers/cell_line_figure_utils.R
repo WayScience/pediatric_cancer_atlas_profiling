@@ -14,25 +14,34 @@ source(file.path("..", "..", "themes.R"))   # repo-level themes.R: site colours 
 
 # ---- child-proportioned body ----
 # gganatogram only ships adult bodies, so its polygons (outline and organs) are reshaped to child proportions:
-# head about 1/4.7 of body height instead of 1/7.5 (a toddler / preschooler), a lower crotch (shorter legs), a narrower frame
-# and narrower hips. The organs keep their adult shapes, so this is a proportion change, not paediatric anatomy.
+# head about 1/4.7 of body height instead of 1/7.5 (a toddler / preschooler), a lower crotch (shorter legs), a sturdier
+# trunk with a rounder belly, and narrower hips and thighs. The organs keep their adult shapes, so this is a proportion
+# change, not paediatric anatomy.
 # Coordinates: y_down is the anatogram's own y (0 at the top of the head, about 195 at the feet).
 child_body <- TRUE
 body_centre_x <- 52.6
 y_landmarks_adult <- c(0, 26, 30, 103, 195)   # head top, chin, shoulders, crotch, feet
 y_landmarks_child <- c(0, 41.75, 47, 119.5, 195)
-frame_scale <- 0.835                           # width of torso, arms and legs relative to the adult body
-hip_scale <- 0.95                               # extra narrowing across the hips and upper legs
+frame_scale <- 1.07    # width of the trunk and arms relative to the adult body (above 1 = sturdier)
+belly_scale <- 1.1     # extra width of the belly, so the trunk is round like a child's (the adult outline has a waist)
+hip_scale <- 0.78      # width of the hips and thighs relative to the frame (the adult hips are wide, a child's are not)
+arm_zone_start <- 28   # distance from the midline (adult plot units) beyond which a point counts as the arm
 head_scale <- y_landmarks_child[2] / y_landmarks_adult[2]
 
 warp_xy <- function(x, y_down) {
   if (!child_body) return(list(x = x, y = y_down))
-  # the head is enlarged in x as well as y, fading into the narrower frame across the neck / top of the shoulders
-  x_scale <- approx(c(0, 25, 31, 65, 85, 112, 135, 195),
-                    c(head_scale, head_scale, frame_scale, frame_scale, frame_scale * hip_scale,
-                      frame_scale * hip_scale, frame_scale, frame_scale),
+  dx <- x - body_centre_x
+  # one width factor per height for the head, trunk and legs: the head is enlarged in x as well as y, fading into the trunk
+  # across the neck and shoulders, with a rounder belly and then narrower hips and thighs
+  torso_y <- approx(c(0, 25, 31, 48, 62, 80, 98, 112, 135, 195),
+                    c(head_scale, head_scale, frame_scale, frame_scale * belly_scale, frame_scale * belly_scale,
+                      frame_scale * belly_scale, frame_scale * hip_scale, frame_scale * hip_scale, frame_scale, frame_scale),
                     xout = y_down, rule = 2)$y
-  list(x = body_centre_x + (x - body_centre_x) * x_scale,
+  # the arms get a constant width factor, blended in away from the body: if they followed the hip narrowing, the hands
+  # (which hang at hip height) would be squeezed by a factor that changes quickly with height, which shears the wrists
+  t <- pmin(pmax((abs(dx) - arm_zone_start) / 7, 0), 1)
+  w_arm <- t * t * (3 - 2 * t) * approx(c(34, 48, 114, 128), c(0, 1, 1, 0), xout = y_down, rule = 2)$y
+  list(x = body_centre_x + dx * ((1 - w_arm) * torso_y + w_arm * frame_scale),
        y = approx(y_landmarks_adult, y_landmarks_child, xout = y_down, rule = 2)$y)
 }
 

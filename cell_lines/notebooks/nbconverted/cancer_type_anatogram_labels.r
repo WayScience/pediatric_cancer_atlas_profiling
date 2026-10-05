@@ -10,7 +10,8 @@ categories_file <- file.path("..", "plotting_helpers", "cancer_type_categories.y
 output_dir <- "figures"
 dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
 
-# wrap to as few lines as fit max_width, then to the narrowest width that still gives that many lines (balanced lines)
+# Wrap text onto the fewest lines that fit within max_width characters, then shrink the width as far as possible without
+# adding a line. This makes the lines about equal in length (balanced) instead of one long line and one short leftover line.
 balanced_wrap <- function(x, max_width) {
   n_lines <- str_count(str_wrap(x, width = max_width), "\n") + 1
   for (w in seq(10, max_width)) {

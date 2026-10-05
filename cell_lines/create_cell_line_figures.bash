@@ -9,13 +9,14 @@
 # To use a differently named conda environment, set R_ENV, e.g.:
 #   R_ENV=my_r_env bash create_cell_line_figures.bash
 
+# stop at the first error, including a failed conda hook or activation (so the figures are never made in the wrong environment)
+set -eo pipefail
+
 # make "conda activate" work in this (non-interactive) shell
 eval "$(conda shell.bash hook)"
 # activate the R-based environment
 conda activate "${R_ENV:-alsf_r_analysis}"
-
-# stop at the first error
-set -e
+set -u   # after activation: conda's own activation scripts use unset variables
 
 # the notebooks use paths relative to their own folder
 cd "$(dirname "$0")/notebooks"
