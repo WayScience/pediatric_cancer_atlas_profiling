@@ -1,0 +1,75 @@
+# Cancer type categories shared by every figure panel (read with yaml::read_yaml in R or yaml.safe_load in Python).
+#
+# sites:   tumor site, listed in body order (head to toe, normal reference lines last). Colors for each site live in the repo-level themes.R.
+# groups:  cancer groups shown in the figures, each collecting one or more raw `cancer_type` values.
+# cancer_types must match the `cancer_type` column of ../pccma_cell_line_metadata.csv exactly; every value in the
+# metadata must appear here once, and each cell line is counted once.
+
+sites:
+  - name: Central nervous system
+    groups:
+      - name: Medulloblastoma
+        cancer_types:
+          - Medulloblastoma
+          - PNET / Medulloblastoma
+      - name: Glioma
+        cancer_types:
+          - Glioblastoma Multiforme
+          - Glioma
+          - High Grade Gliomas - MYCN
+      - name: Ependymoma
+        cancer_types:
+          - "Ependymoma, anaplastic"
+      - name: Atypical teratoid rhabdoid tumor
+        cancer_types:
+          - Atypical Teratoid Rhabdoid Tumor
+  - name: Eye
+    groups:
+      - name: Retinoblastoma
+        cancer_types:
+          - Retinoblastoma
+  - name: Adrenal gland
+    groups:
+      - name: Neuroblastoma
+        cancer_types:
+          - Neuroblastoma
+  - name: Kidney
+    groups:
+      - name: Malignant rhabdoid tumor
+        cancer_types:
+          - Malignant Rhabdoid Tumor
+      - name: Wilms tumor
+        cancer_types:
+          - "Wilms' Tumor"
+  - name: Ovary
+    groups:
+      - name: Germ cell tumor
+        cancer_types:
+          - Mixed Germ Cell
+  - name: Soft tissue
+    groups:
+      - name: Rhabdomyosarcoma
+        cancer_types:
+          - Rhabdomyosarcoma
+          - "Rhabdomyosarcoma, alveolar"
+          - "Rhabdomyosarcoma, embryonal"
+      - name: Myoepithelial carcinoma
+        cancer_types:
+          - Myoepithelial Carcinoma (MEC)
+  - name: Bone
+    groups:
+      - name: Ewing sarcoma family
+        cancer_types:
+          - "Ewing's Sarcoma"
+          - Primitive Neuroectodermal Tumor (PNET)
+      - name: Osteosarcoma
+        cancer_types:
+          - Osteosarcoma
+  - name: Normal reference lines
+    groups:
+      - name: "Normal (colon, lung, microglia, prostate)"
+        cancer_types:
+          - Normal (colon epithelium)
+          - Normal (prostate stromal myofibroblast)
+          - Normal (immortalized microglia)
+          - Normal (embryonic lung fibroblast)

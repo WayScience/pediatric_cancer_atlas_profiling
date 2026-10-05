@@ -23,3 +23,5 @@ dependencies:
   - conda-forge::r-platetools
   - conda-forge::r-arrow
   - conda-forge::r-ggridges
+  - conda-forge::r-yaml
+  # gganatogram is not on conda-forge/CRAN: after creating the env run devtools::install_github("jespermaag/gganatogram")
