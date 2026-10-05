@@ -29,7 +29,7 @@ cat("\nTotal:", sum(group_counts$n), "cell lines\n")
 
 members <- atlas$cell_lines %>%
   group_by(site, cancer_group) %>%
-  summarise(cancer_type_labels = paste(sort(unique(cancer_type)), collapse = "; "),
+  summarize(cancer_type_labels = paste(sort(unique(cancer_type)), collapse = "; "),
             cell_lines = paste(sort(cell_line), collapse = ", "), .groups = "drop")
 print(as.data.frame(members), row.names = FALSE, right = FALSE)
 
@@ -42,7 +42,7 @@ block_gap <- 2.4       # plot units between blocks
 gap_to_text <- 12      # plot units between the body and the text column
 units_per_inch <- 21   # plot units per inch: sets the text size relative to the body
 margin_pt <- 4         # white margin around the figure
-caption_size <- 19     # font size (pt) of the atlas label centred under the figure; it adds to the figure height
+caption_size <- 19     # font size (pt) of the atlas label centered under the figure; it adds to the figure height
 caption_gap <- 6       # pt between the panel and the label
 
 body <- body_extent()
@@ -54,7 +54,7 @@ cell_line_text <- atlas$cell_lines %>%
   mutate(display_name = factor(display_name, levels = str_sort(unique(display_name), numeric = TRUE))) %>%
   arrange(display_name) %>%
   group_by(site, cancer_group) %>%
-  summarise(names = paste(display_name, collapse = ", "), .groups = "drop") %>%
+  summarize(names = paste(display_name, collapse = ", "), .groups = "drop") %>%
   left_join(group_counts, by = c("site", "cancer_group")) %>%
   rowwise() %>%
   mutate(names_text = balanced_wrap(names, max_width)) %>%
@@ -70,11 +70,11 @@ blocks <- site_info %>%
   mutate(
     height = header_height + sapply(site, function(s) sum(cell_line_text$height[cell_line_text$site == s])),
     header = paste0(site, " (n=", n, ")"),
-    text_colour = unname(site_text_colors[site])
+    text_color = unname(site_text_colors[site])
   ) %>%
   arrange(desc(anchor_y))
 
-# centre each block on its organ, then push blocks apart from the top
+# center each block on its organ, then push blocks apart from the top
 blocks$top <- blocks$anchor_y + blocks$height / 2
 blocks$top[1] <- min(blocks$top[1], y_top)
 for (i in seq_len(nrow(blocks))[-1]) {
@@ -84,7 +84,7 @@ blocks <- blocks %>% mutate(header_y = top - header_height / 2)
 
 # top of each cancer group line within its block
 cell_line_text <- cell_line_text %>%
-  left_join(blocks %>% select(site, top, text_colour), by = "site") %>%
+  left_join(blocks %>% select(site, top, text_color), by = "site") %>%
   group_by(site) %>%
   mutate(group_y = top - header_height - (cumsum(height) - height)) %>%
   ungroup() %>%
@@ -100,16 +100,16 @@ fig_width <- diff(x_lim) / units_per_inch + 2 * margin_pt / 72
 fig_height <- diff(y_lim) / units_per_inch + 2 * margin_pt / 72 + (caption_size * 1.2 + caption_gap) / 72
 
 panel <- draw_body(site_counts$site) + body_markers(site_counts$site) +
-  geom_segment(data = blocks, aes(x = anchor_x, y = anchor_y, xend = text_x - 3, yend = header_y, colour = colour),
+  geom_segment(data = blocks, aes(x = anchor_x, y = anchor_y, xend = text_x - 3, yend = header_y, color = color),
                linewidth = 0.6, inherit.aes = FALSE) +
-  geom_point(data = blocks, aes(x = anchor_x, y = anchor_y), size = 1.6, colour = "black", inherit.aes = FALSE) +
-  geom_text(data = blocks, aes(x = text_x, y = header_y, label = header, colour = text_colour),
+  geom_point(data = blocks, aes(x = anchor_x, y = anchor_y), size = 1.6, color = "black", inherit.aes = FALSE) +
+  geom_text(data = blocks, aes(x = text_x, y = header_y, label = header, color = text_color),
             hjust = 0, fontface = "bold", size = 5.4, inherit.aes = FALSE) +
-  geom_text(data = cell_line_text, aes(x = text_x, y = group_y, label = group_label, colour = text_colour),
+  geom_text(data = cell_line_text, aes(x = text_x, y = group_y, label = group_label, color = text_color),
             hjust = 0, vjust = 1, fontface = "bold", size = 4.3, inherit.aes = FALSE) +
-  geom_text(data = cell_line_text, aes(x = text_x, y = names_y, label = names_text, colour = text_colour),
+  geom_text(data = cell_line_text, aes(x = text_x, y = names_y, label = names_text, color = text_color),
             hjust = 0, vjust = 1, size = 4.1, lineheight = 0.95, inherit.aes = FALSE) +
-  scale_colour_identity() +
+  scale_color_identity() +
   coord_fixed(xlim = x_lim, ylim = y_lim, expand = FALSE, clip = "off") +
   labs(caption = paste0("Pediatric Cancer Cell Morphology Atlas (n = ", nrow(atlas$cell_lines), ")")) +
   annotation_theme(margin_pt, caption_size, caption_gap)

@@ -1,6 +1,6 @@
 # Cancer type categories shared by every figure panel (read with yaml::read_yaml in R or yaml.safe_load in Python).
 #
-# sites:   tumor site, listed in body order (head to toe, normal reference lines last). Colours for each site live in the repo-level themes.R.
+# sites:   tumor site, listed in body order (head to toe, normal reference lines last). Colors for each site live in the repo-level themes.R.
 # groups:  cancer groups shown in the figures, each collecting one or more raw `cancer_type` values.
 # cancer_types must match the `cancer_type` column of ../pccma_cell_line_metadata.csv exactly; every value in the
 # metadata must appear here once, and each cell line is counted once.

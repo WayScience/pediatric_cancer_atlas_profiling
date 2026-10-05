@@ -12,20 +12,20 @@ dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
 ring_table <- function(k, data, group_keys, sort_keys, site_order, site_gap, n_total) {
   data %>%
     group_by(across(all_of(group_keys[[k]]))) %>%
-    summarise(w = sum(weight), .groups = "drop") %>%
+    summarize(w = sum(weight), .groups = "drop") %>%
     arrange(across(all_of(sort_keys[[k]]))) %>%
     mutate(ring = k, span = 360 - site_gap * length(site_order),
            start = (as.integer(site) - 0.5) * site_gap + span * (cumsum(w) - w) / n_total,
            end = start + span * w / n_total, mid = (start + end) / 2)
 }
 
-# text colour that stays readable on a given fill
-text_on <- function(fill) ifelse(colSums(col2rgb(fill) * c(0.299, 0.587, 0.114)) / 255 < 0.55, "white", "grey15")
+# text color that stays readable on a given fill
+text_on <- function(fill) ifelse(colSums(col2rgb(fill) * c(0.299, 0.587, 0.114)) / 255 < 0.55, "white", "gray15")
 radial <- function(df) {
   df %>%
     mutate(r = (r0 + r1) / 2, x = r * sin(mid * pi / 180), y = r * cos(mid * pi / 180),
            angle = { phi <- ((90 - mid + 180) %% 360) - 180; ifelse(abs(phi) > 90, phi + 180, phi) },
-           colour = text_on(fill))
+           color = text_on(fill))
 }
 
 # ---- text measurement (approximate Helvetica character widths in em) ----
@@ -42,16 +42,16 @@ text_units <- function(label, size_mm, bold = FALSE) {                          
     (if (bold) 1.06 else 1) * em_units(size_mm)
 }
 
-# text along a circle of radius r, centred on angle `mid` (degrees clockwise from 12 o'clock); in the bottom half
+# text along a circle of radius r, centered on angle `mid` (degrees clockwise from 12 o'clock); in the bottom half
 # the text runs against the clock so that it stays upright
 curved_text <- function(label, r, mid = 0, size_mm = 3.9, bold = TRUE) {
   chars <- strsplit(label, "")[[1]]
   em <- em_units(size_mm)
   w <- char_em(chars) * (if (bold) 1.06 else 1) * em
-  offset <- cumsum(w) - w / 2 - sum(w) / 2       # distance of each character's centre from the middle of the text
+  offset <- cumsum(w) - w / 2 - sum(w) / 2       # distance of each character's center from the middle of the text
   flip <- cos(mid * pi / 180) < 0
   theta <- mid + (if (flip) -offset else offset) / r * 180 / pi
-  r_base <- if (flip) r + 0.36 * em else r - 0.36 * em   # baseline radius, so capital letters are centred on r
+  r_base <- if (flip) r + 0.36 * em else r - 0.36 * em   # baseline radius, so capital letters are centered on r
   data.frame(char = chars, x = r_base * sin(theta * pi / 180), y = r_base * cos(theta * pi / 180),
              angle = if (flip) 180 - theta else -theta)
 }
@@ -84,7 +84,7 @@ n_cell_lines <- n_distinct(rows$cell_line_key)
 # order subtypes within each site and origin by size, with "Unknown" last
 subtype_rank <- rows %>%
   group_by(site, origin, subtype) %>%
-  summarise(w = sum(weight), .groups = "drop") %>%
+  summarize(w = sum(weight), .groups = "drop") %>%
   group_by(site, origin) %>%
   arrange(subtype == "Unknown", desc(w), subtype, .by_group = TRUE) %>%
   mutate(subtype_rank = row_number()) %>%
@@ -109,7 +109,7 @@ rings[[2]] <- rings[[2]] %>%
 rings[[3]] <- rings[[3]] %>%
   mutate(base = unname(site_colors[as.character(site)]),
          origin_fill = origin_shade(base, as.character(origin)),
-         fill = origin_fill)   # a subtype wedge keeps the colour of the origin wedge it sits in
+         fill = origin_fill)   # a subtype wedge keeps the color of the origin wedge it sits in
 rings[[4]] <- rings[[4]] %>%
   mutate(base = unname(site_colors[as.character(site)]), fill = unname(plate_colors[as.character(plate)]))
 
@@ -136,12 +136,12 @@ subtype_names <- c("MYCN/ID2 amplified" = "MYCN/ID2 amp")
 origin_labels <- radial(wedges %>% filter(ring == 2) %>% mutate(label = as.character(origin)))
 subtype_labels <- radial(wedges %>% filter(ring == 3) %>% mutate(label = recode(subtype, !!!subtype_names)))
 
-# ---- ring names: in the gap just outside each ring, centred on 12 o'clock ----
+# ---- ring names: in the gap just outside each ring, centered on 12 o'clock ----
 ring_label_size <- 4.9                           # text size (mm): larger than the site names, so the rings are easy to identify
 ring_names <- c("Tissue site", "Origin", "Subtype", "Plate condition")
 ring_label_chars <- bind_rows(lapply(1:4, function(k) curved_text(ring_names[k], r_edges[[k]][2] + ring_gap / 2, 0, ring_label_size)))
 
-# ---- thin band in the site colour around the outside, carrying the tissue site names ----
+# ---- thin band in the site color around the outside, carrying the tissue site names ----
 band_width <- 0.46
 band_r0 <- r_out + ring_gap
 band_r1 <- band_r0 + band_width
@@ -156,17 +156,17 @@ sites <- wedges %>%
 band_poly <- bind_rows(lapply(seq_len(nrow(sites)), function(i)
   arc_polygon(1000 + i, band_r0, band_r1, sites$start[i], sites$end[i], sites$base[i])))
 band_chars <- bind_rows(lapply(which(sites$inside), function(i)
-  curved_text(sites$label[i], band_r, sites$mid[i], band_text_size) %>% mutate(colour = text_on(sites$base[i]))))
+  curved_text(sites$label[i], band_r, sites$mid[i], band_text_size) %>% mutate(color = text_on(sites$base[i]))))
 # sites too narrow for their name: named just outside the band
 site_labels <- sites %>%
   filter(!inside) %>%
   mutate(x = (band_r1 + 0.3) * sin(mid * pi / 180), y = (band_r1 + 0.3) * cos(mid * pi / 180),
          hjust = ifelse(x >= 0, 0, 1),
-         colour = unname(site_text_colors[as.character(site)]))
+         color = unname(site_text_colors[as.character(site)]))
 out_ext <- site_labels$x + ifelse(site_labels$hjust == 0, 1, -1) *
   sapply(site_labels$label, text_units, size_mm = 3.9, bold = TRUE)
 
-# ---- key on the right of the rings: the plate condition colours ----
+# ---- key on the right of the rings: the plate condition colors ----
 key_size <- 3.8        # text size (mm)
 key_swatch <- 0.3      # swatches are squares
 key_pad <- 0.18        # plot units of padding around each key row
@@ -193,33 +193,33 @@ panel <- ggplot()
 for (k in 1:4) {
   panel <- panel +
     geom_polygon(data = poly_data %>% filter(id %in% wedges$id[wedges$ring == k]), aes(x, y, group = id, fill = fill),
-                 colour = "white", linewidth = 0.35)
+                 color = "white", linewidth = 0.35)
 }
 panel <- panel +
-  geom_polygon(data = band_poly, aes(x, y, group = id, fill = fill), colour = "white", linewidth = 0.35) +
+  geom_polygon(data = band_poly, aes(x, y, group = id, fill = fill), color = "white", linewidth = 0.35) +
   scale_fill_identity() +
-  geom_text(data = origin_labels, aes(x, y, label = label, angle = angle, colour = colour), size = 2.5, fontface = "bold") +
-  geom_text(data = subtype_labels, aes(x, y, label = label, angle = angle, colour = colour), size = 2.5) +
-  geom_text(data = band_chars, aes(x, y, label = char, angle = angle, colour = colour), vjust = 0,
+  geom_text(data = origin_labels, aes(x, y, label = label, angle = angle, color = color), size = 2.5, fontface = "bold") +
+  geom_text(data = subtype_labels, aes(x, y, label = label, angle = angle, color = color), size = 2.5) +
+  geom_text(data = band_chars, aes(x, y, label = char, angle = angle, color = color), vjust = 0,
             size = band_text_size, fontface = "bold") +
-  geom_text(data = site_labels, aes(x, y, label = label, hjust = hjust, colour = colour), size = 3.9, fontface = "bold") +
+  geom_text(data = site_labels, aes(x, y, label = label, hjust = hjust, color = color), size = 3.9, fontface = "bold") +
   geom_text(data = ring_label_chars, aes(x, y, label = char, angle = angle), vjust = 0, size = ring_label_size,
-            fontface = "bold", colour = "grey20") +
+            fontface = "bold", color = "gray20") +
   annotate("text", x = 0, y = 0.72, label = "PCCMA", size = 7, fontface = "bold") +
   annotate("text", x = 0, y = -0.3, label = paste0("n = ", n_cell_lines, "\npediatric cancer\ncell lines"), size = 3.8,
            fontface = "bold", lineheight = 0.95) +
-  scale_colour_identity() +
+  scale_color_identity() +
   coord_fixed(xlim = x_lim, ylim = y_lim, expand = FALSE, clip = "off") +
   theme_void() +
   annotation_theme(margin_pt)
 
 panel <- panel +
-  geom_text(data = key_titles, aes(key_x, y, label = label), hjust = 0, size = key_size, fontface = "bold", colour = "grey15") +
-  geom_text(data = key_items, aes(key_x + 0.5, y, label = label), hjust = 0, size = key_size, colour = "grey15",
+  geom_text(data = key_titles, aes(key_x, y, label = label), hjust = 0, size = key_size, fontface = "bold", color = "gray15") +
+  geom_text(data = key_items, aes(key_x + 0.5, y, label = label), hjust = 0, size = key_size, color = "gray15",
             lineheight = key_lineheight) +
   geom_rect(data = key_items,
             aes(xmin = key_x, xmax = key_x + key_swatch, ymin = y - key_swatch / 2, ymax = y + key_swatch / 2, fill = fill),
-            colour = "grey50", linewidth = 0.2, inherit.aes = FALSE)
+            color = "gray50", linewidth = 0.2, inherit.aes = FALSE)
 
 cat(sprintf("subtype labels: %d of %d wedges (%d unknown); site names inside the band: %d of %d\n",
             nrow(subtype_labels), sum(wedges$ring == 3), sum(subtype_labels$label == "Unknown"),

@@ -1,5 +1,5 @@
 # Shared helpers for the metadata figure panels: data prep and the anatogram body.
-# Colours and themes are in the repo-level themes.R; cancer type categories are in cancer_type_categories.yaml and cell line
+# Colors and themes are in the repo-level themes.R; cancer type categories are in cancer_type_categories.yaml and cell line
 # display names in cell_line_display_names.csv (both next to this file). Paths are relative to a notebook in cell_lines/notebooks/.
 # The body comes from the gganatogram package (not on CRAN or conda-forge):
 #   devtools::install_github("jespermaag/gganatogram")
@@ -10,16 +10,16 @@ suppressPackageStartupMessages({
   library(ggplot2)
   library(gganatogram)
 })
-source(file.path("..", "..", "themes.R"))   # repo-level themes.R: site colours and ggplot themes
+source(file.path("..", "..", "themes.R"))   # repo-level themes.R: site colors and ggplot themes
 
 # ---- child-proportioned body ----
 # gganatogram only ships adult bodies, so its polygons (outline and organs) are reshaped to child proportions:
 # head about 1/4.7 of body height instead of 1/7.5 (a toddler / preschooler), a lower crotch (shorter legs), a sturdier
 # trunk with a rounder belly, and narrower hips and thighs. The organs keep their adult shapes, so this is a proportion
-# change, not paediatric anatomy.
+# change, not pediatric anatomy.
 # Coordinates: y_down is the anatogram's own y (0 at the top of the head, about 195 at the feet).
 child_body <- TRUE
-body_centre_x <- 52.6
+body_center_x <- 52.6
 y_landmarks_adult <- c(0, 26, 30, 103, 195)   # head top, chin, shoulders, crotch, feet
 y_landmarks_child <- c(0, 41.75, 47, 119.5, 195)
 frame_scale <- 1.07    # width of the trunk and arms relative to the adult body (above 1 = sturdier)
@@ -30,7 +30,7 @@ head_scale <- y_landmarks_child[2] / y_landmarks_adult[2]
 
 warp_xy <- function(x, y_down) {
   if (!child_body) return(list(x = x, y = y_down))
-  dx <- x - body_centre_x
+  dx <- x - body_center_x
   # one width factor per height for the head, trunk and legs: the head is enlarged in x as well as y, fading into the trunk
   # across the neck and shoulders, with a rounder belly and then narrower hips and thighs
   torso_y <- approx(c(0, 25, 31, 48, 62, 80, 98, 112, 135, 195),
@@ -41,7 +41,7 @@ warp_xy <- function(x, y_down) {
   # (which hang at hip height) would be squeezed by a factor that changes quickly with height, which shears the wrists
   t <- pmin(pmax((abs(dx) - arm_zone_start) / 7, 0), 1)
   w_arm <- t * t * (3 - 2 * t) * approx(c(34, 48, 114, 128), c(0, 1, 1, 0), xout = y_down, rule = 2)$y
-  list(x = body_centre_x + dx * ((1 - w_arm) * torso_y + w_arm * frame_scale),
+  list(x = body_center_x + dx * ((1 - w_arm) * torso_y + w_arm * frame_scale),
        y = approx(y_landmarks_adult, y_landmarks_child, xout = y_down, rule = 2)$y)
 }
 
@@ -76,8 +76,8 @@ site_info <- tibble::tribble(
   "Soft tissue",            list("skeletal_muscle"),     "right",  45.2,    -106.6,
   "Bone",                   list("bone"),                "right",  44.6,    -162.5
 )
-stopifnot("every site needs a colour in themes.R" = setequal(site_info$site, names(site_colors)))
-site_info$colour <- unname(site_colors[site_info$site])
+stopifnot("every site needs a color in themes.R" = setequal(site_info$site, names(site_colors)))
+site_info$color <- unname(site_colors[site_info$site])
 anchor_xy <- warp_xy(site_info$anchor_x, -site_info$anchor_y)
 site_info$anchor_x <- anchor_xy$x
 site_info$anchor_y <- -anchor_xy$y
@@ -118,7 +118,7 @@ prepare_cancer_type_data <- function(metadata_file, categories_file, names_file 
   cell_lines <- metadata %>% distinct(cell_line_key, .keep_all = TRUE)
   group_map <- read_categories(categories_file)
   cell_lines <- left_join(cell_lines, group_map, by = "cancer_type")
-  # standardised names for display (editable in cell_line_display_names.csv)
+  # standardized names for display (editable in cell_line_display_names.csv)
   display_names <- read_csv(names_file, col_types = cols(.default = col_character()))
   cell_lines <- left_join(cell_lines, display_names, by = "cell_line")
   stopifnot("every cell line must have a display name" = !anyNA(cell_lines$display_name))
@@ -129,7 +129,7 @@ prepare_cancer_type_data <- function(metadata_file, categories_file, names_file 
   group_counts <- cell_lines %>% count(site, cancer_group, name = "n")
   site_counts <- group_counts %>%
     group_by(site) %>%
-    summarise(n = sum(n), .groups = "drop") %>%
+    summarize(n = sum(n), .groups = "drop") %>%
     arrange(site == "Normal reference lines", desc(n))
   group_counts <- group_counts %>%
     mutate(site = factor(site, levels = site_counts$site)) %>%
@@ -141,9 +141,10 @@ prepare_cancer_type_data <- function(metadata_file, categories_file, names_file 
 draw_body <- function(sites = site_info$site) {
   present <- site_info %>% filter(site %in% sites)
   organ_sets <- lapply(present$organs, unlist)
+  # gganatogram's API needs a column named "colour" (British spelling) and fill = "colour"
   organs <- data.frame(
     organ = unlist(organ_sets),
-    colour = rep(present$colour, lengths(organ_sets)),
+    colour = rep(present$color, lengths(organ_sets)),
     value = 1,
     stringsAsFactors = FALSE
   )
@@ -152,18 +153,18 @@ draw_body <- function(sites = site_info$site) {
     theme_void()
 }
 
-# Halos behind tiny organs and coloured eyes for the eye (there is no eye organ in the anatogram)
+# Halos behind tiny organs and colored eyes for the eye (there is no eye organ in the anatogram)
 body_markers <- function(sites = site_info$site, halo_size = 8, halo_alpha = 0.4) {
   layers <- list()
   for (s in intersect(sites, unique(halo_points$site))) {
     pts <- halo_points %>% filter(site == s)
-    colour <- site_colors[[s]]
-    layers <- c(layers, list(geom_point(data = pts, aes(x, y), shape = 16, colour = colour,
+    color <- site_colors[[s]]
+    layers <- c(layers, list(geom_point(data = pts, aes(x, y), shape = 16, color = color,
                                         alpha = halo_alpha, size = halo_size, inherit.aes = FALSE)))
     if (s == "Eye") {
       for (i in seq_len(nrow(pts))) {
         layers <- c(layers, list(geom_polygon(data = ellipse_df(pts$x[i], pts$y[i], 2.1 * eye_scale, 1.1 * eye_scale),
-                                              aes(x, y), fill = colour, colour = "black", linewidth = 0.25,
+                                              aes(x, y), fill = color, color = "black", linewidth = 0.25,
                                               inherit.aes = FALSE)))
       }
     }
