@@ -1,0 +1,144 @@
+project_id: cpg0041-pccma
+source_id: alexslemonade
+batches:
+  # from raw folder: 'Plate 3 A673 Reimage' (cell_line as-found: 'A673')
+  - round_label: Round2
+    plate_label: Plate3
+    cell_line: A673
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 A673 Reimage/BR00145439__2024-11-20T23_25_43-Measurement 3"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 A673 Reimage/BR00145440__2024-11-20T23_43_51-Measurement 3"
+
+  # from raw folder: 'Plate 3 All Cell Lines' (base/original scan)
+  - round_label: Round2
+    plate_label: Plate3
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 All Cell Lines/BR00145438__2024-10-25T09_12_54-Measurement 2"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 All Cell Lines/BR00145439__2024-10-25T10_18_23-Measurement 2"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 All Cell Lines/BR00145440__2024-10-25T11_24_39-Measurement 2"
+
+  # from raw folder: 'Plate 3 CHLA-10 Reimage' (cell_line as-found: 'CHLA-10')
+  - round_label: Round2
+    plate_label: Plate3
+    cell_line: CHLA-10
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 CHLA-10 Reimage/BR00145439__2024-11-29T08_37_40-Measurement 10"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 CHLA-10 Reimage/BR00145440__2024-11-29T08_53_55-Measurement 10"
+
+  # from raw folder: 'Plate 3 CHLA-200 Reimage' (cell_line as-found: 'CHLA-200')
+  - round_label: Round2
+    plate_label: Plate3
+    cell_line: CHLA-200
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 CHLA-200 Reimage/BR00145438__2024-11-29T09_10_40-Measurement 11"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 CHLA-200 Reimage/BR00145439__2024-11-29T09_28_39-Measurement 11"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 CHLA-200 Reimage/BR00145440__2024-11-29T09_46_37-Measurement 11"
+
+  # from raw folder: 'Plate 3 CHP-212 Reimage' (cell_line as-found: 'CHP-212')
+  - round_label: Round2
+    plate_label: Plate3
+    cell_line: CHP-212
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 CHP-212 Reimage/BR00145438__2024-11-21T00_53_05-Measurement 5"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 CHP-212 Reimage/BR00145439__2024-11-21T01_11_05-Measurement 5"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 CHP-212 Reimage/BR00145440__2024-11-21T01_29_13-Measurement 5"
+
+  # from raw folder: 'Plate 3 KPNYN Reimage' (cell_line as-found: 'KPNYN')
+  - round_label: Round2
+    plate_label: Plate3
+    cell_line: KPNYN
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 KPNYN Reimage/BR00145438__2024-11-21T02_39_36-Measurement 7"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 KPNYN Reimage/BR00145439__2024-11-21T02_57_38-Measurement 7"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 KPNYN Reimage/BR00145440__2024-11-21T03_15_41-Measurement 7"
+
+  # from raw folder: 'Plate 3 NB-1 Reimage' (cell_line as-found: 'NB-1')
+  - round_label: Round2
+    plate_label: Plate3
+    cell_line: NB-1
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 NB-1 Reimage/BR00145438__2024-11-21T01_47_50-Measurement 6"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 NB-1 Reimage/BR00145439__2024-11-21T02_04_55-Measurement 6"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 NB-1 Reimage/BR00145440__2024-11-21T02_22_00-Measurement 6"
+
+  # from raw folder: 'Plate 3 SH-SY5Y Reimage' (cell_line as-found: 'SH-SY5Y')
+  - round_label: Round2
+    plate_label: Plate3
+    cell_line: SH-SY5Y
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 SH-SY5Y Reimage/BR00145438__2024-11-21T03_34_21-Measurement 8"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 SH-SY5Y Reimage/BR00145439__2024-11-21T03_52_34-Measurement 8"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 SH-SY5Y Reimage/BR00145440__2024-11-21T04_10_33-Measurement 8"
+
+  # from raw folder: 'Plate 3 SK-N-DZ Reimage' (cell_line as-found: 'SK-N-DZ')
+  - round_label: Round2
+    plate_label: Plate3
+    cell_line: SK-N-DZ
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 SK-N-DZ Reimage/BR00145439__2024-11-29T07_48_13-Measurement 9"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 SK-N-DZ Reimage/BR00145440__2024-11-29T08_04_55-Measurement 9"
+
+  # from raw folder: 'Plate 3 SK-N-MC Reimage' (cell_line as-found: 'SK-N-MC')
+  - round_label: Round2
+    plate_label: Plate3
+    cell_line: SK-N-MC
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 SK-N-MC Reimage/BR00145439__2024-11-21T00_17_04-Measurement 4"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 3 SK-N-MC Reimage/BR00145440__2024-11-21T00_35_04-Measurement 4"
+
+  # from raw folder: 'Plate 4 All Cell Lines' (base/original scan)
+  - round_label: Round2
+    plate_label: Plate4
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 4 All Cell Lines/BR00145816__2024-12-06T16_10_14-Measurement 1"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 4 All Cell Lines/BR00145817__2024-12-06T16_45_29-Measurement 1"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 4 All Cell Lines/BR00145818__2024-12-06T17_20_36-Measurement 1"
+
+  # from raw folder: 'Plate 4 CHLA-10 Reimage' (cell_line as-found: 'CHLA-10')
+  - round_label: Round2
+    plate_label: Plate4
+    cell_line: CHLA-10
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 4 CHLA-10 Reimage/BR00145816__2024-12-06T17_56_31-Measurement 2"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 4 CHLA-10 Reimage/BR00145817__2024-12-06T18_14_24-Measurement 2"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 4 CHLA-10 Reimage/BR00145818__2024-12-06T18_31_53-Measurement 2"
+
+  # from raw folder: 'Plate 4 CHLA-113 Reimage' (cell_line as-found: 'CHLA-113')
+  - round_label: Round2
+    plate_label: Plate4
+    cell_line: CHLA-113
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 4 CHLA-113 Reimage/BR00145816__2024-12-06T19_43_44-Measurement 88"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 4 CHLA-113 Reimage/BR00145817__2024-12-06T20_01_39-Measurement 4"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 4 CHLA-113 Reimage/BR00145818__2024-12-06T20_20_24-Measurement 4"
+
+  # from raw folder: 'Plate 4 CHLA-218 Reimage' (cell_line as-found: 'CHLA-218')
+  - round_label: Round2
+    plate_label: Plate4
+    cell_line: CHLA-218
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 4 CHLA-218 Reimage/BR00145816__2024-12-06T20_38_16-Measurement 4"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 4 CHLA-218 Reimage/BR00145817__2024-12-06T20_55_27-Measurement 5"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 4 CHLA-218 Reimage/BR00145818__2024-12-06T21_12_29-Measurement 5"
+
+  # from raw folder: 'Plate 4 CHLA-25 Reimage' (cell_line as-found: 'CHLA-25')
+  - round_label: Round2
+    plate_label: Plate4
+    cell_line: CHLA-25
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 4 CHLA-25 Reimage/BR00145816__2024-12-06T18_50_26-Measurement 3"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 4 CHLA-25 Reimage/BR00145817__2024-12-06T19_08_18-Measurement 3"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_2_data/Plate 4 CHLA-25 Reimage/BR00145818__2024-12-06T19_25_50-Measurement 3"
