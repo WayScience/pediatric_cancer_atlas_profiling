@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./logo/pccma_logo_dark.svg">
+    <img src="./logo/pccma_logo_light.svg" alt="PCCMA: Pediatric Cancer Cell Morphology Atlas" width="800">
+  </picture>
+</p>
+
 # Pediatric cancer atlas image profiling
 
 [![Software DOI badge](https://zenodo.org/badge/DOI/10.5281/zenodo.15548848.svg)](https://doi.org/10.5281/zenodo.15548848)
