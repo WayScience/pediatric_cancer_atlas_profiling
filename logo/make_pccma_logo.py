@@ -7,12 +7,13 @@ geometry is regular on purpose: equal pieces, seams mirrored where a letter is s
 and aligned seams (the P's stem is cut where its bowl ends; the M's legs and the A's legs and crossbar share one seam).
 Color shares follow the tissue-site cell line counts.
 
-Writes pccma_logo_{light,dark}.{svg,png} (with the wording), pccma_logo_letters_{light,dark}.{svg,png} (letters only) and
-pccma_icon_{light,dark}.{svg,png}. The light logos (dark wording) are for light backgrounds and the dark logos (light wording)
-for dark ones; the letters are the same colors in both, and the logos' backgrounds are transparent. The wording is converted to
-outlines, so the SVG needs no installed font, and is sized to span the letters exactly. The icon sits on an opaque background
-(white or #14161F) so that it works as an avatar. The PNGs are rendered at 2x with headless Chrome in a window of exactly the
-SVG's size.
+Writes, each as SVG and PNG (the PNGs at 2x, rendered with headless Chrome in a window of exactly the SVG's size):
+  pccma_logo_{light,dark}                     the letters with the full wording, on a white / #14161F background
+  pccma_logo_transparent_on_{light,dark}      the same on a transparent background, the wording dark / light for the background it sits on
+  pccma_logo_letters_{light,dark}             the letters alone, on a white / #14161F background
+  pccma_logo_letters_transparent              the letters alone, transparent (the same on any background)
+  pccma_icon_{light,dark,transparent}         the flower in the first C, in bronze lead
+The wording is converted to outlines, so the SVG needs no installed font, and is sized to span the letters exactly.
 
 Usage: python make_pccma_logo.py [output folder]   (needs fontTools and Google Chrome; set CHROME to its path outside macOS)
 """
@@ -31,7 +32,8 @@ SPACING = 3.2 / 15              # letter spacing of the wording, as a share of i
 CAP_HEIGHT = 0.717              # cap height of Helvetica Bold, as a share of its font size
 FONT = "/System/Library/Fonts/Helvetica.ttc"
 CHROME = os.environ.get("CHROME", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
-TEXT_COLORS = {"light": "#3A3A3A", "dark": "#E6E6E6"}
+TEXT_COLORS = {"light": "#3A3A3A", "dark": "#E6E6E6"}       # wording color on a light / dark background
+BACKGROUNDS = {"light": "#FFFFFF", "dark": "#14161F", "transparent": None}
 
 
 # ---- shapes ----
@@ -252,8 +254,8 @@ def layout() -> tuple[list, dict, float, list[float]]:
     return pieces, color, total_w, lefts
 
 
-def build(text_color: str, wording: bool) -> str:
-    """The logo as an SVG string on a transparent background, with the wording under the letters or without it."""
+def build(text_color: str, wording: bool, background: str | None = None) -> str:
+    """The logo as an SVG string, on a transparent background or a filled one, with the wording under the letters or without it."""
     pieces, color, total_w, _ = layout()
 
     size = fit_size(total_w); cap = CAP_HEIGHT * size
@@ -276,8 +278,9 @@ def build(text_color: str, wording: bool) -> str:
     mask = (f'<mask id="cut" maskUnits="userSpaceOnUse" x="-40" y="-40" width="{total_w + 80:.0f}" height="{H + 80}">'
             f'<rect x="-40" y="-40" width="{total_w + 80:.0f}" height="{H + 80}" fill="#fff"/>' + "".join(cuts) + "</mask>")
     svg = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {vw} {vh}" width="{vw * 2}" height="{vh * 2}">',
-           "<defs>" + "".join(defs) + "</defs>",
-           f'<g transform="translate({padx:.2f},{pady:.2f})">', mask, '<g mask="url(#cut)">' + "".join(fills) + "</g>", "</g>"]
+           "<defs>" + "".join(defs) + "</defs>"]
+    if background: svg.append(f'<rect width="{vw}" height="{vh}" fill="{background}"/>')
+    svg += [f'<g transform="translate({padx:.2f},{pady:.2f})">', mask, '<g mask="url(#cut)">' + "".join(fills) + "</g>", "</g>"]
     if wording: svg.append(wording_path(vw / 2, pady + H + sub_h, size, text_color))
     svg.append("</svg>")
     return "\n".join(svg)
@@ -285,7 +288,6 @@ def build(text_color: str, wording: bool) -> str:
 
 # ---- icon: the flower in the first C, in bronze lead ----
 ICON_SIZE, FLOWER_R = 100, 38      # canvas of the icon and radius of the flower's glass disc (units)
-ICON_BACKGROUNDS = {"light": "#FFFFFF", "dark": "#14161F"}
 BRONZE = ["#E8B77F", "#B0702F", "#DDA063", "#82491B", "#D49A5A", "#9C5F26"]      # bands of polished bronze
 BRONZE_SHADOW, BRONZE_LIGHT = "#3A2211", "#FFE3B8"
 EVEN_ODD = ' fill-rule="evenodd"'      # a wedge pane is the wedge with its petal cut out
@@ -298,15 +300,14 @@ def flower_in_c() -> tuple[list[tuple[str, str, str]], tuple[float, float]]:
     return [(pieces[i][0], pieces[i][2], color[i]) for i in idx], (lefts[1] + 100, 100)      # the C has radius 100: center = left edge + 100
 
 
-def build_icon(mode: str) -> str:
-    """The flower as a square icon on an opaque background: the logo's glass held by bronze lead, with a bronze rim."""
+def build_icon(background: str | None = None) -> str:
+    """The flower as a square icon, on a filled or a transparent background: the logo's glass, in exactly its colors, held by
+    bronze lead with a bronze rim."""
     flower, (cx, cy) = flower_in_c()
     half = ICON_SIZE / 2
     stops = "".join(f'<stop offset="{k / (len(BRONZE) - 1):.2f}" stop-color="{c}"/>' for k, c in enumerate(BRONZE))
     defs = [f'<linearGradient id="bronze" gradientUnits="userSpaceOnUse" x1="{cx - FLOWER_R}" y1="{cy - FLOWER_R}" '
             f'x2="{cx + FLOWER_R}" y2="{cy + FLOWER_R}" spreadMethod="reflect">{stops}</linearGradient>',
-            '<linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0.34"/>'
-            '<stop offset="0.55" stop-color="#fff" stop-opacity="0.04"/><stop offset="1" stop-color="#000" stop-opacity="0.22"/></linearGradient>',
             # the lead is one shape (every piece's outline plus the rim), lit from the top left as a whole and casting one soft shadow
             '<filter id="came" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">'
             '<feGaussianBlur in="SourceAlpha" stdDeviation="0.5" result="blur"/>'
@@ -315,12 +316,12 @@ def build_icon(mode: str) -> str:
             '<feComposite in="spec" in2="SourceAlpha" operator="in" result="spec2"/>'
             '<feComposite in="SourceGraphic" in2="spec2" operator="arithmetic" k1="0" k2="1" k3="0.7" k4="0" result="lit"/>'
             f'<feDropShadow in="lit" dx="0.7" dy="0.7" stdDeviation="0.5" flood-color="{BRONZE_SHADOW}" flood-opacity="0.55"/></filter>']
-    glass = [f'<path d="{p}" fill="{c}" fill-opacity="0.92"{EVEN_ODD if kind == "ground" else ""}/>'
-             f'<path d="{p}" fill="url(#sheen)"{EVEN_ODD if kind == "ground" else ""}/>' for p, kind, c in flower]
+    glass = [f'<path d="{p}" fill="{c}"{EVEN_ODD if kind == "ground" else ""}/>' for p, kind, c in flower]      # exactly the C's colors
     lead = [f'<path d="{p}" fill="none" stroke="url(#bronze)" stroke-width="2.2" stroke-linejoin="round"/>' for p, _, _ in flower]
     rim = f'<circle cx="{cx}" cy="{cy}" r="{FLOWER_R + 0.5}" fill="none" stroke="url(#bronze)" stroke-width="3.2"/>'
+    plate = f'<rect width="{ICON_SIZE}" height="{ICON_SIZE}" fill="{background}"/>\n' if background else ""
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {ICON_SIZE} {ICON_SIZE}" width="{ICON_SIZE * 4}" height="{ICON_SIZE * 4}">\n'
-            f'<defs>{"".join(defs)}</defs>\n<rect width="{ICON_SIZE}" height="{ICON_SIZE}" fill="{ICON_BACKGROUNDS[mode]}"/>\n'
+            f'<defs>{"".join(defs)}</defs>\n{plate}'
             f'<g transform="translate({half},{half}) translate({-cx},{-cy})">' + "".join(glass) + '<g filter="url(#came)">' + "".join(lead) + rim
             + "</g></g>\n</svg>")
 
@@ -335,11 +336,14 @@ def render_png(svg_path: str, png_path: str) -> None:
 
 if __name__ == "__main__":
     out = sys.argv[1] if len(sys.argv) > 1 else "."
-    for mode, text in TEXT_COLORS.items():
-        for name, wording in ((f"pccma_logo_{mode}", True), (f"pccma_logo_letters_{mode}", False)):
-            open(f"{out}/{name}.svg", "w").write(build(text, wording))
-            render_png(f"{out}/{name}.svg", f"{out}/{name}.png")
-    for mode in ICON_BACKGROUNDS:
-        name = f"pccma_icon_{mode}"
-        open(f"{out}/{name}.svg", "w").write(build_icon(mode))
+    files = {}
+    for mode in ("light", "dark"):
+        files[f"pccma_logo_{mode}"] = build(TEXT_COLORS[mode], True, BACKGROUNDS[mode])
+        files[f"pccma_logo_transparent_on_{mode}"] = build(TEXT_COLORS[mode], True)
+        files[f"pccma_logo_letters_{mode}"] = build("", False, BACKGROUNDS[mode])
+    files["pccma_logo_letters_transparent"] = build("", False)
+    for mode, background in BACKGROUNDS.items():
+        files[f"pccma_icon_{mode}"] = build_icon(background)
+    for name, svg in files.items():
+        open(f"{out}/{name}.svg", "w").write(svg)
         render_png(f"{out}/{name}.svg", f"{out}/{name}.png")
