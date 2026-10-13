@@ -33,6 +33,6 @@ The `<round>` folders are `Round_1_data` through `Round_4_data`.
 The large single-cell folders (`converted_profiles`, `cleaned_profiles`, and `single_cell_profiles`) are not committed; the bulk profiles, the QC results, figures, and reports are.
 
 - **Bulk profiles** (`data/bulk_profiles/<round>/`) have four files per plate: `<plate>_bulk.parquet` (aggregated per well), `_bulk_annotated` (with the platemap), `_bulk_normalized`, and `_bulk_feature_selected`, which is the input to the [optimization module](../4.optimization/).
-- **`qc_results/`** has `<plate>_failed_qc_indices.csv.gz`, the single cells that failed QC. The Round 1 files are directly in this folder, while the notebook now writes to `qc_results/<round>/` (Rounds 2 to 4 are in subfolders).
+- **`qc_results/<round>/`** has `<plate>_failed_qc_indices.csv.gz`, the single cells that failed QC.
 - **`qc_figures/<round>/`** has two figures per plate: `<plate>_cluster_nuclei_outliers.png` (overlapping nuclei flagged by mass displacement and intensity) and `<plate>_nuclei_solidity_outliers_histogram.png`.
 - **`qc_report/<round>_qc_report.parquet`** has one row per plate and condition: `Metadata_cell_line`, `Metadata_seeding_density`, `Metadata_time_point`, `Metadata_condition`, `Metadata_Plate`, `total_nuclei_segmented`, `total_failed_qc`, and `percentage_failing_cells`.

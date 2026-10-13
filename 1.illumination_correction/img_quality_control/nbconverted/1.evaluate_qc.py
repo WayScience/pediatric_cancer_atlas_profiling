@@ -121,7 +121,7 @@ df.head()
 # 
 # We are seeing that close to 0 images are empty and images that are very negative are very out-of-focus.
 # 
-# We use the z-score method to both find threshold values for identifying poor quality images above and below the mean and to output a data frame with outliers to view these images in a separate software (e.g., ImageJ/FIJI). We use **2 standard deviations** away from the mean for assessing outliers.
+# We use the z-score method to both find threshold values for identifying poor quality images above and below the mean and to output a data frame with outliers to view these images in a separate software (e.g., ImageJ/FIJI). We use **2.5 standard deviations** for the blur metric and **2 standard deviations** for the saturation metric to assess outliers.
 
 # In[4]:
 
@@ -130,7 +130,7 @@ summary_statistics = df["ImageQuality_PowerLogLogSlope"].describe()
 print(summary_statistics)
 
 
-# ### Use z-score to find outliers 2 standard deviations above and below the mean to view as a data frame
+# ### Use z-score to find outliers 2.5 standard deviations above and below the mean to view as a data frame
 
 # In[5]:
 
