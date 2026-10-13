@@ -5,8 +5,6 @@
   </picture>
 </p>
 
-# Pediatric cancer atlas image profiling
-
 [![Software DOI badge](https://zenodo.org/badge/DOI/10.5281/zenodo.15548848.svg)](https://doi.org/10.5281/zenodo.15548848)
 
 In this repository, we perform image analysis to extract single cell morphological profiles and image-based profiling to format the profiles to be processed with machine learning and other analyses.
