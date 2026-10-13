@@ -92,16 +92,28 @@ Also, any empty portions of the layout contain media and no cells so they are no
 
 ## Environments
 
-In this repository, we include four environments in the [environments](./environments/) folder, plus a script to build all of them on an HPC:
+The image-based profiling pipeline runs on [uv](https://docs.astral.sh/uv/), and the other modules keep their conda environments.
 
-- **[CellProfiler environment](./environments/cellprofiler_env.yml)** (`alsf_cp_env`): used for the illumination correction and feature extraction modules, as we used CellProfiler v4.2.8 to perform these tasks.
-- **[Image profiling environment](./environments/preprocessing_env.yml)** (`alsf_preprocessing_env`): used in the preprocessing module after we extracted morphology features using CellProfiler, and includes pycytominer, CytoTable, and coSMicQC.
+### Image-based profiling pipeline (uv)
+
+The dependencies for [3.preprocessing_features](./3.preprocessing_features/) (pycytominer 1.2.2, CytoTable, and coSMicQC) are in [`pyproject.toml`](./pyproject.toml) and are locked in [`uv.lock`](./uv.lock), for Python 3.12.
+Create the environment from the repository root:
+
+```bash
+uv sync --group preprocessing
+```
+
+`uv sync` creates `.venv/`, and `uv run --group preprocessing <command>` runs a command in it.
+We pin pycytominer to 1.2.2, the newest version the previous conda environment could install, so the profiles stay consistent.
+
+### Conda
+
+The other environments are in the [environments](./environments/) folder, with a script to build all of them on an HPC:
+
+- **[CellProfiler environment](./environments/cellprofiler_env.yml)** (`alsf_cp_env`): used for the illumination correction and feature extraction modules, as we used CellProfiler v4.2.8 to perform these tasks. CellProfiler needs Python 3.8, a Java runtime, and wxPython.
 - **[R environment](./environments/r_environment.yml)** (`alsf_r_analysis`): used for any notebook that requires visualization of results and figure generation in the R language (the platemap figures and the optimization boxplots).
 - **[Optimization environment](./environments/optimization_env.yml)** (`optimization_env`): used for the optimization analyses (pairwise correlation and the correlation versus QC plots).
-- **[`hpc_create_envs.sh`](./environments/hpc_create_envs.sh)**: creates or updates every environment above on the Alpine HPC (it reads each environment's name from its first line).
-
-These environments can be installed either via conda or mamba.
-Below is an example of how to install one via the terminal.
+- **[`hpc_create_envs.sh`](./environments/hpc_create_envs.sh)**: creates or updates every conda environment above on the Alpine HPC (it reads each environment's name from its first line).
 
 ```bash
 # Make sure to be in the environments folder

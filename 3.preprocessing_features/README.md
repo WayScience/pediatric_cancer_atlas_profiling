@@ -7,6 +7,7 @@ We are using a Linux-based machine running Pop_OS! LTS 22.04 with an AMD Ryzen 7
 
 ## Perform preprocessing
 
+The module uses the `preprocessing` dependency group, which `run_preprocessing.sh` runs through `uv run` (create it once with `uv sync --group preprocessing` from the repository root).
 You can perform the preprocessing of morphology features using the command below:
 
 ```bash

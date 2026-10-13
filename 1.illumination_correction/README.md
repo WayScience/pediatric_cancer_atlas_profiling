@@ -43,6 +43,7 @@ Set both before running them.
 
 The quality control thresholds were developed on Round 1 (the 6 plates in [`img_quality_control/whole_img_qc_output/`](./img_quality_control/whole_img_qc_output/)) and are applied in the next module to flag and skip poor quality images.
 To update them, uncomment the image quality section of `loaddata_and_illum.sh`, or run the two notebooks in `img_quality_control/` in order.
+The evaluation notebook (`1.evaluate_qc.ipynb`) does not use CellProfiler: it needs pandas, NumPy, SciPy, matplotlib, and seaborn.
 
 The thresholds that [`analysis.cppipe`](../2.feature_extraction/analysis.cppipe) uses (for each of the five fluorescence channels; an image set is skipped if any channel is flagged) are:
 
