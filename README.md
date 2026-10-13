@@ -1,14 +1,7 @@
-<table>
-  <tr>
-    <td>
-      <img src="./logo/pedcp90_logo.png" alt="PedCP90 logo: a cell in nine color treatments" width="180">
-    </td>
-    <td valign="middle">
-      <h1>PedCP90</h1>
-      <p>Pediatric cancer atlas image profiling</p>
-    </td>
-  </tr>
-</table>
+<h1>
+  <img src="./logo/pedcp90_logo.png" alt="PedCP90 logo: a cell in nine color treatments" width="72" align="absmiddle">
+  PedCP90
+</h1>
 
 [![Software DOI badge](https://zenodo.org/badge/DOI/10.5281/zenodo.15548848.svg)](https://doi.org/10.5281/zenodo.15548848)
 
@@ -77,7 +70,7 @@ Each layout has a plating condition, such as:
 3. `laminin` (laminin coated)
 4. a `_PFA` variant of each (`standard_PFA`, `synthemax_PFA`, `laminin_PFA`)
 
-Platemap files and visualizations can be found in the [metadata folder](./0.download_data/metadata/) inside the download data module.
+The platemap files are in the [metadata folder](./0.download_data/metadata/platemaps/) and the layout figures are in [`platemap_figures`](./0.download_data/platemap_figures/), both inside the download data module.
 
 We used multiple methods to determine what are the best conditions per cell line.
 One method is single-cell quality control (QC), which outputs a QC report of which seeding densities and time points yielded the worst quality segmentations.

@@ -1,16 +1,9 @@
 # Download data
 
-In this module, we will add all relevant information for downloading the datasets (including images, XML files, platemaps, etc.) when it comes available.
-All platemaps and layout figures will be included under the [metadata](./metadata/) folder of this module.
-
---- 
-
 ## Current Access Instructions for Microscopy Images (Development)
 
 **Note:** The current method of accessing and downloading the microscopy image data is intended for development purposes only. 
 When the data becomes publicly available, access methods will change, and this README will be updated to reflect the final public access protocol.
-
----
 
 ### Pre-Requisites and Dependencies
 - Access to CU-Boulder Alpine compute cluster.
@@ -19,8 +12,6 @@ When the data becomes publicly available, access methods will change, and this R
   - *(Optional)* Installation of the `globus-cli` command-line tool for advanced users.
 - Globus Connect Personal installed and configured on the local machine for data transfer.
   - Ensure that the local Globus endpoint is properly configured with allowed paths for data transfer.
-
----
 
 ### Instructions for Data Transfer Using Globus Web Interface
 1. Log in to the [Globus web interface](https://app.globus.org/).
@@ -55,29 +46,24 @@ When the data becomes publicly available, access methods will change, and this R
 5. Monitor the transfer:
    - Use the command `globus task show <task_id>` to check the status of your transfer.
 
----
-
 ### Future Access Information
 Once the microscopy image data is publicly released, access will no longer require CU credentials or the current development-specific setup.
 Instructions for public access, including any associated data repositories, will be added here upon release.
 
----
+## Metadata and layout figures
 
----
-
-## Metadata (platemaps and layout figures)
-
-The [metadata](./metadata/) folder describes every pilot plate: which cell line, seeding density, and plating condition is in each well, and which barcode is which layout and time point.
+The [platemaps](./metadata/platemaps/) describe every pilot plate: which cell line, seeding density, and plating condition is in each well, and which barcode is which layout and time point.
+The figures of the layouts are made from the platemaps by a notebook in this module.
 
 ### Contents
 
 | Path                                                                               | Description                                                                                                          |
 | :--------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------- |
-| [`platemaps/Assay_Plate{1..13}_platemap.csv`](./metadata/platemaps/)                         | One file per plate layout. Columns: `cell_line`, `row`, `column`, `well`, `seeding_density`, `condition`.            |
-| [`platemaps/Barcode_platemap_pilot_data.csv`](./metadata/platemaps/Barcode_platemap_pilot_data.csv) | One row per plate (39): `barcode`, `time_point` (24, 48, or 72 hours), and the `platemap_file` (layout) it uses.     |
-| [`platemap_figures/`](./metadata/platemap_figures/)                                          | Figures of the layouts, colored by cell line and by seeding density (see the note below).                            |
-| [`platemap_fig.ipynb`](./metadata/platemap_fig.ipynb)                                        | Notebook (R) that draws a layout figure for every `*_platemap.csv`.                                                  |
-| [`create_figs.sh`](./metadata/create_figs.sh)                                                | Converts the notebook to a script (`nbconverted/platemap_fig.r`) and runs it.                                        |
+| [`metadata/platemaps/Assay_Plate{1..13}_platemap.csv`](./metadata/platemaps/)                         | One file per plate layout. Columns: `cell_line`, `row`, `column`, `well`, `seeding_density`, `condition`.            |
+| [`metadata/platemaps/Barcode_platemap_pilot_data.csv`](./metadata/platemaps/Barcode_platemap_pilot_data.csv) | One row per plate (39): `barcode`, `time_point` (24, 48, or 72 hours), and the `platemap_file` (layout) it uses.     |
+| [`platemap_figures/`](./platemap_figures/)                                          | Figures of the layouts, colored by cell line and by seeding density. |
+| [`platemap_fig.ipynb`](./platemap_fig.ipynb)                                        | Notebook (R) that draws a layout figure for every `*_platemap.csv`.                                                  |
+| [`create_figs.sh`](./create_figs.sh)                                                | Converts the notebook to a script (`nbconverted/platemap_fig.r`) and runs it.                                        |
 
 Only wells that contain cells are listed in the platemaps: any empty portion of a layout contains media and no cells, so it is not included.
 
@@ -113,9 +99,8 @@ Check the labels before grouping by `cell_line` across layouts.
 The figures are generated in R, so use the R environment from the [environments](../environments/) folder (`alsf_r_analysis`).
 
 ```bash
-# Make sure you are in the 0.download_data/metadata directory
+# Make sure you are in the 0.download_data directory
 source create_figs.sh
 ```
 
-The script draws a figure for every layout in `platemaps/`.
-The committed [`platemap_figures`](./metadata/platemap_figures/) currently include only `Assay_Plate1` through `Assay_Plate4`, so run this script to render the remaining layouts.
+The script draws two figures (by cell line and by seeding density) for every layout in `metadata/platemaps/` and writes them to `platemap_figures/`, which has all 13 layouts.
