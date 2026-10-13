@@ -1,0 +1,40 @@
+[project]
+name = "pedcp90"
+version = "0.1.0"
+description = "Image analysis and image-based profiling of the pedcp90 pediatric cancer Cell Painting pilot experiment."
+readme = "README.md"
+license = { text = "CC0-1.0" }
+requires-python = ">=3.12,<3.13"
+# Only the image-based profiling pipeline (3.preprocessing_features) runs on uv: install it with `uv sync --group preprocessing`.
+# CellProfiler, R, and the optimization analyses keep their conda environments in environments/.
+dependencies = []
+
+[dependency-groups]
+# Jupyter tooling that the modules use to run and convert notebooks
+notebooks = [
+    "ipykernel",
+    "jupyterlab",
+    "nbconvert",
+    "papermill",
+]
+# 3.preprocessing_features: CytoTable, coSMicQC, and pycytominer
+preprocessing = [
+    { include-group = "notebooks" },
+    # pinned: pycytominer 1.2.2 is the newest release that the previous conda environment (pandas 1.4.4, numpy 1.22) could install
+    "pycytominer==1.2.2",
+    "cytotable",
+    "cosmicqc>=0.1.0",
+    "cytodataframe>0.0.17",
+    "dask[dataframe]",
+    "pandas",
+    "numpy",
+    "seaborn",
+    "matplotlib",
+    # coSMicQC imports tabulate without declaring it
+    "tabulate",
+]
+
+[tool.uv]
+package = false
+# use uv's own Python, not a conda or system one
+python-preference = "only-managed"
