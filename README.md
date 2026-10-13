@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./logo/pedcp90_logo.png" alt="PedCP90 logo: a cell in nine color treatments" width="300">
+</p>
+
 # Pediatric cancer atlas image profiling
 
 [![Software DOI badge](https://zenodo.org/badge/DOI/10.5281/zenodo.15548848.svg)](https://doi.org/10.5281/zenodo.15548848)
@@ -17,9 +21,9 @@ The logos share the PedCP90 name and color the part that distinguishes each data
 
 | Dataset | Description |
 | --- | --- |
-| <img src="./logo/pedcp90_logo.svg" alt="PedCP90" width="170"> | The real Cell Painting images of 18 pediatric cancer cell lines at five seeding densities (90 conditions), which this repository processes. The preprint uses it as the reference image set. |
-| <img src="./logo/pedcp90sim_logo.svg" alt="PedCP90Sim" width="170"> | A simulated dataset. We add six types of controlled degradation, each at six graded severities, to the real PedCP90 fluorescence images, so the type and severity of the error are known. |
-| <img src="./logo/pedcp90vs_logo.svg" alt="PedCP90VS" width="170"> | A virtual staining dataset. Three model architectures, each trained at five seeding densities (15 models), predict the Cell Painting fluorescence channels from brightfield images of unseen cell lines, so the errors are realistic and their severity is unknown. |
+| <img src="./logo/pedcp90_dataset.svg" alt="PedCP90" width="170"> | The real Cell Painting images of 18 pediatric cancer cell lines at five seeding densities (90 conditions), which this repository processes. The preprint uses it as the reference image set. |
+| <img src="./logo/pedcp90sim_dataset.svg" alt="PedCP90Sim" width="170"> | A simulated dataset. We add six types of controlled degradation, each at six graded severities, to the real PedCP90 fluorescence images, so the type and severity of the error are known. |
+| <img src="./logo/pedcp90vs_dataset.svg" alt="PedCP90VS" width="170"> | A virtual staining dataset. Three model architectures, each trained at five seeding densities (15 models), predict the Cell Painting fluorescence channels from brightfield images of unseen cell lines, so the errors are realistic and their severity is unknown. |
 
 We derive PedCP90Sim and PedCP90VS from PedCP90.
 The code for the analysis is in [`virtual_staining_metric_analysis`](https://github.com/WayScience/virtual_staining_metric_analysis), and the code for training the virtual staining models is in [`virtual_stain_flow`](https://github.com/WayScience/virtual_stain_flow).
