@@ -1,0 +1,72 @@
+# Manifest template for reorganize.py -- copy this, then fill in real
+# raw_source paths for your machine/server before running anything.
+#
+# This is pre-filled with the structure already agreed on for cpg0041-pccma
+# in https://github.com/broadinstitute/cellpainting-gallery/discussions/98,
+# including the Round 1 = SN0313537 special case. Edit cell_line, variant,
+# and raw_source to match what you actually find in each round's data --
+# the values below are placeholders/examples, not confirmed facts about the
+# real plate layout (only the round names, source id, and Round1/SN0313537
+# mapping are confirmed from the discussion).
+
+project_id: cpg0041-pccma
+source_id: alexslemonade
+
+batches:
+  # Round 1 pilot -- NOT literally named "Round 1" on disk. Map it explicitly
+  # rather than relying on any script to find it by pattern-matching "round".
+  - round_label: Round1
+    plate_label: Plate1
+    cell_line: CHANGE_ME       # e.g. A673
+    variant: null              # e.g. Reimage, if this plate was re-imaged
+    plates:
+      - raw_source: /path/to/raw/SN0313537/CHANGE_ME_plate_folder
+
+  # Round 2 pilot
+  - round_label: Round2
+    plate_label: Plate3
+    cell_line: A673
+    variant: Reimage
+    plates:
+      - raw_source: /path/to/raw/Round2/CHANGE_ME_plate_folder
+        # full_plate_name and plate_name are optional -- by default they're
+        # derived from raw_source's folder name. Only set these if the raw
+        # folder name is misleading or you want a different plate_name.
+        # full_plate_name: BR00143976__2024-07-04T16_04_45-Measurement2
+        # plate_name: BR00143976
+
+  # Round 3 pilot
+  - round_label: Round3
+    plate_label: CHANGE_ME
+    cell_line: CHANGE_ME
+    variant: null
+    plates:
+      - raw_source: /path/to/raw/Round3/CHANGE_ME_plate_folder
+
+  # Round 4 pilot
+  - round_label: Round4
+    plate_label: CHANGE_ME
+    cell_line: CHANGE_ME
+    variant: null
+    plates:
+      - raw_source: /path/to/raw/Round4/CHANGE_ME_plate_folder
+
+  # SK-N-AS REPO1 drug screen -- original pass
+  - batch_name: SK-N-AS_REPO1_Screen_Original
+    plates:
+      - raw_source: /path/to/raw/SK-N-AS_REPO1_Screen_Original/CHANGE_ME_plate_folder
+
+  # SK-N-AS REPO1 drug screen -- row O repeat
+  - batch_name: SK-N-AS_REPO1_Screen_RowO_Repeat
+    plates:
+      - raw_source: /path/to/raw/SK-N-AS_REPO1_Screen_RowO_Repeat/CHANGE_ME_plate_folder
+
+  # CHP-134 REPO1 screen
+  - batch_name: CHP-134_REPO1_Screen
+    plates:
+      - raw_source: /path/to/raw/CHP-134_REPO1_Screen/CHANGE_ME_plate_folder
+
+  # CHP-134 reupload
+  - batch_name: CHP-134_Reupload
+    plates:
+      - raw_source: /path/to/raw/CHP-134_Reupload/CHANGE_ME_plate_folder

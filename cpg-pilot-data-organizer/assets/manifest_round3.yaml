@@ -1,0 +1,213 @@
+project_id: cpg0041-pccma
+source_id: alexslemonade
+batches:
+  # from raw folder: 'Plate 5 A673 Reimage' (cell_line as-found: 'A673')
+  - round_label: Round3
+    plate_label: Plate5
+    cell_line: A673
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 5 A673 Reimage/BR00146998__2025-04-14T17_45_14-Measurement 2"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 5 A673 Reimage/BR00146999__2025-04-14T18_01_56-Measurement 2"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 5 A673 Reimage/BR00147000__2025-04-14T18_17_07-Measurement 2"
+
+  # from raw folder: 'Plate 5 All Cell Lines' (base/original scan)
+  - round_label: Round3
+    plate_label: Plate5
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 5 All Cell Lines/BR00146998__2025-03-14T20_04_12-Measurement 1"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 5 All Cell Lines/BR00146999__2025-03-14T21_02_12-Measurement 1"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 5 All Cell Lines/BR00147000__2025-03-14T22_00_26-Measurement 1"
+
+  # from raw folder: 'Plate 5 COG-EP-280 Reimage' (cell_line as-found: 'COG-EP-280')
+  - round_label: Round3
+    plate_label: Plate5
+    cell_line: COG-EP-280
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 5 COG-EP-280 Reimage/BR00146998__2025-04-15T09_43_56-Measurement 4"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 5 COG-EP-280 Reimage/BR00146999__2025-04-15T10_01_54-Measurement 4"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 5 COG-EP-280 Reimage/BR00147000__2025-04-15T12_06_48-Measurement 4"
+
+  # from raw folder: 'Plate 5 TC-71 Reimage' (cell_line as-found: 'TC-71')
+  - round_label: Round3
+    plate_label: Plate5
+    cell_line: TC-71
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 5 TC-71 Reimage/BR00146998__2025-04-14T18_34_20-Measurement 3"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 5 TC-71 Reimage/BR00146999__2025-04-14T18_50_58-Measurement 3"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 5 TC-71 Reimage/BR00147000__2025-04-14T19_07_35-Measurement 3"
+
+  # from raw folder: 'Plate 6 All Cell Lines' (base/original scan)
+  - round_label: Round3
+    plate_label: Plate6
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 6 All Cell Lines/BR00147001__2025-03-14T18_29_04-Measurement 1"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 6 All Cell Lines/BR00147002__2025-03-14T18_52_53-Measurement 1"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 6 All Cell Lines/BR00147003__2025-03-14T19_16_37-Measurement 1"
+
+  # from raw folder: 'Plate 6 CHLA-186 Reimage' (cell_line as-found: 'CHLA-186')
+  - round_label: Round3
+    plate_label: Plate6
+    cell_line: CHLA-186
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 6 CHLA-186 Reimage/BR00147001__2025-04-14T16_35_34-Measurement 2"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 6 CHLA-186 Reimage/BR00147002__2025-04-14T16_53_33-Measurement 2"
+
+  # from raw folder: 'Plate 7 All Cell Lines' (base/original scan)
+  - round_label: Round3
+    plate_label: Plate7
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 7 All Cell Lines/BR00147495__2025-05-17T02_34_52-Measurement 1"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 7 All Cell Lines/BR00147496__2025-05-17T03_32_02-Measurement 1"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 7 All Cell Lines/BR00147497__2025-05-17T04_29_20-Measurement 1"
+
+  # from raw folder: 'Plate 7 CHLA-258 Reimage' (cell_line as-found: 'CHLA-258')
+  - round_label: Round3
+    plate_label: Plate7
+    cell_line: CHLA-258
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 7 CHLA-258 Reimage/BR00147495__2025-05-22T12_39_04-Measurement 3"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 7 CHLA-258 Reimage/BR00147496__2025-05-22T12_55_21-Measurement 3"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 7 CHLA-258 Reimage/BR00147497__2025-05-22T13_11_35-Measurement 3"
+
+  # from raw folder: 'Plate 7 COG-W-408 Reimage' (cell_line as-found: 'COG-W-408')
+  - round_label: Round3
+    plate_label: Plate7
+    cell_line: COG-W-408
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 7 COG-W-408 Reimage/BR00147495__2025-05-22T13_27_52-Measurement 4"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 7 COG-W-408 Reimage/BR00147496__2025-05-22T13_44_09-Measurement 4"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 7 COG-W-408 Reimage/BR00147497__2025-05-22T14_00_24-Measurement 4"
+
+  # from raw folder: 'Plate 7 D283 Reimage' (cell_line as-found: 'D283')
+  - round_label: Round3
+    plate_label: Plate7
+    cell_line: D283
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 7 D283 Reimage/BR00147495__2025-05-22T11_49_44-Measurement 2"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 7 D283 Reimage/BR00147496__2025-05-22T12_05_56-Measurement 2"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 7 D283 Reimage/BR00147497__2025-05-22T12_22_13-Measurement 2"
+
+  # from raw folder: 'Plate 8 All Cell Lines' (base/original scan)
+  - round_label: Round3
+    plate_label: Plate8
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 All Cell Lines/BR00147261__2025-05-27T15_06_19-Measurement 1"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 All Cell Lines/BR00147262__2025-05-27T16_03_54-Measurement 1"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 All Cell Lines/BR00147263__2025-05-27T17_01_19-Measurement 1"
+
+  # from raw folder: 'Plate 8 CHLA-186 Reimage' (cell_line as-found: 'CHLA-186')
+  - round_label: Round3
+    plate_label: Plate8
+    cell_line: CHLA-186
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-186 Reimage/BR00147261__2025-06-04T16_57_58-Measurement 7"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-186 Reimage/BR00147262__2025-06-04T17_15_31-Measurement 7"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-186 Reimage/BR00147263__2025-06-04T17_33_05-Measurement 7"
+
+  # from raw folder: 'Plate 8 CHLA-194 Reimage' (cell_line as-found: 'CHLA-194')
+  - round_label: Round3
+    plate_label: Plate8
+    cell_line: CHLA-194
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-194 Reimage/BR00147261__2025-06-04T16_05_09-Measurement 6"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-194 Reimage/BR00147262__2025-06-04T16_22_36-Measurement 6"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-194 Reimage/BR00147263__2025-06-04T16_40_02-Measurement 6"
+
+  # from raw folder: 'Plate 8 CHLA-196 Reimage' (cell_line as-found: 'CHLA-196')
+  - round_label: Round3
+    plate_label: Plate8
+    cell_line: CHLA-196
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-196 Reimage/BR00147261__2025-06-04T13_28_07-Measurement 3"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-196 Reimage/BR00147262__2025-06-04T13_45_16-Measurement 3"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-196 Reimage/BR00147263__2025-06-04T14_02_23-Measurement 3"
+
+  # from raw folder: 'Plate 8 CHLA-203 Reimage' (cell_line as-found: 'CHLA-203')
+  - round_label: Round3
+    plate_label: Plate8
+    cell_line: CHLA-203
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-203 Reimage/BR00147261__2025-06-04T17_51_47-Measurement 8"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-203 Reimage/BR00147262__2025-06-04T18_09_05-Measurement 8"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-203 Reimage/BR00147263__2025-06-04T18_26_26-Measurement 8"
+
+  # from raw folder: 'Plate 8 CHLA-210 Reimage' (cell_line as-found: 'CHLA-210')
+  - round_label: Round3
+    plate_label: Plate8
+    cell_line: CHLA-210
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-210 Reimage/BR00147261__2025-06-04T15_13_06-Measurement 5"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-210 Reimage/BR00147262__2025-06-04T15_30_15-Measurement 5"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-210 Reimage/BR00147263__2025-06-04T15_47_27-Measurement 5"
+
+  # from raw folder: 'Plate 8 CHLA-258 Reimage' (cell_line as-found: 'CHLA-258')
+  - round_label: Round3
+    plate_label: Plate8
+    cell_line: CHLA-258
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-258 Reimage/BR00147261__2025-06-04T14_20_02-Measurement 4"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-258 Reimage/BR00147262__2025-06-04T14_37_34-Measurement 4"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-258 Reimage/BR00147263__2025-06-04T14_55_05-Measurement 4"
+
+  # from raw folder: 'Plate 8 CHLA-262 Reimage' (cell_line as-found: 'CHLA-262')
+  - round_label: Round3
+    plate_label: Plate8
+    cell_line: CHLA-262
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-262 Reimage/BR00147261__2025-06-04T21_22_41-Measurement 12"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-262 Reimage/BR00147262__2025-06-04T21_39_48-Measurement 12"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 CHLA-262 Reimage/BR00147263__2025-06-04T21_57_02-Measurement 12"
+
+  # from raw folder: 'Plate 8 COG-AR-397hnb Reimage' (cell_line as-found: 'COG-AR-397hnb')
+  - round_label: Round3
+    plate_label: Plate8
+    cell_line: COG-AR-397hnb
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 COG-AR-397hnb Reimage/BR00147261__2025-06-04T12_35_02-Measurement 2"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 COG-AR-397hnb Reimage/BR00147262__2025-06-04T12_52_34-Measurement 2"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 COG-AR-397hnb Reimage/BR00147263__2025-06-04T13_10_05-Measurement 2"
+
+  # from raw folder: 'Plate 8 COG-E-352 Reimage' (cell_line as-found: 'COG-E-352')
+  - round_label: Round3
+    plate_label: Plate8
+    cell_line: COG-E-352
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 COG-E-352 Reimage/BR00147261__2025-06-04T18_44_09-Measurement 9"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 COG-E-352 Reimage/BR00147262__2025-06-04T19_01_19-Measurement 9"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 COG-E-352 Reimage/BR00147263__2025-06-04T19_18_30-Measurement 9"
+
+  # from raw folder: 'Plate 8 COG-EP-280 Reimage' (cell_line as-found: 'COG-EP-280')
+  - round_label: Round3
+    plate_label: Plate8
+    cell_line: COG-EP-280
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 COG-EP-280 Reimage/BR00147261__2025-06-04T19_36_14-Measurement 10"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 COG-EP-280 Reimage/BR00147262__2025-06-04T19_53_53-Measurement 10"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 COG-EP-280 Reimage/BR00147263__2025-06-04T20_11_29-Measurement 10"
+
+  # from raw folder: 'Plate 8 TC-71 Reimage' (cell_line as-found: 'TC-71')
+  - round_label: Round3
+    plate_label: Plate8
+    cell_line: TC-71
+    variant: Reimage
+    plates:
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 TC-71 Reimage/BR00147261__2025-06-04T20_29_37-Measurement 11"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 TC-71 Reimage/BR00147262__2025-06-04T20_47_09-Measurement 11"
+      - raw_source: "/media/18tbdrive/ALSF_pilot_data/Round_3_data/Plate 8 TC-71 Reimage/BR00147263__2025-06-04T21_04_41-Measurement 11"
