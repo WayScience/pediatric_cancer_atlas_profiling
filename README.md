@@ -1,8 +1,14 @@
-<p align="center">
-  <img src="./logo/pedcp90_logo.png" alt="PedCP90 logo: a cell in nine color treatments" width="300">
-</p>
-
-# Pediatric cancer atlas image profiling
+<table>
+  <tr>
+    <td>
+      <img src="./logo/pedcp90_logo.png" alt="PedCP90 logo: a cell in nine color treatments" width="180">
+    </td>
+    <td valign="middle">
+      <h1>PedCP90</h1>
+      <p>Pediatric cancer atlas image profiling</p>
+    </td>
+  </tr>
+</table>
 
 [![Software DOI badge](https://zenodo.org/badge/DOI/10.5281/zenodo.15548848.svg)](https://doi.org/10.5281/zenodo.15548848)
 
