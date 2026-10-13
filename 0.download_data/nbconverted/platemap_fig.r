@@ -3,7 +3,7 @@ suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(platetools))
 
 # Define the path to the platemaps folder
-platemaps_folder <- "platemaps"
+platemaps_folder <- "metadata/platemaps"
 
 # Set up the file naming pattern for the platemap files (CSVs)
 platemap_files <- list.files(path = platemaps_folder, pattern = "_platemap\\.csv$", full.names = TRUE)
@@ -42,7 +42,7 @@ print(output_platemap_files)
 platemap_dfs <- list()
 for (plate in names(output_platemap_files)) {
     # Find the umap file associated with the plate
-    platemap_file <- platemap_files[stringr::str_detect(platemap_files, plate)]
+    platemap_file <- platemap_files[basename(platemap_files) == paste0(plate, "_platemap.csv")]
     
     # Load in the umap data
     df <- readr::read_csv(
