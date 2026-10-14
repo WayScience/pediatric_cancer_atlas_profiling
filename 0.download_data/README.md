@@ -89,7 +89,7 @@ Cell line counts are the number of distinct `cell_line` labels in the platemap.
 | `Assay_Plate13` | Round 4 | `laminin`, `laminin_PFA`, `standard`, `standard_PFA`, `synthemax_PFA` |          4 |
 
 Every layout has five seeding densities per cell line (1000, 2000, 4000, 8000, and 12000 cells per well), typically with four replicate wells per cell line, condition, and density.
-U2-OS is in all 13 layouts and is used as an anchor to compare profiles across plates.
+U2-OS is in all 13 layouts and is used as an anchor to optimize segmentation parameters to use across all cell lines and compare profiles across plates.
 
 **NOTE:** Cell line names are not harmonized across platemaps: the same line can appear under different labels (for example `A673` and `A-673`, `SH-SY5Y` and `SHSY5Y`, or `CHP212` and `CHP-212` variants).
 Check the labels before grouping by `cell_line` across layouts.
