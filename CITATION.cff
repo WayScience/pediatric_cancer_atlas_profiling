@@ -25,7 +25,7 @@ authors:
 repository-code: 'https://github.com/WayScience/pediatric_cancer_atlas_profiling'
 url: 'https://github.com/WayScience/pediatric_cancer_atlas_profiling'
 abstract: >-
-  Image analysis and image-based profiling of pediatic cancer cell lines to extract morphological profiles.
+  Image analysis and image-based profiling of pediatric cancer cell lines to extract morphological profiles.
 keywords:
   - image-based-profiling
   - pediatric-cancer
@@ -36,3 +36,20 @@ identifiers:
   - description: Software DOI
     type: doi
     value: '10.5281/zenodo.15548848'
+references:
+  - type: article
+    title: On doubting image quality assessment metrics for microscopy virtual staining
+    authors:
+      - given-names: Wei-shan
+        family-names: Li
+        orcid: 'https://orcid.org/0009-0001-4643-9372'
+      - given-names: Gregory P.
+        family-names: Way
+        orcid: 'https://orcid.org/0000-0002-0503-9348'
+    journal: bioRxiv
+    status: preprint
+    year: 2026
+    doi: 10.64898/2026.08.31.748410
+    notes: >-
+      First reports PedCP90, the two Round 1 plate layouts (18 cell lines at five
+      seeding densities), which this repository processes.

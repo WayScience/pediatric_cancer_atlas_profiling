@@ -1,12 +1,10 @@
 #!/bin/bash
 
-# initialize the correct shell for your machine to allow conda to work (see README for note on shell names)
-conda init bash
-# activate the preprocessing environment
-conda activate alsf_preprocessing_env
+# run everything in the uv environment for this module (created from pyproject.toml and uv.lock)
+RUN="uv run --group preprocessing"
 
 # convert all notebooks to script files into the nbconverted folder
-jupyter nbconvert --to script --output-dir=nbconverted/ *.ipynb
+$RUN jupyter nbconvert --to script --output-dir=nbconverted/ *.ipynb
 
 # Set the round of data to be processed
 ROUND="Round_4_data"
@@ -28,7 +26,7 @@ done
 
 # First, using papermill, run CytoTable to generate merged single-cell profiles
 for plate in "${plates[@]}"; do
-    papermill \
+    $RUN papermill \
     0.convert_cytotable.ipynb \
     0.convert_cytotable.ipynb \
     -p plate_id $plate
@@ -36,13 +34,13 @@ done
 
 # Using papermill, run single cell quality control on all plates
 for plate in "${plates[@]}"; do
-    papermill \
+    $RUN papermill \
     1.sc_quality_control.ipynb \
     1.sc_quality_control.ipynb \
     -p plate_id $plate
 done
 
 # Run the rest of the preprocessing and reporting
-python nbconverted/2.bulk_processing.py
-python nbconverted/3.single_cell_processing.py
-python nbconverted/4.sc_qc_report.py
+$RUN python nbconverted/2.bulk_processing.py
+$RUN python nbconverted/3.single_cell_processing.py
+$RUN python nbconverted/4.sc_qc_report.py

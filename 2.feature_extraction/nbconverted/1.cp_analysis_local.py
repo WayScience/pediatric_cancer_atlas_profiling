@@ -70,7 +70,7 @@ plate_info_dictionary = {
         "path_to_pipeline": path_to_pipeline,
     }
     for name in plate_names
-    if name == "BR00143976" and next(loaddata_dir.glob(f"{name}*.csv"), None)
+    if next(loaddata_dir.glob(f"{name}*.csv"), None)
 }
 
 # view the dictionary to assess that all info is added correctly
